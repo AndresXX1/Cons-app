@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@assets/*": ["./assets/*"]
+      "@assets/*": ["./assets/*"],
+      "@theme": ["./src/theme/index.ts"]
     },
     "strict": true
   }
