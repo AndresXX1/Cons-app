@@ -2,17 +2,26 @@ import { useState, useEffect } from "react";
 import { Provider } from "react-redux";
 import { store } from "./src/store";
 import MainNavigator from "./src/navigator/Navigator";
-import { loadFonts } from "src/theme/fonts";
-import { loadImages } from "src/theme/images";
-import LoadingScreen from "src/pages/LoadingScreen";
+import { loadImages, loadFonts } from "@theme";
+import * as SplashScreen from "expo-splash-screen";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+SplashScreen.preventAutoHideAsync().catch((error) => {
+  console.log(error);
+});
+
+const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
 
 const App = () => {
   const [appReady, setAppReady] = useState<boolean>(false);
   const preloadAssets = async () => {
     try {
-      await Promise.all([loadFonts(), loadImages(), delay(2000)]);
+      await Promise.all([loadFonts(), loadImages()]);
     } finally {
       setAppReady(true);
     }
@@ -22,14 +31,15 @@ const App = () => {
     preloadAssets();
   }, []);
 
-  if (!appReady) {
-    return <LoadingScreen />;
-  }
-  return (
-    <Provider store={store}>
-      <MainNavigator />
-    </Provider>
-  );
+  useEffect(() => {
+    if (appReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [appReady]);
+
+  if (!appReady) return null;
+
+  return <MainNavigator />;
 };
 
-export default App;
+export default AppWrapper;

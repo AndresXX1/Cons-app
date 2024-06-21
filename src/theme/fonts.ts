@@ -1,36 +1,20 @@
-import * as Font from "expo-font";
-
-import GothamRegular from "@assets/fonts/gotham/Gotham-Light.otf";
-import GothamSemiBold from "@assets/fonts/gotham/Gotham-Medium.otf";
-import GothamBold from "@assets/fonts/gotham-screensmart/GothamSSm-Bold.otf";
-import GothamThin from "@assets/fonts/gotham/Gotham-Thin.otf";
+import * as Font from 'expo-font';
 
 export const fonts = {
   gotham: {
-    regular: "Gotham Regular",
-    semiBold: "Gotham SemiBold",
-    bold: "Gotham Bold",
-    thin: "Gotham Thin",
+    regular: 'Gotham Regular',
+    semiBold: 'Gotham SemiBold',
+    bold: 'Gotham Bold',
+    thin: 'Gotham Thin',
   },
 };
 
 // preload fonts
-export const loadFonts = () =>
+export const loadFonts = async () => {
   Font.loadAsync({
-    "Gotham Regular": {
-      uri: GothamRegular,
-      display: Font.FontDisplay.SWAP,
-    },
-    "Gotham SemiBold": {
-      uri: GothamSemiBold,
-      display: Font.FontDisplay.SWAP,
-    },
-    "Gotham Bold": {
-      uri: GothamBold,
-      display: Font.FontDisplay.SWAP,
-    },
-    "Gotham Thin": {
-      uri: GothamThin,
-      display: Font.FontDisplay.SWAP,
-    },
+    'Gotham Regular': require('@assets/fonts/GothamLight.ttf'),
+    'Gotham SemiBold': require('@assets/fonts/GothamMedium.ttf'),
+    'Gotham Bold': require('@assets/fonts/GothamBold.ttf'),
+    'Gotham Thin': require('@assets/fonts/GothamThin.ttf'),
   });
+};
