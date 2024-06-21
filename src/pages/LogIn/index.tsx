@@ -1,4 +1,5 @@
 import { fonts } from '@theme';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   View,
@@ -8,8 +9,12 @@ import {
   Image,
   Pressable,
   Text,
+  TextInput,
 } from 'react-native';
 import { images } from 'src/theme/images';
+import { logInAsync } from '../../store/actions/auth';
+import { AppDispatch, RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,6 +23,32 @@ interface LogInProps {
 }
 
 const LogIn = ({ navigation }: LogInProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [error, setError] = useState('');
+  const [active, setActive] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [data, setData] = useState({
+    email: 'joseleonardoagreda@gmail.com',
+    password: '123456',
+  });
+  const handleLogIn = () => {
+    if (!data.email) {
+      setError('Email is required');
+      return;
+    }
+    if (!data.password) {
+      setError('Password is required');
+      return;
+    }
+    dispatch(logInAsync({ data, setActive, setError, dispatch }));
+  };
+  const handleInputChange = (name: string, value: string) => {
+    setError('');
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -31,7 +62,28 @@ const LogIn = ({ navigation }: LogInProps) => {
           </Pressable>
           <Image source={images.logo} style={styles.logo} resizeMode="cover" />
         </View>
-        <View style={styles.form}></View>
+        <View style={styles.form}>
+          <TextInput
+            placeholder="Email"
+            value={data.email}
+            onChangeText={text => {
+              handleInputChange('email', text);
+            }}
+          />
+          <TextInput
+            secureTextEntry={!passwordVisible}
+            placeholder="Contraseña"
+            value={data.password}
+            onChangeText={text => {
+              handleInputChange('password', text);
+            }}
+          />
+          <Pressable onPress={() => handleLogIn()}>
+            {!active ? <Text>Iniciar sesión</Text> : <Text>loading</Text>}
+          </Pressable>
+
+          {error && <Text>{error}</Text>}
+        </View>
       </ImageBackground>
       <StatusBar style="auto" />
     </View>

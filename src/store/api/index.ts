@@ -4,9 +4,9 @@ export const baseUrl = "https://backend.padelink.com.ar";
 
 export const apiUrls = {
   // user Auth
-  logIn: () => `${baseUrl}/api/user-auth/log-in`,
-  refreshToken: () => `${baseUrl}/api/user-auth/refresh-token`,
-  logOut: () => `${baseUrl}/api/user-auth/log-out`,
+  logIn: () => `${baseUrl}/api/auth/log-in`,
+  refreshToken: () => `${baseUrl}/api/auth/refresh-token`,
+  logOut: () => `${baseUrl}/api/auth/log-out`,
   getUser: () => `/api/user`,
   //services
   avatar: (url: string) => `${baseUrl}/avatar/${url}`,
