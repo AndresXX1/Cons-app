@@ -40,8 +40,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
     gap: 32,
   },
   containerItem: {

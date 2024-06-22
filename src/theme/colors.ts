@@ -2,6 +2,11 @@ export const colors = {
   black: '#000000',
   white: '#ffffff',
   blue: '#006E9A',
+  blue2: '#00a5e7',
+  gray: '#f1f2f2',
+  gray2: '#AAAAAA',
+  gray3: '#777777',
+  gray4: '#c4c4c4',
 
   //otros
   darkPurple: '#231d54',
