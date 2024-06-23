@@ -9,6 +9,8 @@ module.exports = function (api) {
           alias: {
             "@assets": "./assets",
             "@theme": "./src/theme",
+            '@pages': './src/pages',
+            '@components': './src/components',
           },
         },
       ],

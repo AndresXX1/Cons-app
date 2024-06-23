@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     color: '#ffffff',
     textAlign: 'center',
+    paddingHorizontal: 20,
   },
   body: {
     height: 350,

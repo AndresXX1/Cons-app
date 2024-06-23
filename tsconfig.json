@@ -4,7 +4,9 @@
     "baseUrl": "./",
     "paths": {
       "@assets/*": ["./assets/*"],
-      "@theme": ["./src/theme/index.ts"]
+      "@pages/*": ["./src/pages/*"],
+      "@theme": ["./src/theme/index.ts"],
+      "@components/*": ["./src/components/*"],
     },
     "strict": true
   }
