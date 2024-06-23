@@ -11,6 +11,8 @@ export const images: { [key: string]: ImageSourcePropType } = {
   money: require('@assets/images/money.png'),
   bags: require('@assets/images/bags.png'),
   help: require('@assets/images/help.png'),
+  profile_default: require('@assets/images/profile_default.png'),
+  banner: require('@assets/images/banner.png'),
 };
 
 type VirtualAssetModuleType = number | string;
