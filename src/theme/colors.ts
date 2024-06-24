@@ -1,4 +1,5 @@
 export const colors = {
+  transparent: 'transparent',
   black: '#000000',
   white: '#ffffff',
   blue: '#006E9A',
@@ -16,5 +17,4 @@ export const colors = {
   lightPurple: '#9388db',
   lightGrayPurple: '#f7f7fb',
   pink: '#ff3d69',
-  transparent: 'transparent',
 };

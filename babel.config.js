@@ -11,6 +11,7 @@ module.exports = function (api) {
             "@theme": "./src/theme",
             '@pages': './src/pages',
             '@components': './src/components',
+            '@headers': './src/headers',
           },
         },
       ],
