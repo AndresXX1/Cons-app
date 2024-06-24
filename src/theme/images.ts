@@ -16,6 +16,13 @@ export const images: { [key: string]: ImageSourcePropType } = {
   profile_default: require('@assets/images/profile_default.png'),
   banner: require('@assets/images/banner.png'),
   google_button: require('@assets/images/google_button.png'),
+  icon_gold: require('@assets/images/gold.png'),
+  arrow_back_white: require('@assets/images/arrow_back_ios_white.png'),
+  arrow_back_blue: require('@assets/images/arrow_back_ios_blue.png'),
+  profile_white: require('@assets/images/profile_white.png'),
+  security_white: require('@assets/images/security_white.png'),
+  doubt_white: require('@assets/images/doubt_white.png'),
+  logout_blue: require('@assets/images/logout_blue.png'),
 };
 
 type VirtualAssetModuleType = number | string;

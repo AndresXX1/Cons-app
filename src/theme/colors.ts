@@ -7,6 +7,8 @@ export const colors = {
   gray2: '#AAAAAA',
   gray3: '#777777',
   gray4: '#c4c4c4',
+  texts: '#575757',
+  red: '#E74D3E',
 
   //otros
   darkPurple: '#231d54',
