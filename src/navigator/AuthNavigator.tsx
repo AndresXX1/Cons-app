@@ -6,6 +6,8 @@ import LogIn from '@pages/LogIn';
 import SignUp from '@pages/SignUp';
 import SignUp2 from '@pages/SignUp2';
 import SignUp3 from '@pages/SignUp3';
+import { StackHeaderLeft } from '@headers/StackHeaderLeft';
+import { colors } from '@theme';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,28 +37,61 @@ const AuthNavigator = () => {
         <Stack.Screen
           name={`SignUp`}
           component={SignUp}
-          options={{
-            headerShown: false,
-            headerTitle: () => null,
-            headerLeft: () => null,
+          options={({ route, navigation }) => {
+            return {
+              headerTransparent: true,
+              headerStyle: { backgroundColor: colors.transparent },
+              title: 'SignUp',
+              headerTitle: () => null,
+              headerTitleAlign: 'center',
+              headerLeft: () => (
+                <StackHeaderLeft
+                  title={'Volver atrás'}
+                  onPress={() => navigation.goBack()}
+                  color={colors.blue}
+                />
+              ),
+            };
           }}
         />
         <Stack.Screen
           name={`SignUp2`}
           component={SignUp2}
-          options={{
-            headerShown: false,
-            headerTitle: () => null,
-            headerLeft: () => null,
+          options={({ route, navigation }) => {
+            return {
+              headerTransparent: true,
+              headerStyle: { backgroundColor: colors.transparent },
+              title: 'SignUp2',
+              headerTitle: () => null,
+              headerTitleAlign: 'center',
+              headerLeft: () => (
+                <StackHeaderLeft
+                  title={'Volver atrás'}
+                  onPress={() => navigation.goBack()}
+                  color={colors.blue}
+                />
+              ),
+            };
           }}
         />
         <Stack.Screen
           name={`SignUp3`}
           component={SignUp3}
-          options={{
-            headerShown: false,
-            headerTitle: () => null,
-            headerLeft: () => null,
+          options={({ route, navigation }) => {
+            return {
+              headerTransparent: true,
+              headerStyle: { backgroundColor: colors.transparent },
+              title: 'SignUp3',
+              headerTitle: () => null,
+              headerTitleAlign: 'center',
+              headerLeft: () => (
+                <StackHeaderLeft
+                  title={'Volver atrás'}
+                  onPress={() => navigation.goBack()}
+                  color={colors.blue}
+                />
+              ),
+            };
           }}
         />
       </Stack.Navigator>

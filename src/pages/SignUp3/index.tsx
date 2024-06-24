@@ -95,12 +95,6 @@ const SignUp3 = ({ route, navigation }: SignUp3Props) => {
 
   return (
     <View style={styles.root}>
-      <View style={styles.back}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.btnBack}>
-          <Image source={images.arrow_blue} style={styles.btnBackIcon} />
-          <Text style={styles.btnBackText}>Volver atrás</Text>
-        </Pressable>
-      </View>
       <View style={styles.form}>
         <View style={styles.logoContainer}>
           <Image source={images.logo_blue} style={styles.logo} />
@@ -177,28 +171,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 20,
-  },
-  back: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    alignSelf: 'stretch',
-    paddingVertical: 20,
-  },
-  btnBack: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 20,
-    gap: 9,
-  },
-  btnBackIcon: {
-    width: 14,
-    height: 24,
-  },
-  btnBackText: {
-    color: colors.blue,
-    fontFamily: fonts.gotham.semiBold,
-    marginBottom: 2,
   },
   logoContainer: {
     paddingVertical: 20,
