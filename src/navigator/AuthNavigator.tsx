@@ -13,7 +13,7 @@ const AuthNavigator = () => {
   return (
     <NavigationContainer>
       <StatusBar style="light" backgroundColor="#40066C" />
-      <Stack.Navigator initialRouteName="SignUp">
+      <Stack.Navigator initialRouteName="Menu">
         <Stack.Screen
           name={`Menu`}
           component={MenuAuth}
