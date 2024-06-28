@@ -15,6 +15,8 @@ import { images } from 'src/theme/images';
 import { logInAsync } from '../../store/actions/auth';
 import { AppDispatch, RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { colors } from '@theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,6 +33,34 @@ const LogIn = ({ navigation }: LogInProps) => {
     email: 'joseleonardoagreda@gmail.com',
     password: '123456',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [inputEmailValue, setInputEmailValue] = useState('');
+
+  const [inputPasswordValue, setInputPasswordValue] = useState('');
+  const [passwordIsFocused, setPasswordIsFocused] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [emailIsFocused, setEmailIsFocused] = useState(false);
+
+  const handleEmailFocus = () => {
+    setEmailIsFocused(true);
+  };
+
+  const handlePasswordBlur = () => {
+    setPasswordIsFocused(false);
+  };
+
+  const handlePasswordFocus = () => {
+    setPasswordIsFocused(true);
+  };
+
+  const handlePasswordVisibility = () => {
+    setPasswordVisibility(!passwordVisibility);
+  };
+
+  const handleEmailBlur = () => {
+    setEmailIsFocused(false);
+  };
   const handleLogIn = () => {
     if (!data.email) {
       setError('Email is required');
@@ -63,26 +93,61 @@ const LogIn = ({ navigation }: LogInProps) => {
           <Image source={images.logo} style={styles.logo} resizeMode="cover" />
         </View>
         <View style={styles.form}>
-          <TextInput
-            placeholder="Email"
-            value={data.email}
-            onChangeText={text => {
-              handleInputChange('email', text);
-            }}
-          />
-          <TextInput
-            secureTextEntry={!passwordVisible}
-            placeholder="Contraseña"
-            value={data.password}
-            onChangeText={text => {
-              handleInputChange('password', text);
-            }}
-          />
-          <Pressable onPress={() => handleLogIn()}>
-            {!active ? <Text>Iniciar sesión</Text> : <Text>loading</Text>}
-          </Pressable>
+          <Text style={styles.title}>Iniciar Sesión</Text>
 
           {error && <Text>{error}</Text>}
+          <TextInput
+            placeholder="Email"
+            autoCapitalize="none"
+            placeholderTextColor={colors.gray2}
+            onFocus={handleEmailFocus}
+            onBlur={handleEmailBlur}
+            onChangeText={text => setInputEmailValue(text)}
+            editable={!isSubmitting}
+            style={[
+              styles.textInput,
+              {
+                borderColor: emailIsFocused ? colors.blue2 : colors.gray2,
+              },
+            ]}
+          />
+          <View style={[styles.inputContainer]}>
+            <TextInput
+              secureTextEntry={!passwordVisible}
+              placeholder="Contraseña"
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholderTextColor={colors.gray2}
+              onFocus={handlePasswordFocus}
+              onBlur={handlePasswordBlur}
+              onChangeText={text => {
+                handleInputChange('password', text);
+              }}
+              editable={!isSubmitting}
+              style={[styles.textInputHidden]}
+            />
+            <Pressable onPress={handlePasswordVisibility}>
+              <MaterialCommunityIcons
+                name={passwordVisibility ? 'eye-outline' : 'eye-off-outline'}
+                size={32}
+                color={colors.blue}
+              />
+            </Pressable>
+          </View>
+
+          <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
+
+          <View style={styles.containerLogin}>
+            <Pressable onPress={() => handleLogIn()}>
+              <Text style={styles.buttonLogin}>Iniciar sesión</Text>
+            </Pressable>
+          </View>
+
+          <Text style={[styles.textGoogle]}>O iniciar sesión con tu cuenta de Google</Text>
+
+          <View style={styles.googleIconContainer}>
+            <Image source={images.google_button} style={styles.googleIcon} />
+          </View>
         </View>
       </ImageBackground>
       <StatusBar style="auto" />
@@ -96,6 +161,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: {
+    fontFamily: fonts.gotham.bold,
+    color: colors.blue2,
+    fontSize: 32,
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    paddingTop: 35,
+    paddingBottom: 54,
   },
   backgroundImage: {
     flex: 1,
@@ -134,6 +208,81 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 60,
     height: height - 180,
     width: width,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 48,
+    borderColor: colors.gray2,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    marginTop: 16,
+    backgroundColor: colors.white,
+  },
+  textInputHidden: {
+    flex: 1,
+    height: 48,
+    fontFamily: fonts.gotham.regular,
+    fontSize: 16,
+    fontWeight: '400',
+  },
+  textInput: {
+    fontFamily: fonts.gotham.regular,
+    fontSize: 16,
+    fontWeight: '400',
+    height: 48,
+    borderColor: colors.gray2,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    backgroundColor: colors.white,
+  },
+  textReset: {
+    color: colors.blue,
+    fontSize: 16,
+    fontWeight: '400',
+    textAlign: 'center',
+    paddingTop: 10,
+  },
+  containerLogin: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    paddingBottom: 70,
+    paddingTop: 60,
+  },
+  buttonLogin: {
+    fontFamily: fonts.gotham.bold,
+    backgroundColor: colors.blue,
+    color: colors.white,
+    fontSize: 20,
+    width: 263,
+    height: 54,
+    borderRadius: 50,
+    display: 'flex',
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    lineHeight: 26,
+  },
+  textGoogle: {
+    textAlign: 'center',
+    color: colors.gray3,
+    fontSize: 14,
+    fontFamily: fonts.gotham.regular,
+    paddingBottom: 25,
+  },
+  googleIconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  googleIcon: {
+    width: 52,
+    height: 52,
   },
 });
 
