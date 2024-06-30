@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { colors, images, fonts } from '@theme';
 import { Image } from 'react-native';
+import NavBar from '@components/NavBar';
 
 const ShopScreen = () => {
   interface data {
@@ -32,6 +33,7 @@ const ShopScreen = () => {
   ];
   return (
     <ScrollView style={styles.scrollView}>
+      <NavBar routeName='Shop' />
       <View style={styles.container}>
         <View style={styles.containerLogo}>
           <View style={styles.ContainerLogoDest}>
@@ -91,9 +93,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
-    paddingTop: 35,
-    paddingHorizontal: 16,
-    paddingBottom: 100,
+    paddingBottom: 50,
   },
   containerLogo: {
     display: 'flex',
