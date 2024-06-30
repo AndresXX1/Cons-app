@@ -24,6 +24,11 @@ export const images: { [key: string]: ImageSourcePropType } = {
   security_white: require('@assets/images/security_white.png'),
   doubt_white: require('@assets/images/doubt_white.png'),
   logout_blue: require('@assets/images/logout_blue.png'),
+  logo_featured: require('@assets/images/logo_featured.png'),
+  logo_phone: require('@assets/images/logo_phone.png'),
+  logo_electro: require('@assets/images/logo_electro.png'),
+  filter: require('@assets/images/filter.png'),
+  samsumg: require('@assets/images/image_frame.png'),
   money_white: require('@assets/images/money_white.png'),
 };
 

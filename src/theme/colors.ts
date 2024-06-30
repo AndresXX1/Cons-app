@@ -10,6 +10,7 @@ export const colors = {
   gray4: '#c4c4c4',
   texts: '#575757',
   red: '#E74D3E',
+  red2: '#ED1A00',
 
   //otros
   darkPurple: '#231d54',
