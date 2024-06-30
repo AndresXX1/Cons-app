@@ -1,10 +1,13 @@
-import { View, Text, StyleSheet, Image, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store';
 import { firstWord } from '../../utils/format';
 import { colors, fonts, images } from '@theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { logOutAsync } from 'src/store/actions/auth';
+import NavBar from '@components/NavBar';
+
+const { width } = Dimensions.get('window');
 
 const ProfileScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,8 +15,10 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
+        <NavBar routeName="Profile" />
         <Text style={styles.fullName}>
-          {user?.first_name && firstWord(user.first_name)}{' '}
+          {user?.first_name && firstWord(user.first_name)}
+          {user?.last_name && ' '}
           {user?.last_name && firstWord(user.last_name)}
         </Text>
         <View style={styles.containerItem}>
@@ -77,18 +82,19 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
-    paddingTop: 35,
-    paddingHorizontal: 16,
     paddingBottom: 100,
   },
   fullName: {
     fontFamily: fonts.gotham.semiBold,
     color: colors.texts,
     fontSize: 30,
+    display: 'flex',
+    justifyContent: 'center',
   },
   containerItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 10,
     gap: 5,
   },
@@ -104,7 +110,8 @@ const styles = StyleSheet.create({
   linearGradient: {
     marginTop: 42,
     height: 93,
-    width: '100%',
+    width: width - 32,
+    marginLeft: 16,
     borderRadius: 10,
     paddingLeft: 18,
     paddingRight: 8,
@@ -140,10 +147,12 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 16,
     marginTop: 26,
+    textAlign: 'center',
   },
   buttonBlue: {
     backgroundColor: colors.blue,
-    width: '100%',
+    width: width - 32,
+    marginLeft: 16,
     height: 54,
     borderRadius: 50,
     display: 'flex',
@@ -156,7 +165,8 @@ const styles = StyleSheet.create({
   },
   buttonBlue2: {
     backgroundColor: colors.blue,
-    width: '100%',
+    width: width - 32,
+    marginLeft: 16,
     height: 54,
     borderRadius: 50,
     display: 'flex',
@@ -191,7 +201,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderColor: colors.blue,
     borderWidth: 2,
-    width: '100%',
+    width: width - 32,
+    marginLeft: 16,
     height: 54,
     borderRadius: 50,
     display: 'flex',
