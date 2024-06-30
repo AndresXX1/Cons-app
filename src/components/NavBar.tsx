@@ -52,6 +52,13 @@ const NavBar = ({ routeName }: NavBarProps) => {
         />
       </View>
     );
+  } else if (routeName === 'Shop') {
+    return (
+      <View style={styles.containerShop}>
+        <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+        <Image source={images.banner} style={styles.banner} resizeMode="cover" />
+      </View>
+    );
   }
   return null;
 };
@@ -108,6 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ED1A00',
     height: 300,
     gap: 40,
+    zIndex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
     borderEndStartRadius: 20,
