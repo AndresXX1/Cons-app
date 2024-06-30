@@ -104,6 +104,7 @@ const LogIn = ({ navigation }: LogInProps) => {
             onBlur={handleEmailBlur}
             onChangeText={text => setInputEmailValue(text)}
             editable={!isSubmitting}
+            value={inputEmailValue}
             style={[
               styles.textInput,
               {

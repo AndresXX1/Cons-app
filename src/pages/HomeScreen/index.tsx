@@ -1,10 +1,14 @@
+import NavBar from '@components/NavBar';
 import { images, fonts, colors } from '@theme';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
+        <NavBar routeName="Home" />
         <Image source={images.banner_two} style={styles.banner} />
         <View style={styles.containerTitle}>
           <Text style={styles.text}>¡Llevate</Text>
@@ -29,13 +33,12 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
-    paddingTop: 20,
-    paddingHorizontal: 16,
     paddingBottom: 100,
   },
   banner: {
-    width: '100%',
+    width: width - 32,
     height: 212,
+    marginLeft: 16,
     borderRadius: 10,
   },
   containerTitle: {
@@ -54,27 +57,28 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontSize: 20,
   },
-  button:{
+  button: {
     backgroundColor: colors.red,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
-    width: '100%',
+    width: width - 32,
+    marginLeft: 16,
     height: 54,
     gap: 2,
     marginTop: 9,
   },
-  moneyIcon:{
+  moneyIcon: {
     width: 24,
     height: 24,
   },
-  textButton:{
+  textButton: {
     color: colors.white,
     fontFamily: fonts.gotham.bold,
     fontSize: 20,
-  }
+  },
 });
 
 export default HomeScreen;
