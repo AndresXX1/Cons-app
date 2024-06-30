@@ -31,6 +31,7 @@ export const images: { [key: string]: ImageSourcePropType } = {
   samsumg: require('@assets/images/image_frame.png'),
   money_white: require('@assets/images/money_white.png'),
   platinum: require('@assets/images/platino.png'),
+  info: require('@assets/images/info.png'),
 };
 
 type VirtualAssetModuleType = number | string;

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 const BenefitsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>LoanScreen</Text>
+      <Text>BenefitsScreen</Text>
     </View>
   );
 };
