@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Image, Pressable } from 'react-native';
-import { images } from '@theme';
+import { colors, fonts, images } from '@theme';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { apiUrls } from '../store/api';
@@ -20,18 +20,21 @@ const NavBar = ({ routeName }: NavBarProps) => {
           <NotificationSVG />
         </View>
         <View>
-          <Text style={{ color: '#ffffff', fontSize: 20 }}>Hola! 👋🏻</Text>
-          <Text style={{ color: '#ffffff', fontSize: 20 }}>
+          <Text style={styles.wellcomeHome}>Hola! 👋🏻</Text>
+          <Text style={styles.fullNameHome}>
             {user && user.first_name !== '' ? user.first_name : 'User'}{' '}
             {user && user.last_name !== '' ? user.last_name : 'Name'}
           </Text>
         </View>
         <View style={styles.menuInfo}>
           <Pressable style={styles.level}>
-            <Text style={{ color: '#ffffff', fontSize: 20 }}>Estas en el nivel Platino</Text>
+            <Image source={images.platinum} style={styles.platinumIcon} resizeMode="cover" />
+            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily:fonts.gotham.regular }}>Estas en el nivel</Text>
+            <Text style={{ color: '#ffffff', fontSize: 16,fontFamily:fonts.gotham.bold }}> Platino</Text>
           </Pressable>
           <Pressable style={styles.points}>
-            <Text style={{ color: '#ffffff', fontSize: 20 }}>Tenés 1500 puntos</Text>
+            <Text style={{ color: '#ffffff', fontSize: 16,fontFamily:fonts.gotham.bold }}>Tenés 1500 puntos</Text>
+            <Image source={images.arrow_back_white} style={styles.homeBack} resizeMode="cover" />
           </Pressable>
         </View>
       </View>
@@ -59,20 +62,57 @@ const NavBar = ({ routeName }: NavBarProps) => {
         <Image source={images.banner} style={styles.banner} resizeMode="cover" />
       </View>
     );
+  } else if (routeName === 'Loan') {
+    return (
+      <View style={styles.containerLoan}>
+        <View style={styles.homeButtons}>
+          <CardSVG />
+          <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+          <NotificationSVG />
+        </View>
+        <View>
+          <Text style={{ color: '#ffffff', fontSize: 20 }}>Préstamos actuales de</Text>
+          <Text style={{ color: '#ffffff', fontSize: 20 }}>
+            {user && user.first_name !== '' ? user.first_name : 'User'}{' '}
+            {user && user.last_name !== '' ? user.last_name : 'Name'}👇🏻
+          </Text>
+        </View>
+      </View>
+    );
   }
   return null;
 };
 
 const styles = StyleSheet.create({
-  containerHome: {
+  containerLoan: {
     backgroundColor: '#00A5E7',
-    height: 300,
+    height: 243,
     justifyContent: 'space-between',
     borderEndStartRadius: 20,
     borderEndEndRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginBottom: 20,
+  },
+  containerHome: {
+    backgroundColor: '#00A5E7',
+    height: 299,
+    justifyContent: 'space-between',
+    borderEndStartRadius: 20,
+    borderEndEndRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    marginBottom: 20,
+  },
+  wellcomeHome: {
+    color: colors.white,
+    fontFamily: fonts.gotham.bold,
+    fontSize: 25,
+  },
+  fullNameHome: {
+    color: colors.white,
+    fontFamily: fonts.gotham.regular,
+    fontSize: 25,
   },
   homeButtons: {
     flexDirection: 'row',
@@ -92,6 +132,14 @@ const styles = StyleSheet.create({
     height: 37,
     borderRadius: 10,
     paddingHorizontal: 5,
+    display: 'flex',
+    gap: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  platinumIcon: {
+    width: 27,
+    height: 26,
   },
   points: {
     borderColor: '#ffffff',
@@ -99,7 +147,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 37,
     borderRadius: 10,
-    paddingHorizontal: 5,
+    paddingRight: 10,
+    paddingLeft: 5,
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  homeBack: {
+    width: 10,
+    height: 17,
   },
   container: {
     backgroundColor: '#00A5E7',
