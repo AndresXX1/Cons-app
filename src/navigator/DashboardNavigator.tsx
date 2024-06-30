@@ -23,7 +23,7 @@ const DashboardNavigator = () => {
       <NavigationContainer>
         <StatusBar style="light" backgroundColor="#00A5E7" />
         <Tab.Navigator
-          initialRouteName="Shop"
+          initialRouteName="Benefits"
           tabBar={props => {
             return (
               <View style={styles.navBar}>
