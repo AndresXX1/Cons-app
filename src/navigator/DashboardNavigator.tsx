@@ -9,12 +9,13 @@ import BenefitsScreen from '../pages/BenefitsScreen';
 import LoanScreen from '../pages/LoanScreen';
 import ShopScreen from '../pages/ShopScreen';
 import ProfileScreen from '../pages/ProfileScreen';
-import Header from '../components/Header';
+// import Header from '../components/Header';
 
 const Tab = createBottomTabNavigator();
 
 export const optionDefault = {
-  header: ({ route }: { route: any }) => <Header route={route} />,
+  // header: ({ route }: { route: any }) => <Header route={route} />,
+  headerShown: false,
 };
 
 const DashboardNavigator = () => {

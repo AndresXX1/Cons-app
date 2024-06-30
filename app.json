@@ -18,10 +18,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#13B4EF"
-      }
+      },
+      "package": "com.senjo903.argenpesosapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fa42da7d-d4bb-4957-893c-9e70f9acd551"
+      }
     }
   }
 }
