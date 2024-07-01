@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import { images } from 'src/theme/images';
 import { logInAsync } from '../../store/actions/auth';
-import { AppDispatch, RootState } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { useDispatch } from 'react-redux';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '@theme';
 
@@ -30,14 +30,9 @@ const LogIn = ({ navigation }: LogInProps) => {
   const [active, setActive] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [data, setData] = useState({
-    email: 'joseleonardoagreda@gmail.com',
-    password: '123456',
+    email: '',
+    password: '',
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [inputEmailValue, setInputEmailValue] = useState('');
-
-  const [inputPasswordValue, setInputPasswordValue] = useState('');
   const [passwordIsFocused, setPasswordIsFocused] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [emailIsFocused, setEmailIsFocused] = useState(false);
@@ -68,6 +63,9 @@ const LogIn = ({ navigation }: LogInProps) => {
     }
     if (!data.password) {
       setError('Password is required');
+      return;
+    }
+    if (active) {
       return;
     }
     dispatch(logInAsync({ data, setActive, setError, dispatch }));
@@ -102,9 +100,9 @@ const LogIn = ({ navigation }: LogInProps) => {
             placeholderTextColor={colors.gray2}
             onFocus={handleEmailFocus}
             onBlur={handleEmailBlur}
-            onChangeText={text => setInputEmailValue(text)}
-            editable={!isSubmitting}
-            value={inputEmailValue}
+            onChangeText={text => setData({...data, email: text})}
+            editable={!active}
+            value={data.email}
             style={[
               styles.textInput,
               {
@@ -121,10 +119,9 @@ const LogIn = ({ navigation }: LogInProps) => {
               placeholderTextColor={colors.gray2}
               onFocus={handlePasswordFocus}
               onBlur={handlePasswordBlur}
-              onChangeText={text => {
-                handleInputChange('password', text);
-              }}
-              editable={!isSubmitting}
+              onChangeText={text => setData({...data, password: text})}
+              value={data.password}
+              editable={!active}
               style={[styles.textInputHidden]}
             />
             <Pressable onPress={handlePasswordVisibility}>

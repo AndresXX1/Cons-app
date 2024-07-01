@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
+import NavBar from '@components/NavBar';
+import { View, StyleSheet } from 'react-native';
 
 const BenefitsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>BenefitsScreen</Text>
+      <NavBar routeName='Benefits'/>
     </View>
   );
 };
@@ -11,9 +12,7 @@ const BenefitsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#E8E9E3',
   },
 });
 

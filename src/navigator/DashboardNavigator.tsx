@@ -9,14 +9,25 @@ import BenefitsScreen from '../pages/BenefitsScreen';
 import LoanScreen from '../pages/LoanScreen';
 import ShopScreen from '../pages/ShopScreen';
 import ProfileScreen from '../pages/ProfileScreen';
-// import Header from '../components/Header';
+import ApplyForLoanScreen from '@pages/HomeScreen/ApplyForLoanScreen';
+import BranchOfficesScreen from '@pages/HomeScreen/BranchOfficesScreen';
 
 const Tab = createBottomTabNavigator();
 
-export const optionDefault = {
-  // header: ({ route }: { route: any }) => <Header route={route} />,
-  headerShown: false,
+interface isMatchingRouteProps {
+  routes: any;
+  index: number;
+}
+
+const isMatchingRoute = ({ routes, index }: isMatchingRouteProps) => {
+  if (index >= 0 && index < routes.length) {
+    const routeName = routes[index].name;
+    return disableNavbarPages.includes(routeName);
+  }
+  return false;
 };
+
+const disableNavbarPages = ['ApplyForLoanScreen','BranchOfficesScreen'];
 
 const DashboardNavigator = () => {
   return (
@@ -24,19 +35,68 @@ const DashboardNavigator = () => {
       <NavigationContainer>
         <StatusBar style="light" backgroundColor="#00A5E7" />
         <Tab.Navigator
-          initialRouteName="Loan"
+          initialRouteName="Home"
           tabBar={props => {
+            const routes = props.state.routes || [];
+            const index = props.state.index || 0;
+            if (isMatchingRoute({ routes, index })) {
+              return null;
+            }
             return (
               <View style={styles.navBar}>
                 <TabBar {...props} />
               </View>
             );
           }}>
-          <Tab.Screen name="Home" component={HomeScreen} options={optionDefault} />
-          <Tab.Screen name="Benefits" component={BenefitsScreen} options={optionDefault} />
-          <Tab.Screen name="Loan" component={LoanScreen} options={optionDefault} />
-          <Tab.Screen name="Shop" component={ShopScreen} options={optionDefault} />
-          <Tab.Screen name="Profile" component={ProfileScreen} options={optionDefault} />
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="ApplyForLoanScreen"
+            component={ApplyForLoanScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="BranchOfficesScreen"
+            component={BranchOfficesScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="Benefits"
+            component={BenefitsScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="Loan"
+            component={LoanScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="Shop"
+            component={ShopScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </ViewContainer>

@@ -88,6 +88,12 @@ const NavBar = ({ routeName }: NavBarProps) => {
         </View>
       </View>
     );
+  } else if (routeName === 'Benefits') {
+    return (
+      <View style={styles.containerBenefits}>
+        <Image source={images.logo_purple} style={styles.logo} resizeMode="cover" />
+      </View>
+    );
   }
   return null;
 };
@@ -241,6 +247,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderWidth: 6,
     marginBottom: -30,
+  },
+  containerBenefits: {
+    backgroundColor: colors.white,
+    height: 130,
+    gap: 40,
+    zIndex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
