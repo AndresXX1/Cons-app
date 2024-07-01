@@ -1,9 +1,12 @@
+import React, { useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { colors, images, fonts } from '@theme';
 import { Image } from 'react-native';
 import NavBar from '@components/NavBar';
 
 const ShopScreen = () => {
+  const scrollViewRef = useRef<ScrollView>(null);
   interface data {
     img: keyof typeof images;
     name: string;
@@ -31,9 +34,16 @@ const ShopScreen = () => {
       price: '$270.000',
     },
   ];
+  useFocusEffect(
+    React.useCallback(() => {
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({ y: 0, animated: true });
+      }
+    }, []),
+  );
   return (
-    <ScrollView style={styles.scrollView}>
-      <NavBar routeName='Shop' />
+    <ScrollView ref={scrollViewRef} style={styles.scrollView}>
+      <NavBar routeName="Shop" />
       <View style={styles.container}>
         <View style={styles.containerLogo}>
           <View style={styles.ContainerLogoDest}>
@@ -242,7 +252,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.gotham.bold,
     fontWeight: '700',
-    marginTop: 13
+    marginTop: 13,
   },
 });
 

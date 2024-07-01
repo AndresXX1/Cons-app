@@ -1,10 +1,24 @@
+import React, { useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import NavBar from '@components/NavBar';
 import { images, fonts, colors } from '@theme';
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 const { width } = Dimensions.get('window');
 
-const HomeScreen = () => {
+interface HomeScreenProps {
+  navigation: any;
+}
+
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const scrollViewRef = useRef<ScrollView>(null);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({ y: 0, animated: true });
+      }
+    }, []),
+  );
   const data = [
     {
       image: 'location_liniers',
@@ -36,7 +50,7 @@ const HomeScreen = () => {
   ];
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <NavBar routeName="Home" />
         <Image source={images.banner_two} style={styles.banner} />
         <View style={styles.containerTitle}>
@@ -45,7 +59,7 @@ const HomeScreen = () => {
           <Text style={styles.text}> tus</Text>
           <Text style={styles.textBold}> $300.000!</Text>
         </View>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate('ApplyForLoanScreen')}>
           <Image source={images.money_white} style={styles.moneyIcon} />
           <Text style={styles.textButton}>QUIERO MI PRÉSTAMO</Text>
         </Pressable>
@@ -72,8 +86,9 @@ const HomeScreen = () => {
             </View>
           ))}
         </View>
-
-        <Text style={styles.textBlue}>Ver todas las sucursales</Text>
+        <Pressable onPress={() => navigation.navigate('BranchOfficesScreen')}>
+          <Text style={styles.textBlue}>Ver todas las sucursales</Text>
+        </Pressable>
 
         <View style={styles.containerPay}>
           <Text style={styles.payTitle}>Medios de pago</Text>

@@ -29,11 +29,18 @@ const NavBar = ({ routeName }: NavBarProps) => {
         <View style={styles.menuInfo}>
           <Pressable style={styles.level}>
             <Image source={images.platinum} style={styles.platinumIcon} resizeMode="cover" />
-            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily:fonts.gotham.regular }}>Estas en el nivel</Text>
-            <Text style={{ color: '#ffffff', fontSize: 16,fontFamily:fonts.gotham.bold }}> Platino</Text>
+            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.regular }}>
+              Estas en el nivel
+            </Text>
+            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
+              {' '}
+              Platino
+            </Text>
           </Pressable>
           <Pressable style={styles.points}>
-            <Text style={{ color: '#ffffff', fontSize: 16,fontFamily:fonts.gotham.bold }}>Tenés 1500 puntos</Text>
+            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
+              Tenés 1500 puntos
+            </Text>
             <Image source={images.arrow_back_white} style={styles.homeBack} resizeMode="cover" />
           </Pressable>
         </View>
@@ -65,18 +72,26 @@ const NavBar = ({ routeName }: NavBarProps) => {
   } else if (routeName === 'Loan') {
     return (
       <View style={styles.containerLoan}>
-        <View style={styles.homeButtons}>
-          <CardSVG />
+        <View style={styles.LoanButtons}>
+          <View />
           <Image source={images.logo} style={styles.logo} resizeMode="cover" />
-          <NotificationSVG />
+          <Image source={images.info} style={styles.infoLoan} resizeMode="cover" />
         </View>
-        <View>
-          <Text style={{ color: '#ffffff', fontSize: 20 }}>Préstamos actuales de</Text>
-          <Text style={{ color: '#ffffff', fontSize: 20 }}>
-            {user && user.first_name !== '' ? user.first_name : 'User'}{' '}
-            {user && user.last_name !== '' ? user.last_name : 'Name'}👇🏻
+        <View style={styles.textsLoan}>
+          <Text style={{ color: '#ffffff', fontSize: 25, fontFamily: fonts.gotham.semiBold }}>
+            Préstamos actuales de
+          </Text>
+          <Text style={{ color: '#ffffff', fontSize: 25, fontFamily: fonts.gotham.regular }}>
+            {user && user.first_name !== '' ? user.first_name : 'User'}
+            {user && user.last_name !== '' ? ` ${user.last_name}` : ''} 👇🏻
           </Text>
         </View>
+      </View>
+    );
+  } else if (routeName === 'Benefits') {
+    return (
+      <View style={styles.containerBenefits}>
+        <Image source={images.logo_purple} style={styles.logo} resizeMode="cover" />
       </View>
     );
   }
@@ -93,6 +108,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginBottom: 20,
+  },
+  LoanButtons: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 20,
+  },
+  infoLoan: {
+    width: 24,
+    height: 24,
+  },
+  textsLoan: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   containerHome: {
     backgroundColor: '#00A5E7',
@@ -215,6 +247,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderWidth: 6,
     marginBottom: -30,
+  },
+  containerBenefits: {
+    backgroundColor: colors.white,
+    height: 130,
+    gap: 40,
+    zIndex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
