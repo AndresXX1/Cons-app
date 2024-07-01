@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "argenpesos-app",
-    "slug": "argenpesos-app",
-    "version": "1.0.0",
+    "slug": "argen-pesos",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -13,13 +13,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "1",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#13B4EF"
       },
+      "package": "com.binarysorcerers.argenpesos"
     },
     "web": {
       "favicon": "./assets/favicon.png"
