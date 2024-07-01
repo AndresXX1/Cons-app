@@ -32,6 +32,15 @@ export const images: { [key: string]: ImageSourcePropType } = {
   money_white: require('@assets/images/money_white.png'),
   platinum: require('@assets/images/platino.png'),
   info: require('@assets/images/info.png'),
+  location_liniers: require('@assets/images/location_1.png'),
+  location_avellaneda: require('@assets/images/location_2.png'),
+  pay_1: require('@assets/images/pay_1.png'),
+  pay_2: require('@assets/images/pay_2.png'),
+  pay_3: require('@assets/images/pay_3.png'),
+  pay_4: require('@assets/images/pay_4.png'),
+  contact_1: require('@assets/images/contact_1.png'),
+  contact_2: require('@assets/images/contact_2.png'),
+  contact_3: require('@assets/images/contact_3.png'),
 };
 
 type VirtualAssetModuleType = number | string;
