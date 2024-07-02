@@ -66,7 +66,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         <View style={styles.line}></View>
         <View style={styles.containerOffices}>
           <Text style={styles.textOffices}>
-            📍 Nuestras <span style={styles.span}>sucursales</span>
+            📍 Nuestras <Text style={styles.span}>sucursales</Text>
           </Text>
           <View style={styles.containerCircle}>
             <View style={styles.circleBlue}></View>

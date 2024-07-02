@@ -6,7 +6,7 @@ interface ViewContainerProps {
   header?: boolean;
 }
 
-const ViewContainer = ({ children, style, header }: ViewContainerProps) => {
+const ViewContainer = ({ children, style={}, header=true }: ViewContainerProps) => {
   const paddingTop =
     Platform.OS === 'android' && StatusBar.currentHeight ? StatusBar.currentHeight : Platform.OS === 'web' ? 0 : 50;
 
@@ -16,11 +16,6 @@ const ViewContainer = ({ children, style, header }: ViewContainerProps) => {
     },
   });
   return <View style={[styles.contenContainer, style]}>{children}</View>;
-};
-
-ViewContainer.defaultProps = {
-  styles: {},
-  header: true,
 };
 
 export default ViewContainer;

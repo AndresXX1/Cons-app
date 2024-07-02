@@ -5,7 +5,7 @@ import { fonts } from 'src/theme/fonts';
 import { activateOnboarding } from '../../store/actions/auth';
 import { AppDispatch } from '../../store';
 import { useDispatch } from 'react-redux';
-import { images } from '@theme';
+import { colors, images } from '@theme';
 
 interface CardOnBoardingProps {
   data: {
@@ -31,10 +31,7 @@ const CardOnBoarding = ({ data, max, navigation }: CardOnBoardingProps) => {
   };
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={images.background}
-        style={styles.backgroundImage}
-        resizeMode="cover">
+      <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
         <Text style={styles.title}>{data.title}</Text>
         <View style={styles.body}>
           <data.component />
@@ -46,10 +43,14 @@ const CardOnBoarding = ({ data, max, navigation }: CardOnBoardingProps) => {
             <View style={data.number === 3 ? styles.lineActive : styles.lineInactive} />
           </View>
           <Pressable onPress={handleNext}>
-            <Text style={styles.buttonNext}>Siguiente</Text>
+            <View style={styles.buttonNext}>
+              <Text style={styles.textNext}>Siguiente</Text>
+            </View>
           </Pressable>
           <Pressable onPress={handleSkip}>
-            <Text style={styles.buttonSkip}>Omitir</Text>
+            <View style={styles.buttonSkip}>
+              <Text style={styles.textSkip}>Omitir</Text>
+            </View>
           </Pressable>
         </View>
       </ImageBackground>
@@ -104,9 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonNext: {
-    fontFamily: fonts.gotham.semiBold,
-    backgroundColor: '#006E9A',
-    color: '#ffffff',
+    backgroundColor: colors.blue,
     width: 164,
     height: 50,
     borderRadius: 50,
@@ -114,16 +113,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonSkip: {
+  textNext: {
     fontFamily: fonts.gotham.semiBold,
-    textDecorationLine: 'underline',
-    color: '#ffffff',
+    color: colors.white,
+  },
+  buttonSkip: {
     width: 164,
     height: 50,
     borderRadius: 50,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textSkip: {
+    fontFamily: fonts.gotham.semiBold,
+    textDecorationLine: 'underline',
+    color: colors.white,
   },
 });
 
