@@ -15,7 +15,7 @@ export const images: { [key: string]: ImageSourcePropType } = {
   help: require('@assets/images/help.png'),
   profile_default: require('@assets/images/profile_default.png'),
   banner: require('@assets/images/banner.png'),
-  banner_two: require('@assets/images/banner-2.png'),
+  banner_two: require('@assets/images/banner_2.png'),
   google_button: require('@assets/images/google_button.png'),
   icon_gold: require('@assets/images/gold.png'),
   arrow_back_white: require('@assets/images/arrow_back_ios_white.png'),
@@ -49,8 +49,22 @@ export const images: { [key: string]: ImageSourcePropType } = {
 type VirtualAssetModuleType = number | string;
 
 // preload images
-const imageAssets = Object.keys(images).map(key => {
-  return Asset.fromModule(images[key] as VirtualAssetModuleType).downloadAsync();
-});
+const loadImage = async (key: string, source: ImageSourcePropType) => {
+  try {
+    await Asset.fromModule(source as VirtualAssetModuleType).downloadAsync();
+    console.log(`Imagen ${key} cargada correctamente`);
+  } catch (error) {
+    console.error(`Error al cargar la imagen ${key}:`, error);
+  }
+};
 
-export const loadImages = () => Promise.all(imageAssets);
+export const loadImages = async () => {
+  try {
+    console.log('Cargando imágenes...');
+    const promises = Object.keys(images).map(key => loadImage(key, images[key]));
+    await Promise.all(promises);
+    console.log('Todas las imágenes se han cargado correctamente');
+  } catch (error) {
+    console.error('Error al cargar las imagenes:', error);
+  }
+};
