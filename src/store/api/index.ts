@@ -13,7 +13,7 @@ export const apiUrls = {
 };
 
 export const tokenAccess = {
-  tokenName: "dsaaaassfssffaaaaaa",
-  refreshTokenName: "s5s5d4sss1dsd4sds",
-  onboardingName: "onboarding1",
+  tokenName: "dsaaaassfsssffaaaaaa",
+  refreshTokenName: "s5s5d4sss1dsd4ssds",
+  onboardingName: "onboardingse",
 };
