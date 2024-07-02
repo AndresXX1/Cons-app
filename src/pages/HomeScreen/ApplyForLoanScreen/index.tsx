@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontSize: 20,
     textAlign: 'center',
-    paddingTop: 42,
+    paddingTop: 30,
     fontFamily: fonts.gotham.semiBold,
     fontWeight: 300,
     marginBottom: 40,
