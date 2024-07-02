@@ -35,7 +35,7 @@ const DashboardNavigator = () => {
       <NavigationContainer>
         <StatusBar style="light" backgroundColor="#00A5E7" />
         <Tab.Navigator
-          initialRouteName="Home"
+          initialRouteName="ApplyForLoanScreen"
           tabBar={props => {
             const routes = props.state.routes || [];
             const index = props.state.index || 0;
