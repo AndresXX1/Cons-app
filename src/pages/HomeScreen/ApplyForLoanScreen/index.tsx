@@ -30,7 +30,7 @@ const ApplyForLoanScreen = ({ navigation }: ApplyForLoanScreenProps) => {
           </View>
         </LinearGradient>
         <Text style={styles.textShare}>
-          12 cuotas <span style={styles.textShareSpan}>de $86.999</span>
+          12 cuotas <Text style={styles.textShareSpan}>de $86.999</Text>
         </Text>
 
         <Text style={styles.buttonRed}>¡LO QUIERO AHORA!</Text>
@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 30,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 300,
     marginBottom: 40,
   },
   containerLoan: {
@@ -109,7 +108,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: fonts.gotham.regular,
     fontSize: 20,
-    fontWeight: 400,
     lineHeight: 26.338,
     marginBottom: 10,
   },
@@ -117,7 +115,6 @@ const styles = StyleSheet.create({
     fontSize: 48,
     color: colors.white,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 700,
     lineHeight: 26.338,
     marginBottom: 10,
   },
@@ -125,7 +122,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
     fontSize: 20,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 700,
     lineHeight: 19,
     color: colors.texts,
     textAlign: 'center',
@@ -133,7 +129,6 @@ const styles = StyleSheet.create({
   },
   textShareSpan: {
     fontFamily: fonts.gotham.regular,
-    fontWeight: 600,
   },
   buttonRed: {
     backgroundColor: '#E74D3E',
@@ -146,7 +141,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 20,
     fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
     lineHeight: 26.338,
     textTransform: 'capitalize',
     marginHorizontal: 'auto',
@@ -158,7 +152,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 25,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: '700',
     borderBottomWidth: 1,
     marginHorizontal: 'auto',
     borderBottomColor: colors.blue,
@@ -168,7 +161,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontSize: 15,
     fontFamily: fonts.gotham.regular,
-    fontWeight: 400,
     lineHeight: 19,
     textAlign: 'center',
     width: 328,

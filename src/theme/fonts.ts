@@ -11,6 +11,7 @@ export const fonts = {
 
 export const loadFonts = async () => {
   try {
+    console.log('Cargando fuentes...');
     await Font.loadAsync({
       'Gotham Light': require('@assets/fonts/GothamLight.ttf'),
       'Gotham Medium': require('@assets/fonts/GothamMedium.ttf'),

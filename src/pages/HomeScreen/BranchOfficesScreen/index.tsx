@@ -45,10 +45,10 @@ const BranchOfficesScreen = ({ navigation }: BranchOfficesScreenProps) => {
             </View>
             <View style={styles.containerButtons}>
               <Text style={styles.textButtonGreen}>
-                <Image source={images.whatsapp} style={styles.imagenButtons}></Image>WhatsApp{' '}
+                <Image source={images.whatsapp} style={styles.imagenButtons}/>WhatsApp
               </Text>
               <Text style={styles.textButtonBlue}>
-                <Image source={images.google_maps} style={styles.imagenButtons}></Image>Google Maps
+                <Image source={images.google_maps} style={styles.imagenButtons}/>Google Maps
               </Text>
             </View>
           </View>
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 30,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 300,
     marginBottom: 40,
   },
   locationImage: {
@@ -121,7 +120,6 @@ const styles = StyleSheet.create({
     color: colors.blue,
     fontSize: 20,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: '700',
     marginTop: 5,
     marginBottom: 10,
   },
@@ -129,7 +127,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontSize: 16,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: '400',
     lineHeight: 19,
     marginTop: 2,
   },
@@ -137,7 +134,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontSize: 16,
     fontFamily: fonts.gotham.regular,
-    fontWeight: '600',
     lineHeight: 19,
     marginTop: 2,
   },
@@ -159,7 +155,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 16,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 500,
     gap: 3,
   },
   textButtonBlue: {
@@ -173,7 +168,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 16,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 500,
     gap: 3,
   },
   imagenButtons: {
