@@ -49,7 +49,7 @@ const ShopScreen = () => {
           <View style={styles.ContainerLogoDest}>
             <Image source={images.logo_featured} style={styles.logo}></Image>
             <Text style={styles.textLogo}>
-              Productos <br></br>
+              Productos
               destacados
             </Text>
           </View>

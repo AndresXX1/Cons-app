@@ -7,7 +7,7 @@ const LoanScreen = () => {
     <View style={styles.container}>
       <NavBar routeName="Loan" />
       <Text style={styles.title}>
-        Préstamos <span style={styles.spanBold}>activos</span>
+        Préstamos <Text style={styles.spanBold}>activos</Text>
       </Text>
       <View style={styles.containerButtons}>
         <Text style={styles.buttonGreen}>Préstamo $300.000</Text>
