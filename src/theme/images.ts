@@ -42,6 +42,8 @@ export const images: { [key: string]: ImageSourcePropType } = {
   contact_2: require('@assets/images/contact_2.png'),
   contact_3: require('@assets/images/contact_3.png'),
   logo_purple: require('@assets/images/logo_purple.png'),
+  whatsapp: require('@assets/images/whatsapp.png'),
+  google_maps: require('@assets/images/google_maps.png'),
 };
 
 type VirtualAssetModuleType = number | string;
