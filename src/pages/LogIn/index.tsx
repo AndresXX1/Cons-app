@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontFamily: fonts.gotham.bold,
+    //fontFamily: fonts.gotham.bold,
     color: colors.blue2,
     fontSize: 32,
     verticalAlign: 'middle',
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   btnBackText: {
     color: '#ffffff',
-    fontFamily: fonts.gotham.regular,
+    //fontFamily: fonts.gotham.regular,
     marginBottom: 2,
   },
   logo: {
@@ -220,12 +220,12 @@ const styles = StyleSheet.create({
   textInputHidden: {
     flex: 1,
     height: 48,
-    fontFamily: fonts.gotham.regular,
+    //fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
   },
   textInput: {
-    fontFamily: fonts.gotham.regular,
+    //fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
     height: 48,
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
   textLogin: {
-    fontFamily: fonts.gotham.bold,
+    //fontFamily: fonts.gotham.bold,
     color: colors.white,
     fontSize: 20,
   },
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.gray3,
     fontSize: 14,
-    fontFamily: fonts.gotham.regular,
+    //fontFamily: fonts.gotham.regular,
     paddingBottom: 25,
   },
   googleIconContainer: {

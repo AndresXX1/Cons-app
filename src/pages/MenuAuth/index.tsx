@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     marginBottom: 34,
   },
   register: {
-    fontFamily: fonts.gotham.semiBold,
+    //fontFamily: fonts.gotham.semiBold,
     color: colors.blue,
     fontSize: 20,
   },
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logIn: {
-    fontFamily: fonts.gotham.semiBold,
+    //fontFamily: fonts.gotham.semiBold,
     color: colors.white,
     fontSize: 20,
   },
