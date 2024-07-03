@@ -11,7 +11,11 @@ import NavBar from '@components/NavBar';
 
 const { width } = Dimensions.get('window');
 
-const ProfileScreen = () => {
+interface ProfileScreenProps {
+  navigation?: any;
+}
+
+const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -48,7 +52,9 @@ const ProfileScreen = () => {
             <Text style={styles.textButton}>Canjear puntos</Text>
           </Pressable>
         </LinearGradient>
-        <Text style={styles.link}>¿Cómo puedo sumar más puntos?</Text>
+        <Pressable onPress={() => navigation.navigate('PointsQuestionsScreen')}>
+          <Text style={styles.link}>¿Cómo puedo sumar más puntos?</Text>
+        </Pressable>
         <Pressable style={styles.buttonBlue}>
           <View style={styles.iconCointainer}>
             <Image source={images.profile_white} style={styles.icon} />
@@ -98,8 +104,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.semiBold,
     color: colors.texts,
     fontSize: 30,
-    display: 'flex',
-    justifyContent: 'center',
+    textAlign: 'center',
   },
   containerItem: {
     flexDirection: 'row',

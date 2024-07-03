@@ -30,7 +30,7 @@ const NavBar = ({ routeName }: NavBarProps) => {
           <Text style={styles.wellcomeHome}>Hola! 👋🏻</Text>
           <Text style={styles.fullNameHome}>
             {user && user.first_name !== '' ? user.first_name : 'User'}{' '}
-            {user && user.last_name !== '' ? user.last_name : 'Name'}
+            {user && user.last_name !== '' ? user.last_name : ''}
           </Text>
         </View>
         <View style={styles.menuInfo}>

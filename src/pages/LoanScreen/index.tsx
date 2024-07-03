@@ -1,6 +1,6 @@
 import NavBar from '@components/NavBar';
 import { colors, fonts } from '@theme';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 const LoanScreen = () => {
   return (
@@ -10,14 +10,23 @@ const LoanScreen = () => {
         Préstamos <Text style={styles.spanBold}>activos</Text>
       </Text>
       <View style={styles.containerButtons}>
-        <Text style={styles.buttonGreen}>Préstamo $300.000</Text>
+        <Pressable style={styles.buttonGreen} onPress={() => {}}>
+          <Text style={styles.textButton}>Préstamo $300.000</Text>
+        </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-03-2023</Text>
-        <Text style={styles.buttonBrown}>Préstamo $250.000</Text>
+        <Pressable style={styles.buttonBrown} onPress={() => {}}>
+          <Text style={styles.textButton}>Préstamo $250.000</Text>
+        </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-08-2023</Text>
-        <Text style={styles.buttonRed}>Préstamo $300.000</Text>
+        <Pressable style={styles.buttonRed} onPress={() => {}}>
+          <Text style={styles.textButton}>Préstamo $300.000</Text>
+        </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-05-2024</Text>
         <View style={styles.line}></View>
-        <Text style={styles.buttonTransparent}>Préstamo en Proceso</Text>
+
+        <Pressable style={styles.buttonTransparent} onPress={() => {}}>
+          <Text style={styles.textTransparent}>Préstamo en Proceso</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -53,10 +62,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: colors.white,
-    fontSize: 20,
-    fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
     lineHeight: 26.338,
     textTransform: 'capitalize',
   },
@@ -68,10 +73,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: colors.white,
-    fontSize: 20,
-    fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
     lineHeight: 26.338,
     textTransform: 'capitalize',
   },
@@ -83,12 +84,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    lineHeight: 26.338,
+    textTransform: 'capitalize',
+  },
+  textButton: {
     color: colors.white,
     fontSize: 20,
     fontFamily: fonts.gotham.bold,
     fontWeight: '700',
-    lineHeight: 26.338,
-    textTransform: 'capitalize',
   },
   textFinaly: {
     color: colors.texts,
@@ -106,14 +109,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: colors.blue,
-    fontSize: 20,
-    fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
     lineHeight: 26.338,
     textTransform: 'capitalize',
     borderWidth: 2,
     borderStyle: 'solid',
+  },
+  textTransparent: {
+    color: colors.blue,
+    fontSize: 20,
+    fontFamily: fonts.gotham.bold,
+    fontWeight: '700',
   },
   line: {
     width: '90%',

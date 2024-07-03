@@ -83,9 +83,7 @@ const SignUp = ({ navigation }: SignUpProps) => {
           style={[
             styles.textInput,
             {
-              borderColor: emailIsFocused
-              ? colors.blue2
-              : colors.gray2,
+              borderColor: emailIsFocused ? colors.blue2 : colors.gray2,
             },
           ]}
         />
@@ -93,9 +91,7 @@ const SignUp = ({ navigation }: SignUpProps) => {
           style={[
             styles.inputContainer,
             {
-              borderColor: passwordIsFocused
-              ? colors.blue2
-              : colors.gray2,
+              borderColor: passwordIsFocused ? colors.blue2 : colors.gray2,
             },
           ]}>
           <TextInput
@@ -122,9 +118,7 @@ const SignUp = ({ navigation }: SignUpProps) => {
           style={[
             styles.inputContainer,
             {
-              borderColor: confirmPasswordIsFocused
-              ? colors.blue2
-              : colors.gray2,
+              borderColor: confirmPasswordIsFocused ? colors.blue2 : colors.gray2,
             },
           ]}>
           <TextInput
@@ -148,8 +142,8 @@ const SignUp = ({ navigation }: SignUpProps) => {
           </Pressable>
         </View>
         <View style={styles.containerNext}>
-          <Pressable onPress={handleNext}>
-            <Text style={styles.buttonNext}>Siguiente</Text>
+          <Pressable style={styles.buttonNext} onPress={handleNext}>
+            <Text style={styles.textNext}>Siguiente</Text>
           </Pressable>
         </View>
         <Text style={styles.googleText}>O registrarse con tu cuenta de Google</Text>
@@ -221,17 +215,18 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   buttonNext: {
-    fontFamily: fonts.gotham.semiBold,
     backgroundColor: colors.blue,
-    color: colors.white,
     width: 164,
     height: 50,
     borderRadius: 50,
     display: 'flex',
     verticalAlign: 'middle',
-    textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textNext: {
+    fontFamily: fonts.gotham.semiBold,
+    color: colors.white,
   },
   googleText: {
     fontFamily: fonts.gotham.regular,
