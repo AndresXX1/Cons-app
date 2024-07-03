@@ -19,8 +19,8 @@ const MainNavigator = () => {
     };
     validateSessions();
   }, [dispatch]);
-  return <LoadingScreen />;
-  if (!isOnboarding) return <OnBoardingNavigator />;
+  if (isLoading) return <LoadingScreen />;
+  //if (!isOnboarding) return <OnBoardingNavigator />;
   if (!isAuth) return <AuthNavigator />;
   if (!user) return <LoadingScreen />;
 
