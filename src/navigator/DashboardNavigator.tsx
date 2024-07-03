@@ -11,6 +11,7 @@ import ShopScreen from '../pages/ShopScreen';
 import ProfileScreen from '../pages/ProfileScreen';
 import ApplyForLoanScreen from '@pages/HomeScreen/ApplyForLoanScreen';
 import BranchOfficesScreen from '@pages/HomeScreen/BranchOfficesScreen';
+import PointsQuestionsScreen from '@pages/ProfileScreen/PointsQuestionsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +28,7 @@ const isMatchingRoute = ({ routes, index }: isMatchingRouteProps) => {
   return false;
 };
 
-const disableNavbarPages = ['ApplyForLoanScreen','BranchOfficesScreen'];
+const disableNavbarPages = ['ApplyForLoanScreen', 'BranchOfficesScreen', 'PointsQuestionsScreen'];
 
 const DashboardNavigator = () => {
   return (
@@ -93,6 +94,13 @@ const DashboardNavigator = () => {
           <Tab.Screen
             name="Profile"
             component={ProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="PointsQuestionsScreen"
+            component={PointsQuestionsScreen}
             options={{
               headerShown: false,
             }}

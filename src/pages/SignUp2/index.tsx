@@ -82,9 +82,7 @@ const SignUp2 = ({ route, navigation }: SignUp2Props) => {
           style={[
             styles.textInput,
             {
-              borderColor: nameIsFocused
-              ? colors.blue2
-              : colors.gray2,
+              borderColor: nameIsFocused ? colors.blue2 : colors.gray2,
             },
           ]}
         />
@@ -99,9 +97,7 @@ const SignUp2 = ({ route, navigation }: SignUp2Props) => {
           style={[
             styles.textInput,
             {
-              borderColor: lastNameIsFocused
-              ? colors.blue2
-              : colors.gray2,
+              borderColor: lastNameIsFocused ? colors.blue2 : colors.gray2,
             },
           ]}
         />
@@ -116,15 +112,13 @@ const SignUp2 = ({ route, navigation }: SignUp2Props) => {
           style={[
             styles.textInput,
             {
-              borderColor: cUILIsFocused
-              ? colors.blue2
-              : colors.gray2,
+              borderColor: cUILIsFocused ? colors.blue2 : colors.gray2,
             },
           ]}
         />
         <View style={styles.containerNext}>
-          <Pressable onPress={handleNext}>
-            <Text style={styles.buttonNext}>Siguiente</Text>
+          <Pressable style={styles.buttonNext} onPress={handleNext}>
+            <Text style={styles.textNext}>Siguiente</Text>
           </Pressable>
         </View>
       </View>
@@ -176,9 +170,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   buttonNext: {
-    fontFamily: fonts.gotham.semiBold,
     backgroundColor: colors.blue,
-    color: colors.white,
     width: 164,
     height: 50,
     borderRadius: 50,
@@ -187,6 +179,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textNext: {
+    fontFamily: fonts.gotham.semiBold,
+    color: colors.white,
   },
 });
 

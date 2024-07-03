@@ -133,8 +133,8 @@ const LogIn = ({ navigation }: LogInProps) => {
           <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
 
           <View style={styles.containerLogin}>
-            <Pressable onPress={() => handleLogIn()}>
-              <Text style={styles.buttonLogin}>Iniciar sesión</Text>
+            <Pressable style={styles.buttonLogin} onPress={() => handleLogIn()}>
+              <Text style={styles.textLogin}>Iniciar sesión</Text>
             </Pressable>
           </View>
 
@@ -250,19 +250,20 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   buttonLogin: {
-    fontFamily: fonts.gotham.bold,
     backgroundColor: colors.blue,
-    color: colors.white,
-    fontSize: 20,
     width: 263,
     height: 54,
     borderRadius: 50,
     display: 'flex',
     verticalAlign: 'middle',
-    textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     lineHeight: 26,
+  },
+  textLogin: {
+    fontFamily: fonts.gotham.bold,
+    color: colors.white,
+    fontSize: 20,
   },
   textGoogle: {
     textAlign: 'center',

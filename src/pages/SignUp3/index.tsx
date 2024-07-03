@@ -150,8 +150,8 @@ const SignUp3 = ({ route, navigation }: SignUp3Props) => {
           ]}
         />
         <View style={styles.containerNext}>
-          <Pressable onPress={handleNext}>
-            <Text style={styles.buttonNext}>Siguiente</Text>
+          <Pressable style={styles.buttonNext} onPress={handleNext}>
+            <Text style={styles.textNext}>Siguiente</Text>
           </Pressable>
         </View>
       </View>
@@ -204,9 +204,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   buttonNext: {
-    fontFamily: fonts.gotham.semiBold,
     backgroundColor: colors.blue,
-    color: colors.white,
     width: 164,
     height: 50,
     borderRadius: 50,
@@ -215,6 +213,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textNext: {
+    fontFamily: fonts.gotham.semiBold,
+    color: colors.white,
   },
   input: {
     backgroundColor: colors.transparent,
