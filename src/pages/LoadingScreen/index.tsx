@@ -1,44 +1,48 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  Image,
-  Dimensions,
-} from "react-native";
-import { images } from "../../theme/images";
+import { StatusBar } from 'expo-status-bar';
+import { View, StyleSheet, ImageBackground, Image, Dimensions, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { colors, images } from '@theme';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const logoMargin = 44;
 
 const LoadingScreen = () => {
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("@assets/images/background.png")}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      >
-        <Image source={images.logo} style={styles.logo} resizeMode="cover" />
-      </ImageBackground>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <ImageBackground
+          source={images.background}
+          style={styles.backgroundImage}
+          resizeMode="cover">
+          <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+          <Text style={styles.title} numberOfLines={1}>
+            TEST
+          </Text>
+        </ImageBackground>
+        <StatusBar style="auto" />
+      </View>
+    </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: { 
+    fontSize: 24,
+    color: colors.white,
+    alignItems: 'center',
   },
   backgroundImage: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
     width: width - 2 * logoMargin,

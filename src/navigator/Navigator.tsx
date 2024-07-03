@@ -19,7 +19,7 @@ const MainNavigator = () => {
     };
     validateSessions();
   }, [dispatch]);
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) 
   if (!isOnboarding) return <OnBoardingNavigator />;
   if (!isAuth) return <AuthNavigator />;
   if (!user) return <LoadingScreen />;
