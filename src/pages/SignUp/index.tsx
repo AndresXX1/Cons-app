@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.semiBold,
     color: colors.blue2,
     fontSize: 32,
-    textAlignVertical: 'center',
+    verticalAlign: 'middle',
     textAlign: 'center',
   },
   inputContainer: {
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 50,
     display: 'flex',
-    textAlignVertical: 'center',
+    verticalAlign: 'middle',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.regular,
     color: colors.gray3,
     fontSize: 14,
-    textAlignVertical: 'center',
+    verticalAlign: 'middle',
     textAlign: 'center',
   },
   googleIconContainer: {

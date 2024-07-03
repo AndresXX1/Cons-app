@@ -44,6 +44,17 @@ export const images: { [key: string]: ImageSourcePropType } = {
   logo_purple: require('@assets/images/logo_purple.png'),
   whatsapp: require('@assets/images/whatsapp.png'),
   google_maps: require('@assets/images/google_maps.png'),
+  home_icon_blue: require('@assets/images/home_icon_blue.png'),
+  home_icon_grey: require('@assets/images/home_icon_grey.png'),
+  benefits_icon_grey: require('@assets/images/benefits_icon_grey.png'),
+  benefits_icon_blue: require('@assets/images/benefits_icon_blue.png'),
+  logo_icon_white: require('@assets/images/logo_icon_white.png'),
+  shop_icon_red: require('@assets/images/shop_icon_red.png'),
+  shop_icon_grey: require('@assets/images/shop_icon_grey.png'),
+  profile_icon_blue: require('@assets/images/profile_icon_blue.png'),
+  profile_icon_grey: require('@assets/images/profile_icon_grey.png'),
+  breaking_news_white: require('@assets/images/breaking_news_white.png'),
+  notification_white: require('@assets/images/notification_white.png'),
 };
 
 type VirtualAssetModuleType = number | string;
@@ -52,7 +63,7 @@ type VirtualAssetModuleType = number | string;
 const loadImage = async (key: string, source: ImageSourcePropType) => {
   try {
     await Asset.fromModule(source as VirtualAssetModuleType).downloadAsync();
-    console.log(`Imagen ${key} cargada correctamente`);
+    // console.log(`Imagen ${key} cargada correctamente`);
   } catch (error) {
     console.error(`Error al cargar la imagen ${key}:`, error);
   }
@@ -60,7 +71,6 @@ const loadImage = async (key: string, source: ImageSourcePropType) => {
 
 export const loadImages = async () => {
   try {
-    console.log('Cargando imágenes...');
     const promises = Object.keys(images).map(key => loadImage(key, images[key]));
     await Promise.all(promises);
     console.log('Todas las imágenes se han cargado correctamente');

@@ -79,10 +79,7 @@ const LogIn = ({ navigation }: LogInProps) => {
   };
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('@assets/images/background.png')}
-        style={styles.backgroundImage}
-        resizeMode="cover">
+      <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
         <View style={styles.back}>
           <Pressable onPress={() => navigation.navigate('Menu')} style={styles.btnBack}>
             <Image source={images.arrow_back} />
@@ -100,7 +97,7 @@ const LogIn = ({ navigation }: LogInProps) => {
             placeholderTextColor={colors.gray2}
             onFocus={handleEmailFocus}
             onBlur={handleEmailBlur}
-            onChangeText={text => setData({...data, email: text})}
+            onChangeText={text => setData({ ...data, email: text })}
             editable={!active}
             value={data.email}
             style={[
@@ -119,7 +116,7 @@ const LogIn = ({ navigation }: LogInProps) => {
               placeholderTextColor={colors.gray2}
               onFocus={handlePasswordFocus}
               onBlur={handlePasswordBlur}
-              onChangeText={text => setData({...data, password: text})}
+              onChangeText={text => setData({ ...data, password: text })}
               value={data.password}
               editable={!active}
               style={[styles.textInputHidden]}
@@ -164,7 +161,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.bold,
     color: colors.blue2,
     fontSize: 32,
-    textAlignVertical: 'center',
+    verticalAlign: 'middle',
     textAlign: 'center',
     paddingTop: 35,
     paddingBottom: 54,
@@ -261,7 +258,7 @@ const styles = StyleSheet.create({
     height: 54,
     borderRadius: 50,
     display: 'flex',
-    textAlignVertical: 'center',
+    verticalAlign: 'middle',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',

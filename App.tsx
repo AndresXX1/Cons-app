@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 import MainNavigator from './src/navigator/Navigator';
-import { loadFonts } from "@theme";
+import { loadFonts, loadImages } from '@theme';
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync().catch(error => {
@@ -19,25 +19,25 @@ const AppWrapper = () => {
 
 const App = () => {
   const [appReady, setAppReady] = useState<boolean>(false);
-  // const preloadAssets = async () => {
-  //   try {
-  //     await Promise.all([loadFonts()]);
-  //   } finally {
-  //     setAppReady(true);
-  //   }
-  // };
+  const preloadAssets = async () => {
+    try {
+      await Promise.all([loadFonts(), loadImages()]);
+    } finally {
+      setAppReady(true);
+    }
+  };
 
-  // useEffect(() => {
-  //   preloadAssets();
-  // }, []);
+  useEffect(() => {
+    preloadAssets();
+  }, []);
 
-  // useEffect(() => {
-  //   if (appReady) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [appReady]);
+  useEffect(() => {
+    if (appReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [appReady]);
 
-  // if (!appReady) return null;
+  if (!appReady) return null;
 
   return <MainNavigator />;
 };

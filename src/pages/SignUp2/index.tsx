@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, Image, Pressable, Text, TextInput } from 'react-native';
 import { images } from 'src/theme/images';
-import { logInAsync } from '../../store/actions/auth';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AppDispatch, RootState } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
+// import { logInAsync } from '../../store/actions/auth';
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AppDispatch } from '../../store';
+import { useDispatch } from 'react-redux';
 import CustomProgressBar from '@components/CustomProgressBar';
 
 interface SignUp2Props {
@@ -16,7 +16,6 @@ interface SignUp2Props {
 
 const SignUp2 = ({ route, navigation }: SignUp2Props) => {
   const { email, password } = route.params;
-  console.log(route.params);
 
   const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.semiBold,
     color: colors.blue2,
     fontSize: 32,
-    textAlignVertical: 'center',
+    verticalAlign: 'middle',
     textAlign: 'center',
   },
   textInput: {
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 50,
     display: 'flex',
-    textAlignVertical: 'center',
+    verticalAlign: 'middle',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
