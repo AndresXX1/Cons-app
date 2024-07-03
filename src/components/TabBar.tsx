@@ -1,5 +1,5 @@
-import { View, Pressable, StyleSheet } from 'react-native';
-import { HomeSVG, BenefitsSVG, ShopSVG, ProfileSVG, LoanSVG } from '../utils/icons';
+import { images } from '@theme';
+import { View, Pressable, StyleSheet, Image } from 'react-native';
 
 const TabBar = ({ state, descriptors, navigation }: any) => {
   const actualRoute = state.routes[state.index];
@@ -50,22 +50,34 @@ const TabBar = ({ state, descriptors, navigation }: any) => {
           <View key={index}>
             <Pressable onPress={onPress}>
               <View>
-                {label === 'Home' && (
-                  <HomeSVG size={24} color={isFocused ? '#006E9A' : '#C4C4C4'} />
+                {label === 'Home' && isFocused && (
+                  <Image source={images.home_icon_blue} style={styles.icon} />
                 )}
-                {label === 'Benefits' && (
-                  <BenefitsSVG size={24} color={isFocused ? '#006E9A' : '#C4C4C4'} />
+                {label === 'Home' && !isFocused && (
+                  <Image source={images.home_icon_grey} style={styles.icon} />
+                )}
+                {label === 'Benefits' && isFocused && (
+                  <Image source={images.benefits_icon_blue} style={styles.icon} />
+                )}
+                {label === 'Benefits' && !isFocused && (
+                  <Image source={images.benefits_icon_grey} style={styles.icon} />
                 )}
                 {label === 'Loan' && (
                   <View style={styles.btnLoan}>
-                    <LoanSVG color="#ffffff" />
+                    <Image source={images.logo_icon_white} style={styles.iconLogo} />
                   </View>
                 )}
-                {label === 'Shop' && (
-                  <ShopSVG size={24} color={isFocused ? '#EF4623' : '#C4C4C4'} />
+                {label === 'Shop' && isFocused && (
+                  <Image source={images.shop_icon_red} style={styles.icon} />
                 )}
-                {label === 'Profile' && (
-                  <ProfileSVG size={24} color={isFocused ? '#006E9A' : '#C4C4C4'} />
+                {label === 'Shop' && !isFocused && (
+                  <Image source={images.shop_icon_grey} style={styles.icon} />
+                )}
+                {label === 'Profile' && isFocused && (
+                  <Image source={images.profile_icon_blue} style={styles.icon} />
+                )}
+                {label === 'Profile' && !isFocused && (
+                  <Image source={images.profile_icon_grey} style={styles.icon} />
                 )}
               </View>
             </Pressable>
@@ -82,13 +94,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: -2,
+    // },
+    // shadowColor: '#000',
+    // shadowOpacity: 0.1,
+    // shadowRadius: 3,
   },
   btnLoan: {
     backgroundColor: '#00A5E7',
@@ -103,6 +115,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
     borderWidth: 3,
+  },
+  icon: {
+    width: 30,
+    height: 30,
+  },
+  iconLogo: {
+    width: 51,
+    height: 33,
   },
 });
 

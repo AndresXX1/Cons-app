@@ -37,7 +37,7 @@ const ShopScreen = () => {
   useFocusEffect(
     React.useCallback(() => {
       if (scrollViewRef.current) {
-        scrollViewRef.current.scrollTo({ y: 0, animated: true });
+        scrollViewRef.current.scrollTo({ y: 0, animated: false });
       }
     }, []),
   );

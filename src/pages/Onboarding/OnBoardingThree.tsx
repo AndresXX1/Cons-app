@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.gotham.regular,
-    textAlignVertical: "center",
+    verticalAlign: 'middle',
     textAlign: "center",
     fontSize: 18,
     lineHeight: 24,

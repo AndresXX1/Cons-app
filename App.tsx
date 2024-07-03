@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 import MainNavigator from './src/navigator/Navigator';
-import { loadImages, loadFonts } from "@theme";
+import { loadFonts, loadImages } from '@theme';
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync().catch(error => {

@@ -3,7 +3,6 @@ import { colors, fonts, images } from '@theme';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { apiUrls } from '../store/api';
-import { CardSVG, NotificationSVG } from '../utils/icons';
 
 interface NavBarProps {
   routeName: string;
@@ -15,9 +14,17 @@ const NavBar = ({ routeName }: NavBarProps) => {
     return (
       <View style={styles.containerHome}>
         <View style={styles.homeButtons}>
-          <CardSVG />
+          <Image
+            source={images.breaking_news_white}
+            style={styles.breakingNewsIcon}
+            resizeMode="cover"
+          />
           <Image source={images.logo} style={styles.logo} resizeMode="cover" />
-          <NotificationSVG />
+          <Image
+            source={images.notification_white}
+            style={styles.notificationIcon}
+            resizeMode="cover"
+          />
         </View>
         <View>
           <Text style={styles.wellcomeHome}>Hola! 👋🏻</Text>
@@ -136,6 +143,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 20,
   },
+  breakingNewsIcon: {
+    width: 31,
+    height: 31,
+  },
+  notificationIcon: {
+    width: 24,
+    height: 24,
+  },
   wellcomeHome: {
     color: colors.white,
     fontFamily: fonts.gotham.bold,
@@ -217,13 +232,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: '#9D9D9D',
     borderWidth: 1,
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: -2,
+    // },
+    // shadowColor: '#000',
+    // shadowOpacity: 0.1,
+    // shadowRadius: 3,
   },
   containerProfile: {
     backgroundColor: '#00A5E7',
