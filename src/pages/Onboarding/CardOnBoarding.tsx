@@ -75,6 +75,8 @@ const styles = StyleSheet.create({
   },
   body: {
     height: 350,
+    width: '100%',
+    paddingHorizontal: 20,
   },
   containerLine: {
     display: 'flex',

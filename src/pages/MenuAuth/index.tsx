@@ -23,12 +23,14 @@ const MenuAuth = ({ navigation }: MenuAuthProps) => {
       <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
         <Image source={images.logo} style={styles.logo} resizeMode="cover" />
         <Pressable
+          style={styles.btnRegister}
           onPress={() => {
             navigation.navigate('SignUp');
           }}>
           <Text style={styles.register}>Registrarme</Text>
         </Pressable>
         <Pressable
+          style={styles.btnLogIn}
           onPress={() => {
             navigation.navigate('LogIn');
           }}>
@@ -59,13 +61,10 @@ const styles = StyleSheet.create({
     height: (width - 2 * logoMargin) * 0.312,
     marginBottom: 70,
   },
-  register: {
-    fontFamily: fonts.gotham.semiBold,
+  btnRegister: {
     width: width - 112,
     height: 54,
     backgroundColor: colors.white,
-    color: colors.blue,
-    fontSize: 20,
     borderRadius: 50,
     display: 'flex',
     verticalAlign: 'middle',
@@ -74,20 +73,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 34,
   },
-  logIn: {
+  register: {
     fontFamily: fonts.gotham.semiBold,
+    color: colors.blue,
+    fontSize: 20,
+  },
+  btnLogIn: {
     width: width - 112,
     height: 54,
-    color: '#ffffff',
-    borderColor: '#ffffff',
+    borderColor: colors.white,
     borderWidth: 2,
-    fontSize: 20,
     borderRadius: 50,
     display: 'flex',
     verticalAlign: 'middle',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logIn: {
+    fontFamily: fonts.gotham.semiBold,
+    color: colors.white,
+    fontSize: 20,
   },
 });
 
