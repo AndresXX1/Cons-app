@@ -5,10 +5,6 @@ import MainNavigator from './src/navigator/Navigator';
 import { loadFonts, loadImages } from '@theme';
 import * as SplashScreen from 'expo-splash-screen';
 
-SplashScreen.preventAutoHideAsync().catch(error => {
-  console.log(error);
-});
-
 const AppWrapper = () => {
   return (
     <Provider store={store}>
@@ -21,6 +17,7 @@ const App = () => {
   const [appReady, setAppReady] = useState<boolean>(false);
   const preloadAssets = async () => {
     try {
+      SplashScreen.preventAutoHideAsync();
       await Promise.all([loadFonts(), loadImages()]);
     } finally {
       setAppReady(true);
