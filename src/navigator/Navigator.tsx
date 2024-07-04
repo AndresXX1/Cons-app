@@ -7,7 +7,6 @@ import OnBoardingNavigator from './OnBoardingNavigator';
 //import DashboardNavigator from './DashboardNavigator';
 //import AuthNavigator from './AuthNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 
 const MainNavigator = () => {
   //const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +14,6 @@ const MainNavigator = () => {
   return (
     <>
       <NavigationContainer>
-        <StatusBar style="light" backgroundColor="#40066C" />
         <OnBoardingNavigator />
       </NavigationContainer>
     </>
