@@ -4,6 +4,9 @@ import { store } from './src/store';
 import MainNavigator from './src/navigator/Navigator';
 import { loadFonts, loadImages } from '@theme';
 import * as SplashScreen from 'expo-splash-screen';
+import { Alert } from 'react-native';
+
+SplashScreen.preventAutoHideAsync();
 
 const AppWrapper = () => {
   return (
@@ -17,8 +20,10 @@ const App = () => {
   const [appReady, setAppReady] = useState<boolean>(false);
   const preloadAssets = async () => {
     try {
-      SplashScreen.preventAutoHideAsync();
       await Promise.all([loadFonts(), loadImages()]);
+    } catch (error: any) {
+      setAppReady(true);
+      Alert.alert(error);
     } finally {
       setAppReady(true);
     }

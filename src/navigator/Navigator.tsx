@@ -1,7 +1,7 @@
 //import { useEffect } from 'react';
 //import { verifySessionAsync, checkOnboarding } from '../store/actions/auth';
-import { AppDispatch, RootState } from '../store';
-import { useDispatch, useSelector } from 'react-redux';
+//import { AppDispatch, RootState } from '../store';
+//import { useDispatch, useSelector } from 'react-redux';
 //import LoadingScreen from '../pages/LoadingScreen';
 import OnBoardingNavigator from './OnBoardingNavigator';
 //import DashboardNavigator from './DashboardNavigator';
@@ -10,7 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
 const MainNavigator = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  //const dispatch = useDispatch<AppDispatch>();
 
   return (
     <>
