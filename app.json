@@ -35,9 +35,6 @@
     "owner": "binarysorcerers",
     "scheme": "argenpesos",
     "currentFullName": "@binarysorcerers/argen-pesos",
-    "originalFullName": "@binarysorcerers/argen-pesos",
-    "plugins": [
-      "expo-font"
-    ]
+    "originalFullName": "@binarysorcerers/argen-pesos"
   }
 }
