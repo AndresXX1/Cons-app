@@ -53,19 +53,17 @@ const CardScreenThree = ({ navigation }: any) => {
 
 const OnBoardingNavigator = () => {
   return (
-    <NavigationContainer>
-      <StatusBar style="light" backgroundColor="#40066C" />
-      <Stack.Navigator>
-        <Stack.Screen
-          name={'card-1'}
-          component={OnBoardingOne}
-          options={{
-            headerShown: false,
-            headerTitle: () => null,
-            headerLeft: () => null,
-          }}
-        />
-        {/*<Stack.Screen
+    <Stack.Navigator>
+      <Stack.Screen
+        name={'card-1'}
+        component={OnBoardingOne}
+        options={{
+          headerShown: false,
+          headerTitle: () => null,
+          headerLeft: () => null,
+        }}
+      />
+      {/*<Stack.Screen
           name={`card-2`}
           component={CardScreenTwo}
           options={{
@@ -83,8 +81,7 @@ const OnBoardingNavigator = () => {
             headerLeft: () => null,
           }}
         />*/}
-      </Stack.Navigator>
-    </NavigationContainer>
+    </Stack.Navigator>
   );
 };
 

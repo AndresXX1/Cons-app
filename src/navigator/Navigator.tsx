@@ -6,6 +6,8 @@ import LoadingScreen from "../pages/LoadingScreen";
 import OnBoardingNavigator from "./OnBoardingNavigator";
 import DashboardNavigator from "./DashboardNavigator";
 import AuthNavigator from "./AuthNavigator";
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const MainNavigator = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,12 +21,24 @@ const MainNavigator = () => {
     };
     validateSessions();
   }, [dispatch]);
-  if (isLoading) return <LoadingScreen />;
-  if (!isOnboarding) return <OnBoardingNavigator />;
-  if (!isAuth) return <AuthNavigator />;
-  if (!user) return <LoadingScreen />;
 
-  return <DashboardNavigator />;
+  return (
+    <>
+      <NavigationContainer>
+      <StatusBar style="light" backgroundColor="#40066C" />
+        {!isOnboarding && (
+          <OnBoardingNavigator />
+        )}
+ 
+      </NavigationContainer>
+    </>
+  );
+  //if (isLoading) return <LoadingScreen />;
+  //if (!isOnboarding) return <OnBoardingNavigator />;
+  //if (!isAuth) return <AuthNavigator />;
+  //if (!user) return <LoadingScreen />;
+
+  //return <DashboardNavigator />;
 };
 
 export default MainNavigator;
