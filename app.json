@@ -2,7 +2,7 @@
   "expo": {
     "name": "argenpesos-app",
     "slug": "argen-pesos",
-    "version": "1.2.8",
+    "version": "1.2.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "28"
+      "buildNumber": "29"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#13B4EF"
       },
-      "versionCode": 28,
+      "versionCode": 29,
       "package": "com.binarysorcerers.argenpesos"
     },
     "web": {

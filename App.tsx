@@ -21,11 +21,7 @@ const App = () => {
   const preloadAssets = async () => {
     try {
       await Promise.all([loadFonts(), loadImages()]);
-    } catch (error: any) {
-      setAppReady(true);
-      Alert.alert(error);
     } finally {
-      Alert.alert("tesat");
       setAppReady(true);
     }
   };
@@ -36,6 +32,7 @@ const App = () => {
 
   useEffect(() => {
     if (appReady) {
+      Alert.alert('tesat');
       SplashScreen.hideAsync();
     }
   }, [appReady]);

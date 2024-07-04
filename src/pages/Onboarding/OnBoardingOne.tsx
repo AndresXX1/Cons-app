@@ -1,8 +1,8 @@
-import { colors, images } from '@theme';
+//import { colors, images } from '@theme';
 //import { StatusBar } from 'expo-status-bar';
 //import { AppDispatch } from '../../store';
 //import { useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native'; //, Image, ImageBackground
 //import { activateOnboarding } from '../../store/actions/auth';
 
 interface OnBoardingOneProps {
@@ -22,7 +22,8 @@ const OnBoardingOne = ({ navigation }: OnBoardingOneProps) => {
 
   return (
     <View style={styles.root}>
-      <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
+      <Text style={styles.title}> "Test".</Text>
+      {/*<ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
         <Text style={styles.title}>Registrarme o Iniciar Sesión</Text>
         <View style={styles.body}>
           <View style={styles.container}>
@@ -55,7 +56,7 @@ const OnBoardingOne = ({ navigation }: OnBoardingOneProps) => {
             <Text style={styles.textSkip}>Omitir</Text>
           </View>
         </View>
-      </ImageBackground>
+      </ImageBackground>*/}
     </View>
   );
 };
@@ -63,7 +64,7 @@ const OnBoardingOne = ({ navigation }: OnBoardingOneProps) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#333',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
   },
-  body: {
+  /*body: {
     height: 350,
     width: '100%',
     paddingHorizontal: 20,
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     // fontFamily: fonts.gotham.semiBold,
     fontSize: 18,
     lineHeight: 24,
-  },
+  },*/
 });
 
 export default OnBoardingOne;
