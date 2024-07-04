@@ -1,23 +1,23 @@
 import { colors, fonts, images } from '@theme';
 //import { StatusBar } from 'expo-status-bar';
-import { AppDispatch } from '../../store';
-import { useDispatch } from 'react-redux';
+//import { AppDispatch } from '../../store';
+//import { useDispatch } from 'react-redux';
 import { View, Text, StyleSheet, Image, ImageBackground, Pressable } from 'react-native';
-import { activateOnboarding } from '../../store/actions/auth';
+//import { activateOnboarding } from '../../store/actions/auth';
 
 interface OnBoardingOneProps {
   navigation?: any;
 }
 
 const OnBoardingOne = ({ navigation }: OnBoardingOneProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+  //const dispatch = useDispatch<AppDispatch>();
 
   const handleNext = () => {
-    navigation.navigate('card-1');
+   // navigation.navigate('card-1');
   };
 
   const handleSkip = () => {
-    dispatch(activateOnboarding('activated'));
+   // dispatch(activateOnboarding('activated'));
   };
 
   return (
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontFamily: fonts.gotham.semiBold,
+    //fontFamily: fonts.gotham.semiBold,
     fontSize: 36,
     color: '#ffffff',
     textAlign: 'center',
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textNext: {
-    fontFamily: fonts.gotham.semiBold,
+    //fontFamily: fonts.gotham.semiBold,
     color: colors.white,
   },
   buttonSkip: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textSkip: {
-    fontFamily: fonts.gotham.semiBold,
+    //fontFamily: fonts.gotham.semiBold,
     textDecorationLine: 'underline',
     color: colors.white,
   },
@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
     height: 24,
   },
   text: {
-    fontFamily: fonts.gotham.regular,
+    //fontFamily: fonts.gotham.regular,
     fontSize: 18,
     lineHeight: 24,
     color: colors.white,
   },
   text2: {
-    fontFamily: fonts.gotham.semiBold,
+   // fontFamily: fonts.gotham.semiBold,
     fontSize: 18,
     lineHeight: 24,
   },
