@@ -1,8 +1,8 @@
-import { colors, fonts, images } from '@theme';
+import { colors, images } from '@theme';
 //import { StatusBar } from 'expo-status-bar';
 //import { AppDispatch } from '../../store';
 //import { useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, Image, ImageBackground, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 //import { activateOnboarding } from '../../store/actions/auth';
 
 interface OnBoardingOneProps {
@@ -13,11 +13,11 @@ const OnBoardingOne = ({ navigation }: OnBoardingOneProps) => {
   //const dispatch = useDispatch<AppDispatch>();
 
   const handleNext = () => {
-   // navigation.navigate('card-1');
+    // navigation.navigate('card-1');
   };
 
   const handleSkip = () => {
-   // dispatch(activateOnboarding('activated'));
+    // dispatch(activateOnboarding('activated'));
   };
 
   return (
@@ -48,16 +48,12 @@ const OnBoardingOne = ({ navigation }: OnBoardingOneProps) => {
             <View style={styles.lineInactive} />
             <View style={styles.lineInactive} />
           </View>
-          <Pressable onPress={handleNext}>
-            <View style={styles.buttonNext}>
-              <Text style={styles.textNext}>Siguiente</Text>
-            </View>
-          </Pressable>
-          <Pressable onPress={handleSkip}>
-            <View style={styles.buttonSkip}>
-              <Text style={styles.textSkip}>Omitir</Text>
-            </View>
-          </Pressable>
+          <View style={styles.buttonNext}>
+            <Text style={styles.textNext}>Siguiente</Text>
+          </View>
+          <View style={styles.buttonSkip}>
+            <Text style={styles.textSkip}>Omitir</Text>
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   text2: {
-   // fontFamily: fonts.gotham.semiBold,
+    // fontFamily: fonts.gotham.semiBold,
     fontSize: 18,
     lineHeight: 24,
   },

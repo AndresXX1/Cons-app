@@ -23,7 +23,9 @@ const App = () => {
       await Promise.all([loadFonts(), loadImages()]);
     } catch (error: any) {
       setAppReady(true);
+      Alert.alert(error);
     } finally {
+      Alert.alert("tesat");
       setAppReady(true);
     }
   };
