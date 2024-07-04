@@ -23,7 +23,6 @@ const App = () => {
       await Promise.all([loadFonts(), loadImages()]);
     } catch (error: any) {
       setAppReady(true);
-      Alert.alert(error);
     } finally {
       setAppReady(true);
     }
