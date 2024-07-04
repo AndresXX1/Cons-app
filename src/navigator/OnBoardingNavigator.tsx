@@ -2,13 +2,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
-import CardOnBoarding from 'src/pages/Onboarding/CardOnBoarding';
+//import CardOnBoarding from 'src/pages/Onboarding/CardOnBoarding';
 import OnBoardingOne from '../pages/Onboarding/OnBoardingOne';
-import OnBoardingTwo from '../pages/Onboarding/OnBoardingTwo';
-import OnBoardingThree from '../pages/Onboarding/OnBoardingThree';
+//import OnBoardingTwo from '../pages/Onboarding/OnBoardingTwo';
+//import OnBoardingThree from '../pages/Onboarding/OnBoardingThree';
 
 const Stack = createNativeStackNavigator();
-
+/*
 const CardScreenOne = ({ navigation, route }: any) => {
   return (
     <CardOnBoarding
@@ -49,7 +49,7 @@ const CardScreenThree = ({ navigation }: any) => {
       navigation={navigation}
     />
   );
-};
+};*/
 
 const OnBoardingNavigator = () => {
   return (
@@ -57,15 +57,15 @@ const OnBoardingNavigator = () => {
       <StatusBar style="light" backgroundColor="#40066C" />
       <Stack.Navigator>
         <Stack.Screen
-          name={`card-1`}
-          component={CardScreenOne}
+          name={'card-1'}
+          component={OnBoardingOne}
           options={{
             headerShown: false,
             headerTitle: () => null,
             headerLeft: () => null,
           }}
         />
-        <Stack.Screen
+        {/*<Stack.Screen
           name={`card-2`}
           component={CardScreenTwo}
           options={{
@@ -82,7 +82,7 @@ const OnBoardingNavigator = () => {
             headerTitle: () => null,
             headerLeft: () => null,
           }}
-        />
+        />*/}
       </Stack.Navigator>
     </NavigationContainer>
   );
