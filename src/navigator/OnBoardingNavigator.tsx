@@ -53,7 +53,7 @@ const CardScreenThree = ({ navigation }: any) => {
 
 const OnBoardingNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="card-1">
       <Stack.Screen
         name={'card-1'}
         component={OnBoardingOne}
