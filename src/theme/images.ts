@@ -60,21 +60,8 @@ export const images: { [key: string]: ImageSourcePropType } = {
 type VirtualAssetModuleType = number | string;
 
 // preload images
-const loadImage = async (key: string, source: ImageSourcePropType) => {
-  try {
-    await Asset.fromModule(source as VirtualAssetModuleType).downloadAsync();
-    // console.log(`Imagen ${key} cargada correctamente`);
-  } catch (error) {
-    console.error(`Error al cargar la imagen ${key}:`, error);
-  }
-};
+const imageAssets = Object.keys(images).map(key => {
+  return Asset.fromModule(images[key] as VirtualAssetModuleType).downloadAsync();
+});
 
-export const loadImages = async () => {
-  try {
-    const promises = Object.keys(images).map(key => loadImage(key, images[key]));
-    await Promise.all(promises);
-    console.log('Todas las imágenes se han cargado correctamente');
-  } catch (error) {
-    console.error('Error al cargar las imagenes:', error);
-  }
-};
+export const loadImages = () => Promise.all(imageAssets);
