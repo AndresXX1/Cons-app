@@ -1,31 +1,36 @@
 {
   "expo": {
     "name": "argenpesos-app",
-    "slug": "argen-pesos",
-    "version": "1.2.9",
+    "slug": "argenpesos-app",
+    "version": "1.3.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#13B4EF"
     },
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "29"
+      "buildNumber": "30"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#13B4EF"
       },
-      "versionCode": 29,
+      "versionCode": 30,
       "package": "com.binarysorcerers.argenpesos"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
     },
     "extra": {
       "eas": {
