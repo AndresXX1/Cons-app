@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,18 +7,23 @@ import { firstWord } from '../../utils/format';
 import { colors, fonts, images } from '@/theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { logOutAsync } from '@/store/actions/auth';
-//import NavBar from '@components/NavBar';
+import NavBar from '@/components/NavBar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { Redirect, useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-interface ProfileScreenProps {
-  navigation?: any;
-}
-
-const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
+const ProfileScreen = () => {
+  const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, isAuth } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (!isAuth) return router.push('(auth)');
+  }, [isAuth]);
+
   useFocusEffect(
     React.useCallback(() => {
       if (scrollViewRef.current) {
@@ -26,10 +31,12 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
       }
     }, []),
   );
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
-        {/*<NavBar routeName="Profile" />*/}
+        <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+        <NavBar />
         <Text style={styles.fullName}>
           {user?.first_name && firstWord(user.first_name)}
           {user?.last_name && ' '}
@@ -52,24 +59,24 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
             <Text style={styles.textButton}>Canjear puntos</Text>
           </Pressable>
         </LinearGradient>
-        <Pressable onPress={() => navigation.navigate('PointsQuestionsScreen')}>
+        <Pressable onPress={() => router.push('points_questions')}>
           <Text style={styles.link}>¿Cómo puedo sumar más puntos?</Text>
         </Pressable>
-        <Pressable style={styles.buttonBlue}>
+        <Pressable style={styles.buttonBlue} onPress={() => router.push('my_data')}>
           <View style={styles.iconCointainer}>
             <Image source={images.profile_white} style={styles.icon} />
             <Text style={styles.textButtonBlue}>Mis datos personales</Text>
           </View>
           <Image source={images.arrow_back_white} style={styles.arrow} />
         </Pressable>
-        <Pressable style={styles.buttonBlue2}>
+        <Pressable style={styles.buttonBlue2} onPress={() => router.push('security')}>
           <View style={styles.iconCointainer}>
             <Image source={images.security_white} style={styles.icon} />
             <Text style={styles.textButtonBlue}>Seguridad</Text>
           </View>
           <Image source={images.arrow_back_white} style={styles.arrow} />
         </Pressable>
-        <Pressable style={styles.buttonBlue2}>
+        <Pressable style={styles.buttonBlue2} onPress={() => router.push('help')}>
           <View style={styles.iconCointainer}>
             <Image source={images.doubt_white} style={styles.icon} />
             <Text style={styles.textButtonBlue}>Preguntas frecuentes</Text>
@@ -85,20 +92,18 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         </Pressable>
         <Text style={styles.version}>Versión 1.13.11</Text>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-
     backgroundColor: '#fff',
     alignItems: 'center',
   },
   scrollView: {
     width: '100%',
-    paddingBottom: 100,
   },
   fullName: {
     fontFamily: fonts.gotham.semiBold,
@@ -240,6 +245,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 54,
     textAlign: 'center',
+    marginBottom: 100,
   },
 });
 

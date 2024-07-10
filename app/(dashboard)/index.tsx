@@ -1,15 +1,19 @@
 import React, { useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-//import NavBar from '@components/NavBar';
 import { images, fonts, colors } from '@/theme';
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import NavBar from '@/components/NavBar';
+import { useRouter } from 'expo-router';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+
 const { width } = Dimensions.get('window');
 
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-
-const HomeScreen = ({ navigation }: BottomTabBarProps) => {
+const HomeScreen = () => {
+  const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
+
   useFocusEffect(
     React.useCallback(() => {
       if (scrollViewRef.current) {
@@ -17,6 +21,7 @@ const HomeScreen = ({ navigation }: BottomTabBarProps) => {
       }
     }, []),
   );
+
   const data = [
     {
       image: 'location_liniers',
@@ -46,10 +51,15 @@ const HomeScreen = ({ navigation }: BottomTabBarProps) => {
       title: 'Vía mail',
     },
   ];
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.root}>
+      <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+      <Pressable style={styles.btnHelp} onPress={() => router.push('help')}>
+        <Image source={images.help} style={styles.helpIcon} />
+      </Pressable>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
-        {/*<NavBar routeName="Home" />*/}
+        <NavBar />
         <Image source={images.banner_two} style={styles.banner} />
         <View style={styles.containerTitle}>
           <Text style={styles.text}>¡Llevate</Text>
@@ -57,7 +67,7 @@ const HomeScreen = ({ navigation }: BottomTabBarProps) => {
           <Text style={styles.text}> tus</Text>
           <Text style={styles.textBold}> $300.000!</Text>
         </View>
-        <Pressable style={styles.button} onPress={() => navigation.navigate('ApplyForLoanScreen')}>
+        <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
           <Image source={images.money_white} style={styles.moneyIcon} />
           <Text style={styles.textButton}>QUIERO MI PRÉSTAMO</Text>
         </Pressable>
@@ -84,7 +94,7 @@ const HomeScreen = ({ navigation }: BottomTabBarProps) => {
             </View>
           ))}
         </View>
-        <Pressable onPress={() => navigation.navigate('BranchOfficesScreen')}>
+        <Pressable onPress={() => router.push('branch_offices')}>
           <Text style={styles.textBlue}>Ver todas las sucursales</Text>
         </Pressable>
 
@@ -135,20 +145,20 @@ const HomeScreen = ({ navigation }: BottomTabBarProps) => {
             <Text style={styles.contactText}>{data.title}</Text>
           </LinearGradient>
         ))}
+        <View style={{ marginBottom: 80 }}></View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
     backgroundColor: '#F1F2F2',
     alignItems: 'center',
   },
   scrollView: {
     width: '100%',
-    paddingBottom: 100,
   },
   banner: {
     width: width - 32,
@@ -412,6 +422,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: fonts.gotham.semiBold,
     color: colors.white,
+  },
+  btnHelp: {
+    width: 62,
+    height: 62,
+    position: 'absolute',
+    zIndex: 3,
+    right: 16,
+    bottom: 80,
+  },
+  helpIcon: {
+    width: 62,
+    height: 62,
   },
 });
 

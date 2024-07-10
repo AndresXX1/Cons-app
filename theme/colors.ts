@@ -1,5 +1,6 @@
 export const colors = {
   green: '#04A11D',
+  green2: '#05B922',
   transparent: 'transparent',
   black: '#000000',
   white: '#ffffff',
@@ -12,6 +13,7 @@ export const colors = {
   texts: '#575757',
   red: '#E74D3E',
   red2: '#ED1A00',
+  skyBlue: '#00A5E7',
 
   //otros
   darkPurple: '#231d54',

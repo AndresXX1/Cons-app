@@ -14,11 +14,11 @@ import {
 import { activateOnboarding } from '@/store/actions/auth';
 
 const OnBoardingOne = () => {
-  const route = useRouter();
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleNext = () => {
-    route.push('step2');
+    router.push('step2');
   };
 
   const handleSkip = () => {

@@ -6,7 +6,7 @@ import { colors, fonts, images } from '@/theme';
 import { useRouter } from 'expo-router';
 
 const SignUp2 = () => {
-  const route = useRouter();
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [inputNameValue, setInputNameValue] = useState('');
@@ -43,7 +43,7 @@ const SignUp2 = () => {
   };
 
   const handleNext = () => {
-    route.push('signup3');
+    router.push('signup3');
   };
 
   return (

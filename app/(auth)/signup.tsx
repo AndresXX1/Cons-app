@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router';
 import CustomProgressBar from '@/components/CustomProgressBar';
 
 const SignUp = () => {
-  const route = useRouter();
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [inputEmailValue, setInputEmailValue] = useState('');
@@ -55,7 +55,7 @@ const SignUp = () => {
   };
 
   const handleNext = () => {
-    route.push('signup2');
+    router.push('signup2');
   };
 
   return (

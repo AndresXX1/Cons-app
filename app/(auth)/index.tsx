@@ -14,7 +14,7 @@ const { width } = Dimensions.get('window');
 const logoMargin = 44;
 
 const MenuAuth = () => {
-  const route = useRouter();
+  const router = useRouter();
 
   return (
     <SafeAreaView style={styles.root}>
@@ -23,14 +23,14 @@ const MenuAuth = () => {
         <Pressable
           style={styles.btnRegister}
           onPress={() => {
-            route.push('signup');
+            router.push('signup');
           }}>
           <Text style={styles.register}>Registrarme</Text>
         </Pressable>
         <Pressable
           style={styles.btnLogIn}
           onPress={() => {
-            route.push('login');
+            router.push('login');
           }}>
           <Text style={styles.logIn}>Iniciar Sesión</Text>
         </Pressable>

@@ -3,7 +3,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { colors, images, fonts } from '@/theme';
 import { Image } from 'react-native';
-//import NavBar from '@components/NavBar';
+import NavBar from '@/components/NavBar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const ShopScreen = () => {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -34,6 +36,7 @@ const ShopScreen = () => {
       price: '$270.000',
     },
   ];
+
   useFocusEffect(
     React.useCallback(() => {
       if (scrollViewRef.current) {
@@ -41,56 +44,63 @@ const ShopScreen = () => {
       }
     }, []),
   );
+
   return (
-    <ScrollView ref={scrollViewRef} style={styles.scrollView}>
-      {/*<NavBar routeName="Shop" />*/}
-      <View style={styles.container}>
-        <View style={styles.containerLogo}>
-          <View style={styles.ContainerLogoDest}>
-            <Image source={images.logo_featured} style={styles.logo}></Image>
-            <Text style={styles.textLogo}>Productos destacados</Text>
-          </View>
-          <View style={styles.ContainerLogoDest}>
-            <Image source={images.logo_electro} style={styles.logo}></Image>
-            <Text style={styles.textLogo}>Electro</Text>
-          </View>
-          <View style={styles.ContainerLogoDest}>
-            <Image source={images.logo_phone} style={styles.logo}></Image>
-            <Text style={styles.textLogo}>Celulares</Text>
-          </View>
-        </View>
-        <View style={styles.containerPoints}>
-          <View style={styles.containerPointsRed}></View>
-          <View style={styles.containerPointsGrey}></View>
-        </View>
-        <View style={styles.line}></View>
-
-        <View style={styles.containerFilter}>
-          <Image source={images.filter} style={styles.imageFilter}></Image>
-          <Text style={styles.textFilter}>Filtrar</Text>
-        </View>
-
-        <Text style={styles.textProduct}>PRODUCTOS DESTACADOS</Text>
-
-        <View style={styles.containerFeaturedFather}>
-          {data.map((dat, key) => (
-            <View key={key} style={styles.containerFeatured}>
-              <Image source={images[dat.img]} style={styles.imageFeatured}></Image>
-              <View style={styles.containerFeaturedTwo}>
-                <Text style={styles.textFeaturedBlue}>{dat.name}</Text>
-                <Text style={styles.textFeaturedRed}>{dat.price}</Text>
-                <Text style={styles.buttonRed}>COMPRAR AHORA</Text>
-                <Text style={styles.buttonBlue}>+ INFO</Text>
-              </View>
+    <SafeAreaView style={styles.root}>
+      <FocusAwareStatusBar backgroundColor={colors.red2} barStyle="light-content" />
+      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
+        <NavBar />
+        <View style={styles.container}>
+          <View style={styles.containerLogo}>
+            <View style={styles.ContainerLogoDest}>
+              <Image source={images.logo_featured} style={styles.logo}></Image>
+              <Text style={styles.textLogo}>Productos{'\n'}destacados</Text>
             </View>
-          ))}
+            <View style={styles.ContainerLogoDest}>
+              <Image source={images.logo_electro} style={styles.logo}></Image>
+              <Text style={styles.textLogo}>Electro</Text>
+            </View>
+            <View style={styles.ContainerLogoDest}>
+              <Image source={images.logo_phone} style={styles.logo}></Image>
+              <Text style={styles.textLogo}>Celulares</Text>
+            </View>
+          </View>
+          <View style={styles.containerPoints}>
+            <View style={styles.containerPointsRed}></View>
+            <View style={styles.containerPointsGrey}></View>
+          </View>
+          <View style={styles.line}></View>
+
+          <View style={styles.containerFilter}>
+            <Image source={images.filter} style={styles.imageFilter}></Image>
+            <Text style={styles.textFilter}>Filtrar</Text>
+          </View>
+
+          <Text style={styles.textProduct}>PRODUCTOS DESTACADOS</Text>
+
+          <View style={styles.containerFeaturedFather}>
+            {data.map((dat, key) => (
+              <View key={key} style={styles.containerFeatured}>
+                <Image source={images[dat.img]} style={styles.imageFeatured}></Image>
+                <View style={styles.containerFeaturedTwo}>
+                  <Text style={styles.textFeaturedBlue}>{dat.name}</Text>
+                  <Text style={styles.textFeaturedRed}>{dat.price}</Text>
+                  <Text style={styles.buttonRed}>COMPRAR AHORA</Text>
+                  <Text style={styles.buttonBlue}>+ INFO</Text>
+                </View>
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.gray,
@@ -100,7 +110,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
-    paddingBottom: 50,
   },
   containerLogo: {
     display: 'flex',
@@ -122,6 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: fonts.gotham.semiBold,
     fontWeight: '700',
+    textAlign: 'center',
   },
   containerPoints: {
     display: 'flex',
@@ -183,7 +193,7 @@ const styles = StyleSheet.create({
   containerFeaturedFather: {
     display: 'flex',
     gap: 31,
-    marginBottom: 70,
+    marginBottom: 100,
   },
   containerFeatured: {
     display: 'flex',
@@ -229,9 +239,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     height: 32,
     width: 151,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    textAlign: 'center',
+    textAlignVertical: 'center',
     borderRadius: 50,
     fontSize: 12,
     fontFamily: fonts.gotham.bold,
@@ -242,9 +251,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     height: 32,
     width: 151,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    textAlign: 'center',
+    textAlignVertical: 'center',
     borderRadius: 50,
     fontSize: 12,
     fontFamily: fonts.gotham.bold,

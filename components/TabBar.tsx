@@ -31,7 +31,7 @@ const TabBar = ({ state, descriptors, navigation, ...props }: BottomTabBarProps)
         } else if (label === 'shop') {
           title = 'Shop';
         } else if (label === 'profile') {
-          title = 'profile';
+          title = 'Profile';
         }
 
         if (title === '') return null;

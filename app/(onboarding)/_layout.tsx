@@ -1,8 +1,11 @@
-import { Stack, useRouter } from 'expo-router';
-import useOnboardingRedirect from '@/hooks/useOnboardingRedirect';
+import { RootState } from '@/store';
+import { Stack, Redirect } from 'expo-router';
+import { useSelector } from 'react-redux';
 
 const OnboardingLayout = () => {
-  useOnboardingRedirect();
+  const { isOnboarding } = useSelector((state: RootState) => state.auth);
+
+  if (isOnboarding) return <Redirect href="(auth)" />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

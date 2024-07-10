@@ -1,26 +1,19 @@
-import { AppDispatch } from '@/store';
+import { AppDispatch, RootState } from '@/store';
 import { logInAsync } from '@/store/actions/auth';
 import { colors, fonts, images } from '@/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  Text,
-  StyleSheet,
-  Image,
-  ImageBackground,
-  Pressable,
-  Dimensions,
-  View,
-  TextInput,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
+import { Text, StyleSheet, Image, Pressable, Dimensions, View, TextInput } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const { width, height } = Dimensions.get('window');
 
 const LogIn = () => {
-  const route = useRouter();
+  const { isAuth } = useSelector((state: RootState) => state.auth);
+
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
   const [active, setActive] = useState(false);
@@ -76,74 +69,69 @@ const LogIn = () => {
     });
   };
 
+  if (isAuth) return <Redirect href="(dashboard)" />;
+
   return (
     <SafeAreaView style={styles.root}>
-      <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
-        <View style={styles.back}>
-          <Pressable onPress={() => route.back()} style={styles.btnBack}>
-            <Image source={images.arrow_back} />
-            <Text style={styles.btnBackText}>Volver atrás</Text>
-          </Pressable>
-          <Image source={images.logo} style={styles.logo} resizeMode="cover" />
-        </View>
-        <View style={styles.form}>
-          <Text style={styles.title}>Iniciar Sesión</Text>
+      <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+      <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+      <View style={styles.form}>
+        <Text style={styles.title}>Iniciar Sesión</Text>
 
-          {error && <Text>{error}</Text>}
+        {error && <Text>{error}</Text>}
+        <TextInput
+          placeholder="Email"
+          autoCapitalize="none"
+          placeholderTextColor={colors.gray2}
+          onFocus={handleEmailFocus}
+          onBlur={handleEmailBlur}
+          onChangeText={text => setData({ ...data, email: text })}
+          editable={!active}
+          value={data.email}
+          style={[
+            styles.textInput,
+            {
+              borderColor: emailIsFocused ? colors.blue2 : colors.gray2,
+            },
+          ]}
+        />
+        <View style={[styles.inputContainer]}>
           <TextInput
-            placeholder="Email"
+            secureTextEntry={!passwordVisible}
+            placeholder="Contraseña"
             autoCapitalize="none"
+            autoCorrect={false}
             placeholderTextColor={colors.gray2}
-            onFocus={handleEmailFocus}
-            onBlur={handleEmailBlur}
-            onChangeText={text => setData({ ...data, email: text })}
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+            onChangeText={text => setData({ ...data, password: text })}
+            value={data.password}
             editable={!active}
-            value={data.email}
-            style={[
-              styles.textInput,
-              {
-                borderColor: emailIsFocused ? colors.blue2 : colors.gray2,
-              },
-            ]}
+            style={[styles.textInputHidden]}
           />
-          <View style={[styles.inputContainer]}>
-            <TextInput
-              secureTextEntry={!passwordVisible}
-              placeholder="Contraseña"
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholderTextColor={colors.gray2}
-              onFocus={handlePasswordFocus}
-              onBlur={handlePasswordBlur}
-              onChangeText={text => setData({ ...data, password: text })}
-              value={data.password}
-              editable={!active}
-              style={[styles.textInputHidden]}
+          <Pressable onPress={handlePasswordVisibility}>
+            <MaterialCommunityIcons
+              name={passwordVisibility ? 'eye-outline' : 'eye-off-outline'}
+              size={32}
+              color={colors.blue}
             />
-            <Pressable onPress={handlePasswordVisibility}>
-              <MaterialCommunityIcons
-                name={passwordVisibility ? 'eye-outline' : 'eye-off-outline'}
-                size={32}
-                color={colors.blue}
-              />
-            </Pressable>
-          </View>
-
-          <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
-
-          <View style={styles.containerLogin}>
-            <Pressable style={styles.buttonLogin} onPress={() => handleLogIn()}>
-              <Text style={styles.textLogin}>Iniciar sesión</Text>
-            </Pressable>
-          </View>
-
-          <Text style={[styles.textGoogle]}>O iniciar sesión con tu cuenta de Google</Text>
-
-          <View style={styles.googleIconContainer}>
-            <Image source={images.google_button} style={styles.googleIcon} />
-          </View>
+          </Pressable>
         </View>
-      </ImageBackground>
+
+        <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
+
+        <View style={styles.containerLogin}>
+          <Pressable style={styles.buttonLogin} onPress={() => handleLogIn()}>
+            <Text style={styles.textLogin}>Iniciar sesión</Text>
+          </Pressable>
+        </View>
+
+        <Text style={[styles.textGoogle]}>O iniciar sesión con tu cuenta de Google</Text>
+
+        <View style={styles.googleIconContainer}>
+          <Image source={images.google_button} style={styles.googleIcon} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -151,9 +139,10 @@ const LogIn = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 52,
+    backgroundColor: colors.blue2,
+    justifyContent: 'flex-end',
+    gap: 26,
   },
   title: {
     fontFamily: fonts.gotham.bold,

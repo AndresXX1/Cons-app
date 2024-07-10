@@ -1,11 +1,8 @@
 import { Stack } from 'expo-router';
 import { colors } from '@/theme';
 import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
-import useAuthRedirect from '@/hooks/useAuthRedirect';
 
 const AuthLayout = () => {
-  useAuthRedirect();
-
   return (
     <Stack>
       <Stack.Screen
@@ -19,9 +16,12 @@ const AuthLayout = () => {
       <Stack.Screen
         name="login"
         options={{
-          headerShown: false,
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'SignUp',
           headerTitle: () => null,
-          headerLeft: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.white} />,
         }}
       />
       <Stack.Screen

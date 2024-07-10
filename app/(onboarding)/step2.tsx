@@ -14,11 +14,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { activateOnboarding } from '@/store/actions/auth';
 
 const OnBoardingTwo = () => {
-  const route = useRouter();
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleNext = () => {
-    route.push('step3');
+    router.push('step3');
   };
 
   const handleSkip = () => {

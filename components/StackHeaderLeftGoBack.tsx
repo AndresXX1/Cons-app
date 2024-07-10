@@ -4,11 +4,12 @@ import { TouchableOpacity, Image, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export function StackHeaderLeftGoBack({ color, title }: { color: string; title: string }) {
-  const route = useRouter();
+  const router = useRouter();
+
   return (
     <TouchableOpacity
       onPress={() => {
-        route.back();
+        router.back();
       }}
       style={{
         borderColor: 'transparent',
@@ -21,7 +22,7 @@ export function StackHeaderLeftGoBack({ color, title }: { color: string; title: 
       activeOpacity={1} // Evitar cambio de opacidad al presionar
     >
       <Image
-        source={images.arrow_blue}
+        source={color === colors.white ? images.arrow_back : images.arrow_blue}
         style={{
           width: 14,
           height: 24,

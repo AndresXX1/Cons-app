@@ -1,24 +1,36 @@
-//import NavBar from '@components/NavBar';
+import NavBar from '@/components/NavBar';
 import { colors, fonts } from '@/theme';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { useRouter } from 'expo-router';
 
 const LoanScreen = () => {
+  const router = useRouter();
+  
   return (
-    <View style={styles.container}>
-      {/*<NavBar routeName="Loan" />*/}
+    <SafeAreaView style={styles.root}>
+      <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+      <NavBar />
       <Text style={styles.title}>
         Préstamos <Text style={styles.spanBold}>activos</Text>
       </Text>
       <View style={styles.containerButtons}>
-        <Pressable style={styles.buttonGreen} onPress={() => {}}>
+        <Pressable
+          style={styles.buttonGreen}
+          onPress={() => router.push('settlement')}>
           <Text style={styles.textButton}>Préstamo $300.000</Text>
         </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-03-2023</Text>
-        <Pressable style={styles.buttonBrown} onPress={() => {}}>
+        <Pressable
+          style={styles.buttonBrown}
+          onPress={() => router.push('pending_payments')}>
           <Text style={styles.textButton}>Préstamo $250.000</Text>
         </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-08-2023</Text>
-        <Pressable style={styles.buttonRed} onPress={() => {}}>
+        <Pressable
+          style={styles.buttonRed}
+          onPress={() => router.push('regularize_credits')}>
           <Text style={styles.textButton}>Préstamo $300.000</Text>
         </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-05-2024</Text>
@@ -28,12 +40,12 @@ const LoanScreen = () => {
           <Text style={styles.textTransparent}>Préstamo en Proceso</Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
     backgroundColor: '#fff',
   },
