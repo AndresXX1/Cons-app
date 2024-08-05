@@ -8,10 +8,14 @@ import NavBar from '@/components/NavBar';
 import { useRouter } from 'expo-router';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import Banners from '@/components/Banners';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const { width } = Dimensions.get('window');
 
 const HomeScreen = () => {
+  const { banners } = useSelector((state: RootState) => state.auth);
+
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -22,33 +26,6 @@ const HomeScreen = () => {
       }
     }, []),
   );
-
-  const banners = [
-    {
-      id: 1,
-      create: '2024-08-05T02:29:35.698Z',
-      update: '2024-08-05T02:29:35.698Z',
-      url: 'd2de75e8-d6a0-495c-aff6-507b52b0febb.gif',
-      deleted: false,
-      type: 'home',
-    },
-    {
-      id: 2,
-      create: '2024-08-05T02:29:38.170Z',
-      update: '2024-08-05T02:29:38.170Z',
-      url: '1e3192ac-38cd-46d7-aa0c-e3b214d29aea.gif',
-      deleted: false,
-      type: 'home',
-    },
-    {
-      id: 4,
-      create: '2024-08-05T02:29:42.967Z',
-      update: '2024-08-05T02:29:42.967Z',
-      url: 'e3763a90-dc90-447d-96c5-ff491723018c.gif',
-      deleted: false,
-      type: 'home',
-    },
-  ];
 
   const data = [
     {
@@ -88,7 +65,7 @@ const HomeScreen = () => {
       </Pressable>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <NavBar />
-        <Banners banners={banners} />
+        <Banners banners={banners.home} />
         <View style={styles.containerTitle}>
           <Text style={styles.text}>¡Llevate</Text>
           <Text style={styles.textBold}> HOY</Text>

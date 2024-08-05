@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { apiUrls } from '../store/api';
 import { usePathname, useRouter } from 'expo-router';
+import BannersArgenCompras from '@/components/BannersArgenCompras';
 
 const NavBar = () => {
   const router = useRouter();
@@ -11,7 +12,7 @@ const NavBar = () => {
 
   console.log(pathName);
 
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, banners } = useSelector((state: RootState) => state.auth);
   if (pathName === '/') {
     return (
       <View style={styles.containerHome}>
@@ -79,7 +80,7 @@ const NavBar = () => {
     return (
       <View style={styles.containerShop}>
         <Image source={images.logo} style={styles.logo} resizeMode="cover" />
-        <Image source={images.banner} style={styles.banner} resizeMode="cover" />
+        <BannersArgenCompras banners={banners.argencompras} />
       </View>
     );
   } else if (pathName === '/loan') {
