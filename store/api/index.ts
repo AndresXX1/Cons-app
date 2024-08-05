@@ -10,6 +10,14 @@ export const apiUrls = {
   getUser: () => `/api/user`,
   //services
   avatar: (url: string) => `${baseUrl}/avatar/${url}`,
+  imgNotice: (url: string) => `${baseUrl}/notice/${url}`,
+  //notices
+  getNotices: () => `${baseUrl}/api/notice`,
+  //banners
+  getBannersHome: () => `${baseUrl}/api/banner/home`,
+  getBannersCuponizate: () => `${baseUrl}/api/banner/cuponizate`,
+  getBannersArgencompras: () => `${baseUrl}/api/banner/argencompras`,
+  imgBanner: (url: string) => `${baseUrl}/api/banner/${url}`,
 };
 
 export const tokenAccess = {
