@@ -3,23 +3,28 @@ import { colors, fonts, images } from '@/theme';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { apiUrls } from '@/store/api';
 
 const NewsDetailScreen = () => {
   const scrollViewRef = useRef<ScrollView>(null);
+  const { notices, noticeId } = useSelector((state: RootState) => state.auth);
+
+  const notice = notices.find(n => n.id === noticeId);
+
+  if (!notice) {
+    return null;
+  }
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <View style={styles.containerNews}>
           <View>
-            <Image source={images.mockup_5} style={styles.imagenTitle} />
-            <Text style={styles.newsTitle}>¡No te olvides de la PROMO REFERIDOS!</Text>
-            <Text style={styles.newsDescription}>
-              Porque recomendar a un amigo o familiar en nuestras sucursales tiene beneficios para
-              ellos y para vos.{'\n\n'}Esa persona saca un préstamo y a vos ¡TE DAMOS $4.000 PARA EL
-              PRÓXIMO PAGO DE TU CUOTA! 😉 🙌{'\n\n'}Promoción válida sólo para clientes ArgenPesos
-              de sucursales oficiales con su cuota al día.
-            </Text>
+            <Image source={{ uri: apiUrls.imgNotice(notice.url) }} style={styles.imagenTitle} />
+            <Text style={styles.newsTitle}>{notice.title}</Text>
+            <Text style={styles.newsDescription}>{notice.description}</Text>
           </View>
         </View>
       </ScrollView>

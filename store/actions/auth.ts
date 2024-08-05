@@ -88,6 +88,7 @@ export const logInAsync = createAsyncThunk(
         setupAxiosInterceptors(dispatch);
         setActive(false);
         dispatch(getUserAsync());
+        dispatch(getBannersAsync());
         return {};
       } else {
         setActive(false);
@@ -114,6 +115,7 @@ export const verifySessionAsync = createAsyncThunk(
     try {
       setupAxiosInterceptors(dispatch);
       await dispatch(getUserAsync());
+      await dispatch(getBannersAsync());
       return {};
       // eslint-disable-next-line
     } catch (error: any) {
@@ -274,6 +276,58 @@ export const getUserAsync = createAsyncThunk(
   },
 );
 
+export const getBannersAsync = createAsyncThunk(
+  'auth/getBannersAsync',
+  async (_, { rejectWithValue }) => {
+    try {
+      const banners = {
+        home: [],
+        cuponizate: [],
+        argencompras: [],
+      };
+      const responseBannersHome = await axiosInstance.get(apiUrls.getBannersHome());
+      if (responseBannersHome.data.ok) {
+        banners.home = responseBannersHome.data.banners;
+      } else {
+        return rejectWithValue('error');
+      }
+      const responseBannersCuponizate = await axiosInstance.get(apiUrls.getBannersCuponizate());
+      if (responseBannersCuponizate.data.ok) {
+        banners.cuponizate = responseBannersCuponizate.data.banners;
+      } else {
+        return rejectWithValue('error');
+      }
+      const responseBannersArgencompras = await axiosInstance.get(apiUrls.getBannersArgencompras());
+      if (responseBannersArgencompras.data.ok) {
+        banners.argencompras = responseBannersArgencompras.data.banners;
+      } else {
+        return rejectWithValue('error');
+      }
+      return banners;
+    } catch (error: any) {
+      return rejectWithValue('error');
+    }
+  },
+);
+
+export const getNoticeAsync = createAsyncThunk(
+  'auth/getNoticeAsync',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(apiUrls.getNotices());
+      if (response.data.ok) {
+        return response.data;
+      } else {
+        return rejectWithValue('error');
+      }
+      // eslint-disable-next-line
+    } catch (error: any) {
+      deleteAccess();
+      return rejectWithValue('error');
+    }
+  },
+);
+
 export const activateOnboarding = createAction('auth/activateOnboarding', (payload: string) => {
   setItem(tokenAccess.onboardingName, payload);
   return { payload };
@@ -285,4 +339,8 @@ export const checkOnboarding = createAsyncThunk('auth/checkOnboarding', async ()
     return true;
   }
   return false;
+});
+
+export const selectNoticeId = createAction('auth/selectNoticeId', (payload: number) => {
+  return { payload };
 });

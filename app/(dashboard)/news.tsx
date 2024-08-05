@@ -1,62 +1,51 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { colors, fonts, images } from '@/theme';
 import { View, StyleSheet, Text, Pressable, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { useRouter } from 'expo-router';
+import { AppDispatch, RootState } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getNoticeAsync, selectNoticeId } from '@/store/actions/auth';
+import { apiUrls } from '@/store/api';
 
 const NewsScreen = () => {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { notices } = useSelector((state: RootState) => state.auth);
   const scrollViewRef = useRef<ScrollView>(null);
-  const news = [
-    {
-      id: 1,
-      title: '¡No te olvides de la PROMO REFERIDOS!',
-      description:
-        'Porque recomendar a un amigo o familiar en nuestras sucursales tiene beneficios para ellos y para vos ....',
-      date: '23.05.2024',
-      image: images.mockup_1,
-    },
-    {
-      id: 2,
-      title: '¡No te olvides de la PROMO REFERIDOS!',
-      description:
-        'Porque recomendar a un amigo o familiar en nuestras sucursales tiene beneficios para ellos y para vos ....',
-      date: '23.05.2024',
-      image: images.mockup_2,
-    },
-    {
-      id: 3,
-      title: '¡No te olvides de la PROMO REFERIDOS!',
-      description:
-        'Porque recomendar a un amigo o familiar en nuestras sucursales tiene beneficios para ellos y para vos ....',
-      date: '23.05.2024',
-      image: images.mockup_3,
-    },
-    {
-      id: 4,
-      title: '¡No te olvides de la PROMO REFERIDOS!',
-      description:
-        'Porque recomendar a un amigo o familiar en nuestras sucursales tiene beneficios para ellos y para vos ....',
-      date: '23.05.2024',
-      image: images.mockup_4,
-    },
-  ];
+  const getNotices = () => {
+    dispatch(getNoticeAsync());
+  };
 
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + ' ...';
+    }
+    return text;
+  };
+
+  useEffect(() => {
+    getNotices();
+  }, []);
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
-      <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
+        <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <Text style={styles.title}>Nuestras Noticias</Text>
         <View style={styles.containerNews}>
-          {news.map(item => {
+          {notices.map(notice => {
             return (
-              <View key={item.id}>
-                <Image source={item.image} style={styles.imagenTitle} />
-                <Text style={styles.date}>{item.date}</Text>
-                <Text style={styles.newsTitle}>{item.title}</Text>
-                <Text style={styles.newsDescription}>{item.description}</Text>
-                <Pressable onPress={() => router.push('news_detail')}>
+              <View key={notice.id}>
+                <Image source={{ uri: apiUrls.imgNotice(notice.url) }} style={styles.imagenTitle} />
+                <Text style={styles.date}>{notice.date}</Text>
+                <Text style={styles.newsTitle}>{notice.title}</Text>
+                <Text style={styles.newsDescription}>{truncateText(notice.description, 101)}</Text>
+                <Pressable
+                  onPress={() => {
+                    dispatch(selectNoticeId(notice.id));
+                    router.push('news_detail');
+                  }}>
                   <Text style={styles.nreLink}>Leer más</Text>
                 </Pressable>
               </View>
