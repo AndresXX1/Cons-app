@@ -5,7 +5,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, StyleSheet, Image, Pressable, Dimensions, View, TextInput } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  Dimensions,
+  View,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
@@ -17,7 +26,6 @@ const LogIn = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
   const [active, setActive] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -97,7 +105,7 @@ const LogIn = () => {
         />
         <View style={[styles.inputContainer]}>
           <TextInput
-            secureTextEntry={!passwordVisible}
+            secureTextEntry={!passwordVisibility}
             placeholder="Contraseña"
             autoCapitalize="none"
             autoCorrect={false}
@@ -122,7 +130,8 @@ const LogIn = () => {
 
         <View style={styles.containerLogin}>
           <Pressable style={styles.buttonLogin} onPress={() => handleLogIn()}>
-            <Text style={styles.textLogin}>Iniciar sesión</Text>
+            {active && <ActivityIndicator size={22} color={colors.white} />}
+            {!active && <Text style={styles.textLogin}>Iniciar sesión</Text>}
           </Pressable>
         </View>
 

@@ -57,13 +57,19 @@ const DashboardLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="shop"
+        name="benefits"
         options={{
           headerShown: false,
         }}
       />
       <Tabs.Screen
         name="loan"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="shop"
         options={{
           headerShown: false,
         }}

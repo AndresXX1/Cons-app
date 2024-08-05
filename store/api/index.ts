@@ -1,4 +1,4 @@
-export const baseUrl = "https://backend.padelink.com.ar";
+export const baseUrl = 'https://back5.maylandlabs.com';
 
 // export const baseUrl = "http://localhost:6001";
 
@@ -13,7 +13,7 @@ export const apiUrls = {
 };
 
 export const tokenAccess = {
-  tokenName: "1dsaaaassfsssrf2faaaaaa",
-  refreshTokenName: "1s5s5d4sss1dsd4ssds",
-  onboardingName: "onboardingName3sss",
+  tokenName: '1dsaaaassfsssrf2faaaaaa',
+  refreshTokenName: '1s5s5d4sss1dsd4ssds',
+  onboardingName: 'onboardingName3sss',
 };

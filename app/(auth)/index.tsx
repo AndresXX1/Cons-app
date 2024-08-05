@@ -1,3 +1,4 @@
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { colors, fonts, images } from '@/theme';
 import { useRouter } from 'expo-router';
 import {
@@ -18,6 +19,7 @@ const MenuAuth = () => {
 
   return (
     <SafeAreaView style={styles.root}>
+      <FocusAwareStatusBar backgroundColor={colors.transparent} barStyle="light-content" />
       <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
         <Image source={images.logo} style={styles.logo} resizeMode="cover" />
         <Pressable

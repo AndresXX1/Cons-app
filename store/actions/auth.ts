@@ -79,6 +79,7 @@ export const logInAsync = createAsyncThunk(
     },
     { rejectWithValue },
   ) => {
+    setActive(true);
     try {
       const response = await axios.post(apiUrls.logIn(), data);
       if (response.data.ok) {
@@ -89,6 +90,7 @@ export const logInAsync = createAsyncThunk(
         dispatch(getUserAsync());
         return {};
       } else {
+        setActive(false);
         setError(response.data.message);
         return rejectWithValue('error');
       }

@@ -2,16 +2,10 @@ import { AppDispatch } from '@/store';
 import { useDispatch } from 'react-redux';
 import { colors, fonts, images } from '@/theme';
 import { useRouter } from 'expo-router';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ImageBackground,
-  Pressable, 
-} from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { activateOnboarding } from '@/store/actions/auth';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const OnBoardingTwo = () => {
   const router = useRouter();
@@ -27,8 +21,9 @@ const OnBoardingTwo = () => {
 
   return (
     <SafeAreaView style={styles.root}>
+      <FocusAwareStatusBar backgroundColor={colors.transparent} barStyle="light-content" />
       <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
-        <Text style={styles.title}>Registrarme o Iniciar Sesión</Text>
+        <Text style={styles.title}>Explora tus opciones</Text>
         <View style={styles.containerItem}>
           <Image source={images.money} style={styles.imageIcon} />
           <Text style={styles.text}>
@@ -91,6 +86,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 64,
     paddingHorizontal: 26,
+    width: '100%',
+    height: '100%',
   },
   title: {
     fontFamily: fonts.gotham.semiBold,
