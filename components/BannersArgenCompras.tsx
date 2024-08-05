@@ -6,11 +6,11 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-na
 
 const { width } = Dimensions.get('window');
 
-interface BannersProps {
+interface BannersArgenComprasProps {
   banners: IBanner[];
 }
 
-const Banners: React.FC<BannersProps> = ({ banners }) => {
+const BannersArgenCompras: React.FC<BannersArgenComprasProps> = ({ banners }) => {
   const [index, setIndex] = useState(0);
   const animation = useSharedValue(1);
 
@@ -29,16 +29,16 @@ const Banners: React.FC<BannersProps> = ({ banners }) => {
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      opacity: animation.value,
+      opacity: 1,
     };
   });
 
   return (
-    <Animated.View style={[styles.banner, animatedStyle]}>
+    <Animated.View style={[styles.banner]}>
       <ImageBackground
         source={{ uri: `https://back5.maylandlabs.com/banner/${banners[index].url}` }}
         style={styles.image}
-        imageStyle={{ borderRadius: 10 }}
+        imageStyle={{ borderRadius: 20 }}
         resizeMode="cover">
         <View style={styles.containerLine}>
           <View style={index === 0 ? styles.lineActive : styles.lineInactive} />
@@ -52,17 +52,20 @@ const Banners: React.FC<BannersProps> = ({ banners }) => {
 
 const styles = StyleSheet.create({
   image: {
-    width: width - 32,
-    height: 212,
+    width: 337,
+    height: 207,
     resizeMode: 'cover',
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'flex-end',
+    borderColor: '#9D9D9D',
+    borderWidth: 1,
   },
   banner: {
-    width: width - 32,
-    height: 212,
-    marginLeft: 16,
+    width: 337,
+    height: 207,
+    marginBottom: -62,
+    borderRadius: 20,
   },
   text: {
     fontSize: 18,
@@ -73,21 +76,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   lineActive: {
     width: 59,
     height: 7,
     borderRadius: 10,
-    backgroundColor: colors.blue2,
+    backgroundColor: colors.black,
   },
   lineInactive: {
     width: 10,
     height: 7,
     opacity: 0.7,
     borderRadius: 10,
-    backgroundColor: colors.blue2,
+    backgroundColor: colors.gray3,
   },
 });
 
-export default Banners;
+export default BannersArgenCompras;
