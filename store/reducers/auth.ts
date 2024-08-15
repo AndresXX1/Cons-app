@@ -10,12 +10,14 @@ import {
   getNoticeAsync,
   selectNoticeId,
   getBannersAsync,
+  registerInAsync,
 } from '../actions/auth';
 
 const initialState: AuthSliceState = {
   isAuth: false,
   isLoading: true,
   user: null,
+  smarter: null,
   isOnboarding: false,
   notices: [],
   noticeId: null,
@@ -38,8 +40,15 @@ export const authSlice = createSlice({
       .addCase(logInAsync.rejected, state => {
         state.isAuth = false;
       })
+      .addCase(registerInAsync.fulfilled, state => {
+        state.isAuth = true;
+      })
+      .addCase(registerInAsync.rejected, state => {
+        state.isAuth = false;
+      })
       .addCase(getUserAsync.fulfilled, (state, action) => {
         state.user = action.payload.user;
+        state.smarter = action.payload.smarter;
       })
       .addCase(getUserAsync.rejected, state => {
         state.isAuth = false;
@@ -107,6 +116,7 @@ export interface AuthSliceState {
   isAuth: boolean;
   isLoading: boolean;
   user: IUser | null;
+  smarter: ISmarter | null;
   isOnboarding: boolean;
   notices: INotice[];
   noticeId: number | null;
@@ -117,12 +127,25 @@ export interface AuthSliceState {
   };
 }
 
+export interface ISmarter {
+  credits: ICredito[];
+}
+
+export interface ICredito {
+  capital: number;
+  fechaLiquidacion: string;
+  estado: string;
+}
+
 export interface IUser {
   id: number;
+  cuil: string;
+  birthday: Date;
   first_name: string;
+  phone: string;
   last_name: string;
   address: string | null;
   email: string;
-  avatar: string | null;
+  avatar: string;
   role: string;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   View,
@@ -8,11 +8,16 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
+import { Redirect, useRouter } from 'expo-router';
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import CustomProgressBar from '@/components/CustomProgressBar';
 import { colors, fonts, images } from '@/theme';
+import { AppDispatch, RootState } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateSecondData } from '@/store/service/user';
 
 const formatDateString = (date: string) => {
   const spaceIndex = date.indexOf(' ');
@@ -24,33 +29,31 @@ const formatDateString = (date: string) => {
 };
 
 const SignUp3 = () => {
+  const router = useRouter();
+  const { isAuth, user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [inputNameValue, setInputNameValue] = useState('');
-  const [nameIsFocused, setNameIsFocused] = useState(false);
+  const [error, setError] = useState('');
+  const [inputPhoneValue, setInputPhoneValue] = useState('');
+  const [phoneIsFocused, setPhoneIsFocused] = useState(false);
 
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedDateText, setSelectedDateText] = useState<string>('');
 
-  const [inputLastNameValue, setInputLastNameValue] = useState('');
-  const [lastNameIsFocused, setLastNameIsFocused] = useState(false);
-
-  const handleNameFocus = () => {
-    setNameIsFocused(true);
+  const routerNext = () => {
+    router.push('(auth)/signup3');
   };
 
-  const handleNameBlur = () => {
-    setNameIsFocused(false);
+  const handlePhoneFocus = () => {
+    setPhoneIsFocused(true);
   };
 
-  const handleLastNameFocus = () => {
-    setLastNameIsFocused(true);
+  const handlePhoneBlur = () => {
+    setPhoneIsFocused(false);
   };
 
-  const handleLastNameBlur = () => {
-    setLastNameIsFocused(false);
-  };
   const showDatePicker = () => {
     setShowPicker(true);
   };
@@ -61,16 +64,57 @@ const SignUp3 = () => {
 
   const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
     if (selectedDate) {
-      const formattedDate = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(
-        selectedDate,
-      );
+      const formattedDate = new Intl.DateTimeFormat('es', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(selectedDate);
       hideDatePicker();
       setSelectedDate(selectedDate);
       setSelectedDateText(formatDateString(formattedDate));
     }
   };
 
-  const handleNext = () => {};
+  const handleNext = async () => {
+    if (!selectedDate) {
+      setError('Fecha de nacimiento requerida');
+      return;
+    }
+    if (!inputPhoneValue) {
+      setError('El telefono es requerido');
+      return;
+    }
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
+    await updateSecondData({
+      birthday: selectedDate,
+      phone: inputPhoneValue,
+      setError,
+      setIsSubmitting,
+      dispatch,
+      routerNext,
+    });
+  };
+
+  useEffect(() => {
+    if (user?.birthday) {
+      const date = new Date(user.birthday.toString());
+      const formattedDate = new Intl.DateTimeFormat('es', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(date);
+      setSelectedDate(date);
+      setSelectedDateText(formatDateString(formattedDate));
+    }
+    setInputPhoneValue(user?.phone || '');
+  }, [user]);
+
+  if (!isAuth) {
+    return <Redirect href="(auth)" />;
+  }
 
   return (
     <SafeAreaView style={styles.root}>
@@ -80,6 +124,8 @@ const SignUp3 = () => {
         </View>
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={3} totalSteps={4} />
+        <Text>{error}</Text>
+
         <TouchableOpacity style={{ opacity: 1 }} activeOpacity={1} onPress={showDatePicker}>
           <TextInput
             placeholder="Fecha de nacimiento"
@@ -100,38 +146,25 @@ const SignUp3 = () => {
           />
         )}
         <TextInput
-          placeholder="Nombre"
+          placeholder="Teléfono"
           autoCapitalize="none"
           placeholderTextColor={colors.gray2}
-          onFocus={handleNameFocus}
-          onBlur={handleNameBlur}
-          onChangeText={text => setInputNameValue(text)}
+          onFocus={handlePhoneFocus}
+          onBlur={handlePhoneBlur}
+          onChangeText={text => setInputPhoneValue(text)}
           editable={!isSubmitting}
+          value={inputPhoneValue}
           style={[
             styles.textInput,
             {
-              borderColor: nameIsFocused ? colors.blue2 : colors.gray2,
-            },
-          ]}
-        />
-        <TextInput
-          placeholder="Apellido"
-          autoCapitalize="none"
-          placeholderTextColor={colors.gray2}
-          onFocus={handleLastNameFocus}
-          onBlur={handleLastNameBlur}
-          onChangeText={text => setInputLastNameValue(text)}
-          editable={!isSubmitting}
-          style={[
-            styles.textInput,
-            {
-              borderColor: lastNameIsFocused ? colors.blue2 : colors.gray2,
+              borderColor: phoneIsFocused ? colors.blue2 : colors.gray2,
             },
           ]}
         />
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleNext}>
-            <Text style={styles.textNext}>Siguiente</Text>
+            {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
+            {!isSubmitting && <Text style={styles.textNext}>Finalizar registro</Text>}
           </Pressable>
         </View>
       </View>

@@ -1,21 +1,35 @@
-import { useState } from 'react';
-import { View, StyleSheet, Image, Pressable, Text, TextInput } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  Text,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomProgressBar from '@/components/CustomProgressBar';
 import { colors, fonts, images } from '@/theme';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { updateFirstData } from '@/store/service/user';
 
 const SignUp2 = () => {
   const router = useRouter();
+  const { isAuth, user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
-  const [inputNameValue, setInputNameValue] = useState('');
+  const [inputNameValue, setInputNameValue] = useState(user?.first_name || '');
   const [nameIsFocused, setNameIsFocused] = useState(false);
 
-  const [inputLastNameValue, setInputLastNameValue] = useState('');
+  const [inputLastNameValue, setInputLastNameValue] = useState(user?.last_name || '');
   const [lastNameIsFocused, setLastNameIsFocused] = useState(false);
 
-  const [inputCUILValue, setInputCUILValue] = useState('');
+  const [inputCUILValue, setInputCUILValue] = useState(user?.cuil || '');
   const [cUILIsFocused, setCUILIsFocused] = useState(false);
 
   const handleNameFocus = () => {
@@ -42,9 +56,47 @@ const SignUp2 = () => {
     setCUILIsFocused(false);
   };
 
-  const handleNext = () => {
-    router.push('signup3');
+  const routerNext = () => {
+    router.push('(auth)/signup3');
   };
+
+  const handleNext = async () => {
+    if (!inputNameValue) {
+      setError('El nombre es requerido');
+      return;
+    }
+    if (!inputLastNameValue) {
+      setError('El apellido es requerido');
+      return;
+    }
+    if (!inputCUILValue) {
+      setError('El CUIL es requerido');
+      return;
+    }
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
+    await updateFirstData({
+      first_name: inputNameValue,
+      last_name: inputLastNameValue,
+      cuil: inputCUILValue,
+      setError,
+      setIsSubmitting,
+      dispatch,
+      routerNext,
+    });
+  };
+
+  useEffect(() => {
+    setInputNameValue(user?.first_name || '');
+    setInputLastNameValue(user?.last_name || '');
+    setInputCUILValue(user?.cuil || '');
+  }, [user]);
+
+  if (!isAuth) {
+    return <Redirect href="(auth)" />;
+  }
 
   return (
     <SafeAreaView style={styles.root}>
@@ -61,6 +113,7 @@ const SignUp2 = () => {
           onFocus={handleNameFocus}
           onBlur={handleNameBlur}
           onChangeText={text => setInputNameValue(text)}
+          value={inputNameValue}
           editable={!isSubmitting}
           style={[
             styles.textInput,
@@ -75,6 +128,7 @@ const SignUp2 = () => {
           placeholderTextColor={colors.gray2}
           onFocus={handleLastNameFocus}
           onBlur={handleLastNameBlur}
+          value={inputLastNameValue}
           onChangeText={text => setInputLastNameValue(text)}
           editable={!isSubmitting}
           style={[
@@ -90,6 +144,7 @@ const SignUp2 = () => {
           placeholderTextColor={colors.gray2}
           onFocus={handleCUILFocus}
           onBlur={handleCUILBlur}
+          value={inputCUILValue}
           onChangeText={text => setInputCUILValue(text)}
           editable={!isSubmitting}
           style={[
@@ -99,9 +154,11 @@ const SignUp2 = () => {
             },
           ]}
         />
+        {error && <Text style={styles.error}>{error}</Text>}
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleNext}>
-            <Text style={styles.textNext}>Siguiente</Text>
+            {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
+            {!isSubmitting && <Text style={styles.textNext}>Siguiente</Text>}
           </Pressable>
         </View>
       </View>
@@ -150,6 +207,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     paddingHorizontal: 10,
+  },
+  error: {
+    fontFamily: fonts.gotham.bold,
+    fontSize: 12,
+    color: colors.red,
+    textAlign: 'center',
   },
   buttonNext: {
     backgroundColor: colors.blue,

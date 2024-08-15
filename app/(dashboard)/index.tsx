@@ -65,7 +65,7 @@ const HomeScreen = () => {
       </Pressable>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <NavBar />
-        <Banners banners={banners.home} />
+        {<Banners banners={banners.home} />}
         <View style={styles.containerTitle}>
           <Text style={styles.text}>¡Llevate</Text>
           <Text style={styles.textBold}> HOY</Text>

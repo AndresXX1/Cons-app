@@ -21,7 +21,7 @@ import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 const { width, height } = Dimensions.get('window');
 
 const LogIn = () => {
-  const { isAuth } = useSelector((state: RootState) => state.auth);
+  const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
@@ -77,7 +77,12 @@ const LogIn = () => {
     });
   };
 
-  if (isAuth) return <Redirect href="(dashboard)" />;
+  if (isAuth && user?.first_name && user.last_name && user.birthday)
+    return <Redirect href="(dashboard)" />;
+
+  if ((!user?.first_name || !user.last_name || !user.cuil) && isAuth && user) {
+    return <Redirect href="signup2" />;
+  }
 
   return (
     <SafeAreaView style={styles.root}>

@@ -4,10 +4,14 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { useRouter } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import React from 'react';
 
 const LoanScreen = () => {
+  const { smarter } = useSelector((state: RootState) => state.auth);
   const router = useRouter();
-  
+
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
@@ -16,24 +20,32 @@ const LoanScreen = () => {
         Préstamos <Text style={styles.spanBold}>activos</Text>
       </Text>
       <View style={styles.containerButtons}>
-        <Pressable
-          style={styles.buttonGreen}
-          onPress={() => router.push('settlement')}>
+        {smarter?.credits.map((credit, key) => {
+          const formattedDate = credit.fechaLiquidacion.split('T')[0];
+          const buttonColor = credit.estado === 'Vigente' ? styles.buttonGreen : styles.buttonRed;
+          return (
+            <React.Fragment key={key}>
+              <Pressable style={buttonColor} onPress={() => router.push('settlement')}>
+                <Text style={styles.textButton}>
+                  Préstamo ${credit.capital.toLocaleString('es-ES', { minimumFractionDigits: 0 })}
+                </Text>
+              </Pressable>
+              <Text style={styles.textFinaly}>Liquidado el {formattedDate}</Text>
+            </React.Fragment>
+          );
+        })}
+        {/*<Pressable style={styles.buttonGreen} onPress={() => router.push('settlement')}>
           <Text style={styles.textButton}>Préstamo $300.000</Text>
         </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-03-2023</Text>
-        <Pressable
-          style={styles.buttonBrown}
-          onPress={() => router.push('pending_payments')}>
+        <Pressable style={styles.buttonBrown} onPress={() => router.push('pending_payments')}>
           <Text style={styles.textButton}>Préstamo $250.000</Text>
         </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-08-2023</Text>
-        <Pressable
-          style={styles.buttonRed}
-          onPress={() => router.push('regularize_credits')}>
+        <Pressable style={styles.buttonRed} onPress={() => router.push('regularize_credits')}>
           <Text style={styles.textButton}>Préstamo $300.000</Text>
         </Pressable>
-        <Text style={styles.textFinaly}>Liquidado el 10-05-2024</Text>
+        <Text style={styles.textFinaly}>Liquidado el 10-05-2024</Text>*/}
         <View style={styles.line}></View>
 
         <Pressable style={styles.buttonTransparent} onPress={() => {}}>

@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { colors } from '@/theme';
 import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
+import { StackHeaderLogout } from '@/components/StackHeaderLogout';
 
 const AuthLayout = () => {
   return (
@@ -43,7 +44,7 @@ const AuthLayout = () => {
           title: 'SignUp',
           headerTitle: () => null,
           headerTitleAlign: 'center',
-          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+          headerLeft: () => <StackHeaderLogout title={'Volver atrás'} color={colors.blue} />,
         }}
       />
       <Stack.Screen

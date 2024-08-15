@@ -35,17 +35,19 @@ const BannersArgenCompras: React.FC<BannersArgenComprasProps> = ({ banners }) =>
 
   return (
     <Animated.View style={[styles.banner]}>
-      <ImageBackground
-        source={{ uri: `https://back5.maylandlabs.com/banner/${banners[index].url}` }}
-        style={styles.image}
-        imageStyle={{ borderRadius: 20 }}
-        resizeMode="cover">
-        <View style={styles.containerLine}>
-          <View style={index === 0 ? styles.lineActive : styles.lineInactive} />
-          <View style={index === 1 ? styles.lineActive : styles.lineInactive} />
-          <View style={index === 2 ? styles.lineActive : styles.lineInactive} />
-        </View>
-      </ImageBackground>
+      {banners.length > 0 && (
+        <ImageBackground
+          source={{ uri: `https://back5.maylandlabs.com/banner/${banners[index].url}` }}
+          style={styles.image}
+          imageStyle={{ borderRadius: 20 }}
+          resizeMode="cover">
+          <View style={styles.containerLine}>
+            <View style={index === 0 ? styles.lineActive : styles.lineInactive} />
+            <View style={index === 1 ? styles.lineActive : styles.lineInactive} />
+            <View style={index === 2 ? styles.lineActive : styles.lineInactive} />
+          </View>
+        </ImageBackground>
+      )}
     </Animated.View>
   );
 };

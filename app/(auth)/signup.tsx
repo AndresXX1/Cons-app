@@ -1,15 +1,30 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, StyleSheet, Image, Pressable, Text, TextInput } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  Text,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, images } from '@/theme';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import CustomProgressBar from '@/components/CustomProgressBar';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { registerInAsync } from '@/store/actions/auth';
 
 const SignUp = () => {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { isAuth, user } = useSelector((state: RootState) => state.auth);
+  const [active, setActive] = useState(false);
+  const [error, setError] = useState('');
 
   const [inputEmailValue, setInputEmailValue] = useState('');
   const [emailIsFocused, setEmailIsFocused] = useState(false);
@@ -53,10 +68,43 @@ const SignUp = () => {
   const handleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisibility(!confirmPasswordVisibility);
   };
-
+  /*
   const handleNext = () => {
     router.push('signup2');
+  };*/
+
+  const handleNext = () => {
+    if (!inputEmailValue) {
+      setError('Introdusca un Email');
+      return;
+    }
+    if (!inputPasswordValue) {
+      setError('Introdusca una contraseña');
+      return;
+    }
+    if (inputConfirmPasswordValue !== inputPasswordValue) {
+      setError('La contraseña debe coincidir');
+      return;
+    }
+    if (active) {
+      return;
+    }
+    dispatch(
+      registerInAsync({
+        data: { email: inputEmailValue, password: inputPasswordValue },
+        setActive,
+        setError,
+        dispatch,
+      }),
+    );
   };
+
+  if (isAuth && user?.first_name && user.last_name && user.birthday && user)
+    return <Redirect href="(dashboard)" />;
+
+  if (isAuth) {
+    return <Redirect href="signup2" />;
+  }
 
   return (
     <SafeAreaView style={styles.root}>
@@ -66,6 +114,7 @@ const SignUp = () => {
         </View>
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={0} totalSteps={3} />
+        {error && <Text>{error}</Text>}
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -73,7 +122,7 @@ const SignUp = () => {
           onFocus={handleEmailFocus}
           onBlur={handleEmailBlur}
           onChangeText={text => setInputEmailValue(text)}
-          editable={!isSubmitting}
+          editable={!active}
           style={[
             styles.textInput,
             {
@@ -97,7 +146,7 @@ const SignUp = () => {
             onFocus={handlePasswordFocus}
             onBlur={handlePasswordBlur}
             onChangeText={text => setInputPasswordValue(text)}
-            editable={!isSubmitting}
+            editable={!active}
             style={[styles.textInputHidden]}
           />
           <Pressable onPress={handlePasswordVisibility}>
@@ -124,7 +173,7 @@ const SignUp = () => {
             onFocus={handleConfirmPasswordFocus}
             onBlur={handleConfirmPasswordBlur}
             onChangeText={text => setInputConfirmPasswordValue(text)}
-            editable={!isSubmitting}
+            editable={!active}
             style={[styles.textInputHidden]}
           />
           <Pressable onPress={handleConfirmPasswordVisibility}>
@@ -137,7 +186,8 @@ const SignUp = () => {
         </View>
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleNext}>
-            <Text style={styles.textNext}>Siguiente</Text>
+            {active && <ActivityIndicator size={22} color={colors.white} />}
+            {!active && <Text style={styles.textNext}>Siguiente</Text>}
           </Pressable>
         </View>
         <Text style={styles.googleText}>O registrarse con tu cuenta de Google</Text>
