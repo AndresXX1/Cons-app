@@ -6,8 +6,12 @@ import { Image } from 'react-native';
 import NavBar from '@/components/NavBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 const ShopScreen = () => {
+  const { products } = useSelector((state: RootState) => state.auth);
+
   const scrollViewRef = useRef<ScrollView>(null);
   interface data {
     img: keyof typeof images;
@@ -79,12 +83,14 @@ const ShopScreen = () => {
           <Text style={styles.textProduct}>PRODUCTOS DESTACADOS</Text>
 
           <View style={styles.containerFeaturedFather}>
-            {data.map((dat, key) => (
+            {products.map((dat, key) => (
               <View key={key} style={styles.containerFeatured}>
-                <Image source={images[dat.img]} style={styles.imageFeatured}></Image>
+                <Image
+                  source={{ uri: dat.images[1] ? dat.images[1].src : dat.images[0].src }}
+                  style={styles.imageFeatured}></Image>
                 <View style={styles.containerFeaturedTwo}>
-                  <Text style={styles.textFeaturedBlue}>{dat.name}</Text>
-                  <Text style={styles.textFeaturedRed}>{dat.price}</Text>
+                  <Text style={styles.textFeaturedBlue}>{dat.name.es}</Text>
+                  <Text style={styles.textFeaturedRed}>{dat.variants.price}</Text>
                   <Text style={styles.buttonRed}>COMPRAR AHORA</Text>
                   <Text style={styles.buttonBlue}>+ INFO</Text>
                 </View>

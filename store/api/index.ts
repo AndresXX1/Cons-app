@@ -17,6 +17,7 @@ export const apiUrls = {
   imgNotice: (url: string) => `${baseUrl}/notice/${url}`,
   //notices
   getNotices: () => `${baseUrl}/api/notice`,
+  getProducts: () => `${baseUrl}/api/product`,
   //banners
   getBannersHome: () => `${baseUrl}/api/banner/home`,
   getBannersCuponizate: () => `${baseUrl}/api/banner/cuponizate`,

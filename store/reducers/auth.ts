@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   logInAsync,
   getUserAsync,
+  getProductsAsync,
   verifySessionAsync,
   logOutAsync,
   activateOnboarding,
@@ -20,6 +21,7 @@ const initialState: AuthSliceState = {
   smarter: null,
   isOnboarding: false,
   notices: [],
+  products: [],
   noticeId: null,
   banners: {
     home: [],
@@ -52,6 +54,12 @@ export const authSlice = createSlice({
       })
       .addCase(getUserAsync.rejected, state => {
         state.isAuth = false;
+      })
+      .addCase(getProductsAsync.fulfilled, (state, action) => {
+        state.products = action.payload;
+      })
+      .addCase(getProductsAsync.rejected, state => {
+        state.products = [];
       })
       .addCase(verifySessionAsync.fulfilled, state => {
         state.isLoading = false;
@@ -119,6 +127,7 @@ export interface AuthSliceState {
   smarter: ISmarter | null;
   isOnboarding: boolean;
   notices: INotice[];
+  products: any[];
   noticeId: number | null;
   banners: {
     home: IBanner[];

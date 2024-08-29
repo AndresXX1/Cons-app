@@ -132,6 +132,7 @@ export const logInAsync = createAsyncThunk(
         setActive(false);
         dispatch(getUserAsync());
         dispatch(getBannersAsync());
+        dispatch(getProductsAsync());
         return {};
       } else {
         setActive(false);
@@ -159,6 +160,7 @@ export const verifySessionAsync = createAsyncThunk(
       setupAxiosInterceptors(dispatch);
       await dispatch(getUserAsync());
       await dispatch(getBannersAsync());
+      await dispatch(getProductsAsync());
       return {};
       // eslint-disable-next-line
     } catch (error: any) {
@@ -314,6 +316,22 @@ export const getUserAsync = createAsyncThunk(
       // eslint-disable-next-line
     } catch (error: any) {
       deleteAccess();
+      return rejectWithValue('error');
+    }
+  },
+);
+
+export const getProductsAsync = createAsyncThunk(
+  'auth/getProductsAsync',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(apiUrls.getProducts());
+      if (response.data.ok) {
+        return response.data.products;
+      } else {
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
       return rejectWithValue('error');
     }
   },
