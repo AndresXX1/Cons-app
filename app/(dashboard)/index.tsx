@@ -68,20 +68,18 @@ const HomeScreen = () => {
         {<Banners banners={banners.home} />}
         {
           smarter?.credits && smarter?.credits.length > 0 && (
-            <>
-              <View style={styles.containerTitle}>
-                <Text style={styles.text}>¡Llevate</Text>
-                <Text style={styles.textBold}> HOY</Text>
-                <Text style={styles.text}> tus</Text>
-                <Text style={styles.textBold}> $300.000!</Text>
-              </View>
-              <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
-                <Image source={images.money_white} style={styles.moneyIcon} />
-                <Text style={styles.textButton}>QUIERO MI PRÉSTAMO</Text>
-              </Pressable>
-            </>
+            <View style={styles.containerTitle}>
+              <Text style={styles.text}>¡Llevate</Text>
+              <Text style={styles.textBold}> HOY</Text>
+              <Text style={styles.text}> tus</Text>
+              <Text style={styles.textBold}> $300.000!</Text>
+            </View>
           )
         }
+        <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
+          <Image source={images.money_white} style={styles.moneyIcon} />
+          <Text style={styles.textButton}>QUIERO MI PRÉSTAMO</Text>
+        </Pressable>
         <View style={styles.line}></View>
         <View style={styles.containerOffices}>
           <Text style={styles.textOffices}>
