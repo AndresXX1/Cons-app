@@ -389,6 +389,24 @@ export const getNoticeAsync = createAsyncThunk(
   },
 );
 
+export const getCuponsAsync = createAsyncThunk(
+  'auth/getCuponsAsync',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(apiUrls.getCupons());
+      if (response.data.ok) {
+        return response.data;
+      } else {
+        return rejectWithValue('error');
+      }
+      // eslint-disable-next-line
+    } catch (error: any) {
+      deleteAccess();
+      return rejectWithValue('error');
+    }
+  },
+);
+
 export const activateOnboarding = createAction('auth/activateOnboarding', (payload: string) => {
   setItem(tokenAccess.onboardingName, payload);
   return { payload };

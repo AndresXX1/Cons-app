@@ -18,6 +18,8 @@ export const apiUrls = {
   //notices
   getNotices: () => `${baseUrl}/api/notice`,
   getProducts: () => `${baseUrl}/api/product`,
+  //cupons
+  getCupons: () => `${baseUrl}/api/cupon`,  
   //banners
   getBannersHome: () => `${baseUrl}/api/banner/home`,
   getBannersCuponizate: () => `${baseUrl}/api/banner/cuponizate`,

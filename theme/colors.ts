@@ -14,10 +14,10 @@ export const colors = {
   red: '#E74D3E',
   red2: '#ED1A00',
   skyBlue: '#00A5E7',
+  purple: '#5C03E8',
 
   //otros
   darkPurple: '#231d54',
-  purple: '#8100ff',
   lightPurple: '#9388db',
   lightGrayPurple: '#f7f7fb',
   pink: '#ff3d69',

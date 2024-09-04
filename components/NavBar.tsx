@@ -102,7 +102,7 @@ const NavBar = () => {
         </View>
       </View>
     );
-  } else if (pathName === 'Benefits') {
+  } else if (pathName === '/benefits') {
     return (
       <View style={styles.containerBenefits}>
         <Image source={images.logo_purple} style={styles.logo} resizeMode="cover" />

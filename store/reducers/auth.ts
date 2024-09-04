@@ -12,6 +12,7 @@ import {
   selectNoticeId,
   getBannersAsync,
   registerInAsync,
+  getCuponsAsync,
 } from '../actions/auth';
 
 const initialState: AuthSliceState = {
@@ -22,6 +23,7 @@ const initialState: AuthSliceState = {
   isOnboarding: false,
   notices: [],
   products: [],
+  cupons: [],
   noticeId: null,
   banners: {
     home: [],
@@ -89,6 +91,12 @@ export const authSlice = createSlice({
       .addCase(getNoticeAsync.rejected, state => {
         state.notices = [];
       })
+      .addCase(getCuponsAsync.fulfilled, (state, action) => {
+        state.cupons = action.payload.cupons;
+      })
+      .addCase(getCuponsAsync.rejected, state => {
+        state.cupons = [];
+      })
       .addCase(selectNoticeId, (state, action) => {
         state.noticeId = action.payload;
       })
@@ -128,6 +136,7 @@ export interface AuthSliceState {
   isOnboarding: boolean;
   notices: INotice[];
   products: any[];
+  cupons: any[];
   noticeId: number | null;
   banners: {
     home: IBanner[];
