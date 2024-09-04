@@ -147,12 +147,20 @@ export interface AuthSliceState {
 
 export interface ISmarter {
   credits: ICredito[];
+  offers: IOffer[];
 }
 
 export interface ICredito {
   capital: number;
   fechaLiquidacion: string;
   estado: string;
+}
+
+export interface IOffer {
+  resultado: string;
+  maximoCapital: string;
+  maximoCuota: string;
+  consultaId: string;
 }
 
 export interface IUser {
