@@ -76,6 +76,10 @@ export const images: { [key: string]: ImageSourcePropType } = {
   cake_blue: require('@/assets/images/cake_blue.png'),
   dock_blue: require('@/assets/images/dock_blue.png'),
   mail_blue: require('@/assets/images/mail_blue.png'),
+  shopping: require('@/assets/images/shopping.png'),
+  local_pizza: require('@/assets/images/local_pizza.png'),
+  apparel: require('@/assets/images/apparel.png'),
+  school: require('@/assets/images/school.png'),
   // Mockups
   mockup_1: require('@/assets/mockups/01.png'),
   mockup_2: require('@/assets/mockups/02.png'),
