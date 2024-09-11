@@ -83,6 +83,7 @@ export const images: { [key: string]: ImageSourcePropType } = {
   image_recom: require('@/assets/images/image_recom.png'),
   world: require('@/assets/images/world.png'),
   image_qr: require('@/assets/images/image_qr.png'),
+  image_completed: require('@/assets/images/image_completed.png'),
   // Mockups
   mockup_1: require('@/assets/mockups/01.png'),
   mockup_2: require('@/assets/mockups/02.png'),
