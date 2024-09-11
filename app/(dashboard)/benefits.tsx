@@ -17,15 +17,19 @@ const BenefitsScreen = () => {
   const info = [
     {
       text: 'Compras',
+      img: 'shopping',
     },
     {
       text: 'Gastronomía',
+      img: 'local_pizza',
     },
     {
       text: 'Indumentaria',
+      img: 'apparel',
     },
     {
       text: 'Educación',
+      img: 'school',
     },
   ];
 
@@ -72,7 +76,9 @@ const BenefitsScreen = () => {
         <View style={styles.containerCoupons}>
           {info.map((inf, key) => (
             <View style={styles.couponsCont} key={key}>
-              <View style={styles.containerCouponsChildren}></View>
+              <View style={styles.containerCouponsChildren}>
+                <Image source={images[inf.img]} style={styles.imageCategory}></Image>
+              </View>
               <Text style={styles.textCouponsChildren}>{inf.text}</Text>
             </View>
           ))}
@@ -175,6 +181,13 @@ const styles = StyleSheet.create({
     height: 64.9,
     borderRadius: 50,
     backgroundColor: colors.purple,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageCategory: {
+    width: 35.86,
+    height: 31,
   },
   textCouponsChildren: {
     color: colors.texts,
