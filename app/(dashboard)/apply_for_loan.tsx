@@ -1,46 +1,77 @@
 import React, { useRef } from 'react';
-import { colors, fonts, images } from '@/theme';
-import { View, StyleSheet, Text, Pressable, Image, ScrollView } from 'react-native';
+import { colors, fonts } from '@/theme';
+import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { useRouter } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { FontAwesome } from '@expo/vector-icons';
 
 const ApplyForLoanScreen = () => {
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
 
+  const { user, smarter } = useSelector((state: RootState) => state.auth);
+
+  const isEligible = smarter?.offers && smarter.offers.length > 0;
+  const loanAmount = isEligible ? smarter.offers[0].maximoCapital : '0';
+  const monthlyPayment = isEligible ? smarter.offers[0].maximoCuota : '0';
+
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.gray} barStyle="dark-content" />
-      <ScrollView style={styles.scrollView} ref={scrollViewRef}>
-        <Text style={styles.title}>Quiero Mi Préstamo</Text>
-        <LinearGradient
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          colors={['#F3E670', '#FFBA08']}
-          style={styles.gradientBorder}>
-          <View style={styles.containerLoan}>
-            <Text style={styles.textLoan}>
-              Préstamo disponible de{'\n'}
-              <Text style={styles.textPriceLoan}>$300.000</Text>
-            </Text>
-          </View>
-        </LinearGradient>
-        <Text style={styles.textShare}>
-          12 cuotas <Text style={styles.textShareSpan}>de $86.999</Text>
-        </Text>
-        <Pressable onPress={() => router.push('borrow_money')} style={styles.buttonRed}>
-          <Text style={styles.textRed}>¡LO QUIERO AHORA!</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('more_options')}>
-          <Text style={styles.textBlue}>Ver otras opciones</Text>
-        </Pressable>
-
+      <View style={styles.contentContainer}>
+        <ScrollView
+          style={styles.scrollView}
+          ref={scrollViewRef}
+          contentContainerStyle={styles.scrollViewContent}>
+          {isEligible ? (
+            <>
+              <Text style={styles.title}>Quiero Mi Préstamo</Text>
+              <LinearGradient
+                start={{ x: 0.5, y: 0 }}
+                end={{ x: 0.5, y: 1 }}
+                colors={['#F3E670', '#FFBA08']}
+                style={styles.gradientBorder}>
+                <View style={styles.containerLoan}>
+                  <Text style={styles.textLoan}>
+                    Préstamo disponible de{'\n'}
+                    <Text style={styles.textPriceLoan}>${loanAmount}</Text>
+                  </Text>
+                </View>
+              </LinearGradient>
+              <Text style={styles.textShare}>
+                12 cuotas <Text style={styles.textShareSpan}>de ${monthlyPayment}</Text>
+              </Text>
+              <Pressable onPress={() => router.push('borrow_money')} style={styles.buttonRed}>
+                <Text style={styles.textRed}>¡LO QUIERO AHORA!</Text>
+              </Pressable>
+              <Pressable onPress={() => router.push('more_options')}>
+                <Text style={styles.textBlue}>Ver otras opciones</Text>
+              </Pressable>
+            </>
+          ) : (
+            <View style={styles.notEligibleContainer}>
+              <View style={styles.iconContainer}>
+                <FontAwesome name="frown-o" size={64} color="#D32F2F" />
+              </View>
+              <Text style={styles.notEligibleText}>
+                Aun no tienes una oferta disponible,{' '}
+                <Text style={styles.boldText}>contacta a un asesor</Text> para que evalue tu
+                situación.
+              </Text>
+              <Pressable style={styles.contactButton}>
+                <Text style={styles.contactButtonText}>CONTACTAR ASESOR</Text>
+              </Pressable>
+            </View>
+          )}
+        </ScrollView>
         <Text style={styles.textFinally}>
           La otorgación del préstamo está sujeta a{'\n'}análisis de riesgo crediticio.
         </Text>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -48,12 +79,18 @@ const ApplyForLoanScreen = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    paddingTop: 52,
     backgroundColor: colors.gray,
   },
+  contentContainer: {
+    flex: 1,
+  },
   scrollView: {
-    width: '100%',
-    paddingBottom: 40,
+    flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingTop: 52,
   },
   back: {
     width: '100%',
@@ -82,9 +119,9 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontSize: 20,
     textAlign: 'center',
-    paddingTop: 30,
     fontFamily: fonts.gotham.semiBold,
     marginBottom: 40,
+    marginTop: 52,
   },
   containerLoan: {
     backgroundColor: colors.blue2,
@@ -166,8 +203,46 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.regular,
     lineHeight: 19,
     textAlign: 'center',
-    width: 328,
-    marginHorizontal: 'auto',
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  notEligibleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    marginTop: -40,
+  },
+  iconContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  notEligibleText: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: colors.texts,
+    marginBottom: 40,
+    fontFamily: fonts.gotham.regular,
+    paddingHorizontal: 20,
+  },
+  boldText: {
+    fontFamily: fonts.gotham.bold,
+  },
+  contactButton: {
+    backgroundColor: '#E74D3E',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    marginTop: 20,
+  },
+  contactButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontFamily: fonts.gotham.bold,
   },
 });
 
