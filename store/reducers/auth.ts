@@ -147,7 +147,7 @@ export interface AuthSliceState {
 
 export interface ISmarter {
   credits: ICredito[];
-  offers: IOffer[];
+  offer: IOffer;
 }
 
 export interface ICredito {
