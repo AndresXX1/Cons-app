@@ -15,9 +15,9 @@ const ApplyForLoanScreen = () => {
 
   const { user, smarter } = useSelector((state: RootState) => state.auth);
 
-  const isEligible = smarter?.offers && smarter.offers.length > 0;
-  const loanAmount = isEligible ? smarter.offers[0].maximoCapital : '0';
-  const monthlyPayment = isEligible ? smarter.offers[0].maximoCuota : '0';
+  const isEligible = smarter?.offer;
+  const loanAmount = isEligible ? smarter.offer.maximoCapital : '0';
+  const monthlyPayment = isEligible ? smarter.offer.maximoCuota : '0';
 
   return (
     <SafeAreaView style={styles.root}>
@@ -126,18 +126,13 @@ const styles = StyleSheet.create({
   containerLoan: {
     backgroundColor: colors.blue2,
     borderRadius: 10,
-    height: '100%',
-    width: '100%',
-    marginHorizontal: 'auto',
-    paddingVertical: 10,
-    display: 'flex',
-    justifyContent: 'center',
+    padding: 16,
     alignItems: 'center',
-    borderColor: '#F3E670',
+    justifyContent: 'center',
   },
   gradientBorder: {
     padding: 6,
-    height: 117,
+    maxHeight: 140,
     borderRadius: 10,
     width: 330,
     marginHorizontal: 'auto',
@@ -145,16 +140,15 @@ const styles = StyleSheet.create({
   textLoan: {
     color: colors.white,
     fontFamily: fonts.gotham.regular,
-    fontSize: 20,
-    lineHeight: 40,
-    marginBottom: 10,
+    fontSize: 16,
     textAlign: 'center',
+    marginBottom: 8,
   },
   textPriceLoan: {
-    fontSize: 48,
+    fontSize: 42,
     color: colors.white,
-    fontFamily: fonts.gotham.semiBold,
-    marginBottom: 10,
+    fontFamily: fonts.gotham.bold,
+    lineHeight: 48,
   },
   textShare: {
     marginTop: 32,
@@ -209,7 +203,8 @@ const styles = StyleSheet.create({
   notEligibleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
     marginTop: -40,
   },
   iconContainer: {
@@ -222,12 +217,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   notEligibleText: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
     color: colors.texts,
     marginBottom: 40,
     fontFamily: fonts.gotham.regular,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   boldText: {
     fontFamily: fonts.gotham.bold,
@@ -238,6 +233,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderRadius: 30,
     marginTop: 20,
+    width: '90%',
+    alignItems: 'center',
   },
   contactButtonText: {
     color: 'white',
