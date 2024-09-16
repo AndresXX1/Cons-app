@@ -1,19 +1,93 @@
-import { View, Text, Image, ScrollView, StyleSheet, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { fonts, colors, images } from '@/theme';
 import { useRef } from 'react';
+import { useLocalSearchParams } from 'expo-router';
+
+const parseHtmlToComponents = (htmlString: string) => {
+  const boldRegex = /<b>(.*?)<\/b>/g;
+  const underlineRegex = /<u>(.*?)<\/u>/g;
+  const linkRegex = /<a href="(.*?)".*?>(.*?)<\/a>/g;
+  const brRegex = /<br\s*\/?>/g;
+
+  // Remplaza las etiquetas <b>, <u> y <a> con componentes de React Native
+  let parsedString = htmlString
+    .replace(boldRegex, '**$1**') // Usaremos '**' para negritas
+    .replace(underlineRegex, '$1') // Usaremos '__' para subrayado
+    .replace(brRegex, '\n'); // Reemplazar saltos de línea
+
+  const parts = [];
+  let match: RegExpExecArray | null;
+  let lastIndex = 0;
+
+  // Procesa los enlaces
+  while ((match = linkRegex.exec(parsedString)) !== null) {
+    // Agregar el texto antes del enlace
+    if (match.index > lastIndex) {
+      parts.push(parsedString.substring(lastIndex, match.index));
+    }
+
+    // Agregar el enlace como TouchableOpacity
+    parts.push(
+      <TouchableOpacity
+        key={match[1]}
+        onPress={() => Linking.openURL(match && match[1] ? match[1] : '')}>
+        <Text style={styles.textRestBlack}>{match[2]}</Text>
+      </TouchableOpacity>,
+    );
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Agregar el texto restante después de los enlaces
+  if (lastIndex < parsedString.length) {
+    parts.push(parsedString.substring(lastIndex));
+  }
+
+  // Volver a procesar las negritas y subrayados
+  return parts.map((part, index) => {
+    if (typeof part === 'string') {
+      return (
+        <Text key={index}>
+          {part.split('**').map((chunk, i) =>
+            i % 2 === 1 ? (
+              <Text key={i} style={styles.textRestBlack}>
+                {chunk}
+              </Text>
+            ) : (
+              chunk
+            ),
+          )}
+        </Text>
+      );
+    }
+    return part;
+  });
+};
 
 const SingleCupon = () => {
+  const { id, nombre, descuento, uri, descripcion_micrositio } = useLocalSearchParams();
+  const renderedContent = parseHtmlToComponents(descripcion_micrositio as string);
+
   const scrollViewRef = useRef<ScrollView>(null);
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <View style={styles.back}></View>
-        <Image source={images.image_recom} style={styles.imageRecom}></Image>
-        <Text style={styles.textDescount}>20%</Text>
-        <Text style={styles.textTitle}>Coderhouse Online</Text>
+        <Image source={{ uri: uri as string }} style={styles.imageRecom}></Image>
+        <Text style={styles.textDescount}>{descuento}</Text>
+        <Text style={styles.textTitle}>{nombre}</Text>
         <Text style={styles.textBenefits}>Puedes usar este beneficio en:</Text>
         <Text style={styles.online}>
           <Image source={images.world} style={styles.imageWorld}></Image>Online
@@ -25,15 +99,11 @@ const SingleCupon = () => {
           <Text style={styles.textDescrip}>-</Text>
         </View>
         <View style={styles.containerRest}>
-          <Text style={styles.textRest}>
-            <Text style={styles.textRestBlack}>¡Desbloquee su potencial al máximo!</Text> Disfrute
-            de un 20% de descuento adicional sobre el Plan CoderBeca ingresando a la url que figura
-            al solicitar el beneficio.
-          </Text>
-          <Text style={styles.textRestBlack}>Pasos para acceder al beneficio:</Text>
+          <Text style={styles.textRest}>{renderedContent}</Text>
+          {/*<Text style={styles.textRestBlack}>Pasos para acceder al beneficio:</Text>
           <Text style={styles.textRest}>
             1- Ingrese al link que figura al acceder al beneficio.
-          </Text>
+          </Text>*/}
         </View>
       </ScrollView>
     </SafeAreaView>

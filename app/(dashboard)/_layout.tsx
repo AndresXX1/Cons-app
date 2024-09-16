@@ -1,4 +1,5 @@
 import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
+import { StackHeaderLeftGoBackBenefits } from '@/components/StackHeaderLeftGoBackBenefits';
 import TabBar from '@/components/TabBar';
 import { colors } from '@/theme';
 import { Tabs } from 'expo-router';
@@ -134,6 +135,19 @@ const DashboardLayout = () => {
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+        }}
+      />
+      <Tabs.Screen
+        name="single_cupon"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'single_cupon',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <StackHeaderLeftGoBackBenefits title={'Volver atrás'} color={colors.blue} />
+          ),
         }}
       />
       <Tabs.Screen

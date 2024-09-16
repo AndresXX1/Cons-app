@@ -1,12 +1,14 @@
 import NavBar from '@/components/NavBar';
+import { useRouter } from 'expo-router';
 import { images, colors, fonts } from '@/theme';
-import { View, StyleSheet, Image, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, Text, ScrollView, Pressable } from 'react-native';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { getCuponsAsync, selectNoticeId } from '@/store/actions/auth';
 
 const BenefitsScreen = () => {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const scrollViewRef = useRef<ScrollView>(null);
   const { cupons } = useSelector((state: RootState) => state.auth);
@@ -92,8 +94,24 @@ const BenefitsScreen = () => {
           <View style={styles.recomContainer}>
             {cupons.map((cupon, key) => {
               const descripcion_breve = cupon.descripcion_breve.replace(/<\/?p>/g, '').trim();
+              const descripcion_micrositio = cupon.descripcion_micrositio.replace(/<\/?p>/g, '').trim();
+ 
               return (
-                <View key={key} style={styles.containerRecom}>
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: 'single_cupon',
+                      params: {
+                        id: cupon.id,
+                        nombre: cupon.nombre,
+                        descuento: cupon.descuento,
+                        uri: cupon.foto_principal.original,
+                        descripcion_micrositio: descripcion_micrositio,
+                      },
+                    })
+                  }
+                  key={key}
+                  style={styles.containerRecom}>
                   <Image
                     source={{ uri: cupon.foto_principal.original }}
                     style={styles.imageRecom}
@@ -101,7 +119,7 @@ const BenefitsScreen = () => {
                   <Text style={styles.recomText1}>{cupon.nombre}</Text>
                   <Text style={styles.recomText2}>{cupon.descuento}</Text>
                   <Text style={styles.recomText3}>{descripcion_breve}</Text>
-                </View>
+                </Pressable>
               );
             })}
           </View>
