@@ -91,7 +91,7 @@ const LogIn = () => {
       <View style={styles.form}>
         <Text style={styles.title}>Iniciar Sesión</Text>
 
-        {error && <Text>{error}</Text>}
+        {error !== '' && <Text>{error}</Text>}
         <TextInput
           placeholder="Email"
           autoCapitalize="none"

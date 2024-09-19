@@ -124,7 +124,7 @@ const SignUp3 = () => {
         </View>
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={3} totalSteps={4} />
-        <Text>{error}</Text>
+        {error !== '' && <Text>{error}</Text>}
 
         <TouchableOpacity style={{ opacity: 1 }} activeOpacity={1} onPress={showDatePicker}>
           <TextInput

@@ -154,7 +154,7 @@ const SignUp2 = () => {
             },
           ]}
         />
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error !== '' && <Text style={styles.error}>{error}</Text>}
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleNext}>
             {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}

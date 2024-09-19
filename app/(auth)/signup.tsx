@@ -114,7 +114,7 @@ const SignUp = () => {
         </View>
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={0} totalSteps={3} />
-        {error && <Text>{error}</Text>}
+        {error !== '' && <Text>{error}</Text>}
         <TextInput
           placeholder="Email"
           autoCapitalize="none"

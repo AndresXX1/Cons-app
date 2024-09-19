@@ -24,6 +24,8 @@ const initialState: AuthSliceState = {
   notices: [],
   products: [],
   cupons: [],
+  cupons2: [],
+  cupons3: [],
   noticeId: null,
   banners: {
     home: [],
@@ -93,9 +95,13 @@ export const authSlice = createSlice({
       })
       .addCase(getCuponsAsync.fulfilled, (state, action) => {
         state.cupons = action.payload.cupons;
+        state.cupons2 = action.payload.cupons2;
+        state.cupons3 = action.payload.cupons3;
       })
       .addCase(getCuponsAsync.rejected, state => {
         state.cupons = [];
+        state.cupons2 = [];
+        state.cupons3 = [];
       })
       .addCase(selectNoticeId, (state, action) => {
         state.noticeId = action.payload;
@@ -137,6 +143,8 @@ export interface AuthSliceState {
   notices: INotice[];
   products: any[];
   cupons: any[];
+  cupons2: any[];
+  cupons3: any[];
   noticeId: number | null;
   banners: {
     home: IBanner[];

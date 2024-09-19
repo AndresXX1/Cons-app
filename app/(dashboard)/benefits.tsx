@@ -11,7 +11,8 @@ const BenefitsScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const scrollViewRef = useRef<ScrollView>(null);
-  const { cupons } = useSelector((state: RootState) => state.auth);
+  const { cupons, cupons2, cupons3 } = useSelector((state: RootState) => state.auth);
+
   const getCupons = () => {
     dispatch(getCuponsAsync());
   };
@@ -35,36 +36,6 @@ const BenefitsScreen = () => {
     },
   ];
 
-  const info3 = [
-    {
-      image: 'image_benefits_1',
-      text: 'SEGURO DE AUTO',
-      text2: 'Hasta 30%',
-      text3: 'de descuento en seguros del auto.',
-    },
-    {
-      image: 'image_benefits_2',
-      text: 'SEGURO DE HOGAR',
-      text2: 'Hasta 30%',
-      text3: 'de descuento en seguros del hogar.',
-    },
-  ];
-
-  const info4 = [
-    {
-      image: 'image_trips',
-      text: 'YPF',
-      text2: '15%',
-      text3: '15% de descuento todos los días en naftas INFINIA.',
-    },
-    {
-      image: 'image_trips',
-      text: 'CODERHOUSE ONLINE',
-      text2: '15%',
-      text3: '15% todos los días en naftas INFINIA e INFINIA DIESEL.',
-    },
-  ];
-
   useEffect(() => {
     getCupons();
   }, []);
@@ -73,8 +44,8 @@ const BenefitsScreen = () => {
     <View style={styles.container}>
       <NavBar />
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
-        <Image source={images.image_benefits} style={styles.imageBenefits}></Image>
-        <Text style={styles.textCoupons}>Explora cupones por categoría</Text>\
+        <Image source={images.image_benefits} style={styles.imageBenefits} />
+        <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
         <View style={styles.containerCoupons}>
           {info.map((inf, key) => (
             <View style={styles.couponsCont} key={key}>
@@ -94,8 +65,10 @@ const BenefitsScreen = () => {
           <View style={styles.recomContainer}>
             {cupons.map((cupon, key) => {
               const descripcion_breve = cupon.descripcion_breve.replace(/<\/?p>/g, '').trim();
-              const descripcion_micrositio = cupon.descripcion_micrositio.replace(/<\/?p>/g, '').trim();
- 
+              const descripcion_micrositio = cupon.descripcion_micrositio
+                .replace(/<\/?p>/g, '')
+                .trim();
+
               return (
                 <Pressable
                   onPress={() =>
@@ -128,30 +101,82 @@ const BenefitsScreen = () => {
           <Text style={styles.textRecom}>Beneficios en seguros</Text>
           <Text style={styles.textView}>Ver más</Text>
         </View>
-        <View style={styles.recomContainer}>
-          {info3.map((inf, key) => (
-            <View key={key} style={styles.containerRecom}>
-              <Image source={images[inf.image]} style={styles.imageRecom}></Image>
-              <Text style={styles.recomText1}>{inf.text}</Text>
-              <Text style={styles.recomText2_two}>{inf.text2}</Text>
-              <Text style={styles.recomText3}>{inf.text3}</Text>
-            </View>
-          ))}
-        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.recomContainer}>
+            {cupons2.map((cupon, key) => {
+              const descripcion_breve = cupon.descripcion_breve.replace(/<\/?p>/g, '').trim();
+              const descripcion_micrositio = cupon.descripcion_micrositio
+                .replace(/<\/?p>/g, '')
+                .trim();
+
+              return (
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: 'single_cupon',
+                      params: {
+                        id: cupon.id,
+                        nombre: cupon.nombre,
+                        descuento: cupon.descuento,
+                        uri: cupon.foto_principal.original,
+                        descripcion_micrositio: descripcion_micrositio,
+                      },
+                    })
+                  }
+                  key={key}
+                  style={styles.containerRecom}>
+                  <Image
+                    source={{ uri: cupon.foto_principal.original }}
+                    style={styles.imageRecom}
+                  />
+                  <Text style={styles.recomText1}>{cupon.nombre}</Text>
+                  <Text style={styles.recomText2}>{cupon.descuento}</Text>
+                  <Text style={styles.recomText3}>{descripcion_breve}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </ScrollView>
         <View style={styles.containerView}>
           <Text style={styles.textRecom}>Viajes y traslados</Text>
           <Text style={styles.textView}>Ver más</Text>
         </View>
-        <View style={styles.recomContainer}>
-          {info4.map((inf, key) => (
-            <View key={key} style={styles.containerRecom}>
-              <Image source={images[inf.image]} style={styles.imageRecom}></Image>
-              <Text style={styles.recomText1}>{inf.text}</Text>
-              <Text style={styles.recomText2}>{inf.text2}</Text>
-              <Text style={styles.recomText3}>{inf.text3}</Text>
-            </View>
-          ))}
-        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.recomContainer}>
+            {cupons3.map((cupon, key) => {
+              const descripcion_breve = cupon.descripcion_breve.replace(/<\/?p>/g, '').trim();
+              const descripcion_micrositio = cupon.descripcion_micrositio
+                .replace(/<\/?p>/g, '')
+                .trim();
+
+              return (
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: 'single_cupon',
+                      params: {
+                        id: cupon.id,
+                        nombre: cupon.nombre,
+                        descuento: cupon.descuento,
+                        uri: cupon.foto_principal.original,
+                        descripcion_micrositio: descripcion_micrositio,
+                      },
+                    })
+                  }
+                  key={key}
+                  style={styles.containerRecom}>
+                  <Image
+                    source={{ uri: cupon.foto_principal.original }}
+                    style={styles.imageRecom}
+                  />
+                  <Text style={styles.recomText1}>{cupon.nombre}</Text>
+                  <Text style={styles.recomText2}>{cupon.descuento}</Text>
+                  <Text style={styles.recomText3}>{descripcion_breve}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </ScrollView>
       </ScrollView>
     </View>
   );
