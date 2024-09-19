@@ -179,7 +179,7 @@ const DashboardLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="regularize_credits"
+        name="waiting_loan"
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },

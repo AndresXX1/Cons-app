@@ -87,6 +87,8 @@ export const images: { [key: string]: ImageSourcePropType } = {
   cuponizate_white: require('@/assets/images/cuponizate_white.png'),
   hamburguer_menu: require('@/assets/images/hamburguer_menu.png'),
   magnifying_glass: require('@/assets/images/magnifying_glass.png'),
+  mood_liquidation: require('@/assets/images/mood_liquidation.png'),
+  hourglass: require('@/assets/images/hourglass.png'),
   // Mockups
   mockup_1: require('@/assets/mockups/01.png'),
   mockup_2: require('@/assets/mockups/02.png'),
