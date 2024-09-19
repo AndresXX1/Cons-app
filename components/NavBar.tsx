@@ -5,6 +5,7 @@ import { RootState } from '../store';
 import { apiUrls } from '../store/api';
 import { usePathname, useRouter } from 'expo-router';
 import BannersArgenCompras from '@/components/BannersArgenCompras';
+import { TextInput } from 'react-native-gesture-handler';
 
 const NavBar = () => {
   const router = useRouter();
@@ -105,7 +106,14 @@ const NavBar = () => {
   } else if (pathName === '/benefits') {
     return (
       <View style={styles.containerBenefits}>
-        <Image source={images.logo_purple} style={styles.logo} resizeMode="cover" />
+        <View style={styles.containerMenu}>
+          <Image source={images.cuponizate_white} style={styles.logo} resizeMode="cover" />
+          <Image source={images.hamburguer_menu} style={styles.hamburguerMenu} resizeMode="cover" />
+        </View>
+        <View style={styles.containerInput}>
+          <TextInput style={styles.inputSearch} placeholder="¿Qué estás buscando?"></TextInput>
+          <Image source={images.magnifying_glass} style={styles.iconMagnifying} />
+        </View>
       </View>
     );
   }
@@ -259,7 +267,14 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 154,
-    height: 48,
+    height: 50,
+    color: colors.white,
+    marginHorizontal: 'auto',
+  },
+  hamburguerMenu: {
+    width: 35,
+    height: 35,
+    color: colors.white,
   },
   imgProfile: {
     width: 107,
@@ -271,12 +286,45 @@ const styles = StyleSheet.create({
     marginBottom: -30,
   },
   containerBenefits: {
-    backgroundColor: colors.white,
-    height: 130,
-    gap: 40,
-    zIndex: 1,
+    backgroundColor: colors.purple,
+    height: 224,
+    gap: 10,
+    paddingTop: 50,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
+  },
+  containerMenu: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    marginHorizontal: 16,
+  },
+  inputSearch: {
+    backgroundColor: colors.white,
+    height: 50,
+    paddingHorizontal: 40,
+    borderRadius: 15,
+    fontSize: 16,
+    color: colors.gray2,
+    width: '90%',
+  },
+  containerInput: {
+    position: 'relative',
+    width: '100%',
+    marginHorizontal: 'auto',
+    display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
+    maxWidth: 400,
+    marginTop: 45,
+  },
+  iconMagnifying: {
+    position: 'absolute',
+    width: 24,
+    height: 24,
+    left: 30,
+    bottom: 12,
   },
 });
 
