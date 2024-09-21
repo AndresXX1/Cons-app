@@ -108,7 +108,6 @@ const NavBar = () => {
       <View style={styles.containerBenefits}>
         <View style={styles.containerMenu}>
           <Image source={images.cuponizate_white} style={styles.logo} resizeMode="cover" />
-          <Image source={images.hamburguer_menu} style={styles.hamburguerMenu} resizeMode="cover" />
         </View>
         <View style={styles.containerInput}>
           <TextInput style={styles.inputSearch} placeholder="¿Qué estás buscando?"></TextInput>
@@ -268,6 +267,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 154,
     height: 50,
+    marginTop: 20,
     color: colors.white,
     marginHorizontal: 'auto',
   },
@@ -295,7 +295,6 @@ const styles = StyleSheet.create({
   },
   containerMenu: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginHorizontal: 16,
@@ -317,7 +316,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     maxWidth: 400,
-    marginTop: 45,
+    marginTop: 25,
   },
   iconMagnifying: {
     position: 'absolute',

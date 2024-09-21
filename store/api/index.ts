@@ -30,5 +30,5 @@ export const apiUrls = {
 export const tokenAccess = {
   tokenName: '1dsaaaassfsssrf2faaaaaa',
   refreshTokenName: '1s5s5d4sss1dsd4ssds',
-  onboardingName: 'onboardingName3sss',
+  onboardingName: 'onboardingName3ssss',
 };
