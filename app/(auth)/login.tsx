@@ -4,8 +4,8 @@ import { colors, fonts, images } from '@/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
 //import * as Google from 'expo-auth-session/providers/google';
-import { Redirect } from 'expo-router';
-import { useState } from 'react';
+import { Redirect, useNavigation } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Text,
@@ -16,9 +16,11 @@ import {
   View,
   TextInput,
   ActivityIndicator,
+  Keyboard,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
 
 const { width, height } = Dimensions.get('window');
 
@@ -118,6 +120,30 @@ const LogIn = () => {
       [name]: value,
     });
   };
+
+  const navigation = useNavigation();
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
+      setKeyboardVisible(true),
+    );
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
+      setKeyboardVisible(false),
+    );
+
+    navigation.setOptions({
+      headerLeft: () =>
+        !keyboardVisible ? (
+          <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.white} />
+        ) : null,
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, [keyboardVisible, navigation]);
 
   if (isAuth && user?.first_name && user.last_name && user.birthday)
     return <Redirect href="(dashboard)" />;

@@ -58,6 +58,17 @@ const AuthLayout = () => {
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
         }}
       />
+      <Stack.Screen
+        name="signup4"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'SignUp',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => null,
+        }}
+      />
     </Stack>
   );
 };
