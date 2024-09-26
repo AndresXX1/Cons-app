@@ -43,7 +43,7 @@ const SignUp3 = () => {
   const [selectedDateText, setSelectedDateText] = useState<string>('');
 
   const routerNext = () => {
-    router.push('(auth)/signup3');
+    router.push('(auth)/signup4');
   };
 
   const handlePhoneFocus = () => {
