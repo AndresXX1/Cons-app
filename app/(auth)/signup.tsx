@@ -17,6 +17,38 @@ import CustomProgressBar from '@/components/CustomProgressBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { registerInAsync } from '@/store/actions/auth';
+import * as Notifications from 'expo-notifications';
+
+const registerForPushNotificationsAsync = async () => {
+  try {
+    let token = '';
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+
+      finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+      return token;
+    }
+
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: 'e18f18ae-f643-49e3-a8e6-a68228cf0d96',
+      })
+    ).data;
+
+    return token;
+  } catch (error) {
+    console.error('Error al obtener el token de notificación:', error);
+    return '';
+  }
+};
 
 const SignUp = () => {
   const router = useRouter();
@@ -73,7 +105,7 @@ const SignUp = () => {
     router.push('signup2');
   };*/
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!inputEmailValue) {
       setError('Introdusca un Email');
       return;
@@ -89,9 +121,12 @@ const SignUp = () => {
     if (active) {
       return;
     }
+
+    const tokenNotifications = await registerForPushNotificationsAsync();
     dispatch(
       registerInAsync({
         data: { email: inputEmailValue, password: inputPasswordValue },
+        tokenNotifications,
         setActive,
         setError,
         dispatch,

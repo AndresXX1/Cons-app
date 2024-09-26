@@ -65,6 +65,7 @@ export const registerInAsync = createAsyncThunk(
   async (
     {
       data,
+      tokenNotifications,
       setActive,
       setError,
       dispatch,
@@ -73,6 +74,7 @@ export const registerInAsync = createAsyncThunk(
         email: string;
         password: string;
       };
+      tokenNotifications: string;
       setActive: (boolean: boolean) => void;
       setError: (error: string) => void;
       dispatch: ReturnType<typeof useAppDispatch>;
@@ -81,7 +83,7 @@ export const registerInAsync = createAsyncThunk(
   ) => {
     setActive(true);
     try {
-      const response = await axios.post(apiUrls.signUp(), data);
+      const response = await axios.post(apiUrls.signUp(), { ...data, tokenNotifications });
       if (response.data.ok) {
         await setItem(tokenAccess.tokenName, response.data.token);
         await setItem(tokenAccess.refreshTokenName, response.data.refreshToken);
@@ -108,6 +110,7 @@ export const logInAsync = createAsyncThunk(
   async (
     {
       data,
+      tokenNotifications,
       setActive,
       setError,
       dispatch,
@@ -116,6 +119,7 @@ export const logInAsync = createAsyncThunk(
         email: string;
         password: string;
       };
+      tokenNotifications: string;
       setActive: (boolean: boolean) => void;
       setError: (error: string) => void;
       dispatch: ReturnType<typeof useAppDispatch>;
@@ -124,7 +128,7 @@ export const logInAsync = createAsyncThunk(
   ) => {
     setActive(true);
     try {
-      const response = await axios.post(apiUrls.logIn(), data);
+      const response = await axios.post(apiUrls.logIn(), { ...data, tokenNotifications });
       if (response.data.ok) {
         await setItem(tokenAccess.tokenName, response.data.token);
         await setItem(tokenAccess.refreshTokenName, response.data.refreshToken);

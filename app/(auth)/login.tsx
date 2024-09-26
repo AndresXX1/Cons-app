@@ -2,6 +2,8 @@ import { AppDispatch, RootState } from '@/store';
 import { logInAsync } from '@/store/actions/auth';
 import { colors, fonts, images } from '@/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Notifications from 'expo-notifications';
+//import * as Google from 'expo-auth-session/providers/google';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,7 +22,46 @@ import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const { width, height } = Dimensions.get('window');
 
+const registerForPushNotificationsAsync = async () => {
+  try {
+    let token = '';
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+
+      finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+      return token;
+    }
+
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: 'e18f18ae-f643-49e3-a8e6-a68228cf0d96',
+      })
+    ).data;
+
+    return token;
+  } catch (error) {
+    console.error('Error al obtener el token de notificación:', error);
+    return '';
+  }
+};
+
 const LogIn = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  /*const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
+    androidClientId: '973276096874-10g1k706gbv3mcn98olk2r8trh64p246.apps.googleusercontent.com',
+    webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
+    //iosClientId: '',
+  });-*/
+
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -54,7 +95,7 @@ const LogIn = () => {
     setEmailIsFocused(false);
   };
 
-  const handleLogIn = () => {
+  const handleLogIn = async () => {
     if (!data.email) {
       setError('Email is required');
       return;
@@ -66,7 +107,8 @@ const LogIn = () => {
     if (active) {
       return;
     }
-    dispatch(logInAsync({ data, setActive, setError, dispatch }));
+    const tokenNotifications = await registerForPushNotificationsAsync();
+    dispatch(logInAsync({ data, tokenNotifications, setActive, setError, dispatch }));
   };
 
   const handleInputChange = (name: string, value: string) => {

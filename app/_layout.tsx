@@ -8,6 +8,7 @@ import { store, AppDispatch, RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadFonts, loadImages } from '@/theme';
 import { verifySessionAsync, checkOnboarding } from '@/store/actions/auth';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const queryClient = new QueryClient();
 
@@ -18,7 +19,9 @@ const RootLayoutWrapper = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <RootLayout />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <RootLayout />
+        </GestureHandlerRootView>
       </Provider>
     </QueryClientProvider>
   );

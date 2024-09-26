@@ -19,7 +19,7 @@ const OnBoardingThree = () => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <FocusAwareStatusBar backgroundColor={colors.transparent} barStyle="light-content" />
+      <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
         <Text style={styles.title}>¿Necesitas ayuda?</Text>
         <View style={styles.container}>
@@ -66,8 +66,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 64,
     paddingHorizontal: 26,
-    width: '100%',
-    height: '100%',
   },
   title: {
     fontFamily: fonts.gotham.semiBold,

@@ -89,11 +89,13 @@ const SingleCupon = () => {
         <Text style={styles.textDescount}>{descuento}</Text>
         <Text style={styles.textTitle}>{nombre}</Text>
         <Text style={styles.textBenefits}>Puedes usar este beneficio en:</Text>
-        <Text style={styles.online}>
-          <Image source={images.world} style={styles.imageWorld}></Image>Online
-        </Text>
-        <Text style={styles.buttonGreen}>¡Quiero este cupón!</Text>
-
+        <View style={styles.online}>
+          <Image source={images.world} style={styles.imageWorld}></Image>
+          <Text style={styles.onlineText}>Online</Text>
+        </View>
+        <View style={styles.buttonGreen}>
+          <Text style={styles.buttonGreenText}>¡Quiero este cupón!</Text>
+        </View>
         <View style={styles.containerDescrip}>
           <Text style={styles.textDescrip}>Descripción del beneficio</Text>
           <Text style={styles.textDescrip}>-</Text>
@@ -157,7 +159,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 60,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 900,
     lineHeight: 78.6,
     color: colors.texts,
   },
@@ -165,7 +166,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     textAlign: 'center',
     fontSize: 25,
-    fontWeight: 400,
     lineHeight: 32.75,
     fontFamily: fonts.gotham.regular,
     marginBottom: 24,
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontFamily: fonts.gotham.regular,
     textAlign: 'center',
-    fontWeight: 400,
     lineHeight: 20.96,
     fontSize: 16,
     marginBottom: 23,
@@ -185,6 +184,7 @@ const styles = StyleSheet.create({
   },
   online: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -194,12 +194,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 'auto',
     gap: 5,
+    marginBottom: 56,
+  },
+  onlineText: {
     fontSize: 14,
     color: colors.purple,
     fontFamily: fonts.gotham.regular,
     lineHeight: 18.34,
-    fontWeight: 400,
-    marginBottom: 56,
   },
   buttonGreen: {
     backgroundColor: colors.purple,
@@ -209,14 +210,17 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    marginHorizontal: 'auto',
+    marginBottom: 34,
+  },
+  buttonGreenText: {
+    alignItems: 'center',
+    justifyContent: 'center',
     color: colors.white,
     fontSize: 20,
     fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
     lineHeight: 26.338,
     textTransform: 'capitalize',
-    marginHorizontal: 'auto',
-    marginBottom: 34,
   },
   containerDescrip: {
     display: 'flex',
@@ -227,7 +231,6 @@ const styles = StyleSheet.create({
   textDescrip: {
     color: colors.texts,
     fontSize: 20,
-    fontWeight: 400,
     lineHeight: 26.2,
     fontFamily: fonts.gotham.regular,
     marginBottom: 21,
@@ -242,13 +245,11 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontSize: 13,
     fontFamily: fonts.gotham.regular,
-    fontWeight: 400,
     lineHeight: 15,
   },
   textRestBlack: {
     color: colors.texts,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 400,
   },
 });
 

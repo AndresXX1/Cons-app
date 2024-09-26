@@ -5,7 +5,8 @@ import { View, StyleSheet, Image, Text, ScrollView, Pressable } from 'react-nati
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-import { getCuponsAsync, selectNoticeId } from '@/store/actions/auth';
+import { getCuponsAsync } from '@/store/actions/auth';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const BenefitsScreen = () => {
   const router = useRouter();
@@ -43,6 +44,7 @@ const BenefitsScreen = () => {
   return (
     <View style={styles.container}>
       <NavBar />
+      <FocusAwareStatusBar backgroundColor={colors.transparent} barStyle="light-content" />
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <Image source={images.image_benefits} style={styles.imageBenefits} />
         <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
@@ -56,7 +58,9 @@ const BenefitsScreen = () => {
             </View>
           ))}
         </View>
-        <Text style={styles.buttonGreen}>¡Quiero estos beneficios!</Text>
+        <View style={styles.buttonGreen}>
+          <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
+        </View>
         <View style={styles.containerView}>
           <Text style={styles.textRecom}>Recomendados</Text>
           <Text style={styles.textView}>Ver más</Text>
@@ -203,7 +207,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.texts,
     fontSize: 16,
-    fontWeight: 300,
     fontFamily: fonts.gotham.semiBold,
     marginBottom: 10,
   },
@@ -236,7 +239,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontFamily: fonts.gotham.semiBold,
     fontSize: 10.039,
-    fontWeight: 700,
     paddingTop: 6,
   },
   buttonGreen: {
@@ -247,27 +249,27 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
+    marginHorizontal: 'auto',
+    marginVertical: 43,
+  },
+  buttonGreenText: {
     color: colors.white,
     fontSize: 20,
     fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
     lineHeight: 26.338,
     textTransform: 'capitalize',
-    marginHorizontal: 'auto',
-    marginVertical: 43,
   },
   textRecom: {
     color: colors.texts,
     fontSize: 20,
     fontFamily: fonts.gotham.regular,
     lineHeight: 26.2,
-    fontWeight: 400,
   },
   textView: {
     color: colors.purple,
     fontSize: 12,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 700,
     lineHeight: 15.72,
   },
   containerView: {
@@ -299,7 +301,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.texts,
     fontSize: 10,
-    fontWeight: '400',
     lineHeight: 19,
     fontFamily: fonts.gotham.regular,
   },
@@ -307,7 +308,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: colors.texts,
     textAlign: 'center',
-    fontWeight: 900,
     fontFamily: fonts.gotham.semiBold,
     lineHeight: 19,
     paddingVertical: 10,
@@ -315,19 +315,16 @@ const styles = StyleSheet.create({
   recomText3: {
     fontSize: 10,
     textAlign: 'center',
-    fontWeight: 400,
     lineHeight: 10,
     color: colors.texts,
     fontFamily: fonts.gotham.regular,
     paddingHorizontal: 8,
     paddingTop: 2,
   },
-
   recomText2_two: {
     fontSize: 23,
     color: colors.texts,
     textAlign: 'center',
-    fontWeight: 900,
     fontFamily: fonts.gotham.semiBold,
     lineHeight: 19,
     paddingVertical: 10,
