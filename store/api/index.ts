@@ -7,6 +7,8 @@ export const apiUrls = {
   // user Auth
   logIn: () => `${baseUrl}/api/auth/log-in`,
   signUp: () => `${baseUrl}/api/auth/sign-up`,
+  verifyCode: () => `${baseUrl}/api/auth/verify-email`,
+  resendVerifyCode: () => `${baseUrl}/api/auth/resend-code`,
   refreshToken: () => `${baseUrl}/api/auth/refresh-token`,
   logOut: () => `${baseUrl}/api/auth/log-out`,
   getUser: () => `/api/user`,

@@ -182,4 +182,5 @@ export interface IUser {
   email: string;
   avatar: string;
   role: string;
+  email_verified: boolean;
 }

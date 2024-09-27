@@ -134,10 +134,21 @@ const SignUp = () => {
     );
   };
 
-  if (isAuth && user?.first_name && user.last_name && user.birthday && user)
+  if (
+    isAuth &&
+    user !== null &&
+    user?.first_name &&
+    user.last_name &&
+    user.birthday &&
+    user?.email_verified
+  )
     return <Redirect href="(dashboard)" />;
 
-  if (isAuth) {
+  if (isAuth && user !== null && !user?.email_verified) {
+    return <Redirect href="email_verify" />;
+  }
+
+  if (isAuth && user !== null && user?.email_verified) {
     return <Redirect href="signup2" />;
   }
 

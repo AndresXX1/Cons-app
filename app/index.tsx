@@ -14,9 +14,14 @@ const Index = () => {
     return <Redirect href="(auth)" />;
   }
 
+  if (isAuth && user !== null && !user?.email_verified) {
+    return <Redirect href="email_verify" />;
+  }
+
   if (
     isAuth &&
-    user &&
+    user !== null &&
+    user?.email_verified &&
     (!user?.first_name || !user.last_name || !user.cuil || !user.birthday || !user.phone)
   ) {
     return <Redirect href="signup2" />;
