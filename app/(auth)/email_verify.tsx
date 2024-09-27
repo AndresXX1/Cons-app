@@ -73,9 +73,11 @@ const EmailVerify = () => {
           onFilled={text => console.log(`OTP is ${text}`)}
         />
         {error !== '' && <Text style={styles.error}>{error}</Text>}
+      </View>
+      <View style={styles.form}>
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNextWhite} onPress={handleResendVerifyCode}>
-            {isSubmitting2 && <ActivityIndicator size={22} color={colors.white} />}
+            {isSubmitting2 && <ActivityIndicator size={22} color={colors.blue} />}
             {!isSubmitting2 && <Text style={styles.textNextBlue}>Reenviar Email</Text>}
           </Pressable>
         </View>
