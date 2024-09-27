@@ -57,9 +57,11 @@ const EmailVerify = () => {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.form}>
-        <View style={styles.logoContainer}>
-          <Image source={images.logo_blue} style={styles.logo} />
-        </View>
+        <Text style={styles.textPin}>Pin de seguridad</Text>
+        <Text style={styles.textPinTwo}>
+          Introduce el pin que enviamos al correo{' '}
+          <Text style={styles.textOpacity}>name@name.com </Text>
+        </Text>
         <OTPInputText
           numberOfDigits={5}
           focusColor={colors.blue2}
@@ -72,15 +74,15 @@ const EmailVerify = () => {
         />
         {error !== '' && <Text style={styles.error}>{error}</Text>}
         <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNext} onPress={handleResendVerifyCode}>
+          <Pressable style={styles.buttonNextWhite} onPress={handleResendVerifyCode}>
             {isSubmitting2 && <ActivityIndicator size={22} color={colors.white} />}
-            {!isSubmitting2 && <Text style={styles.textNext}>Reenviar Email</Text>}
+            {!isSubmitting2 && <Text style={styles.textNextBlue}>Reenviar Email</Text>}
           </Pressable>
         </View>
         <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNext} onPress={handleNext}>
+          <Pressable style={styles.buttonNextBlue} onPress={handleNext}>
             {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
-            {!isSubmitting && <Text style={styles.textNext}>Siguiente</Text>}
+            {!isSubmitting && <Text style={styles.textNextWhite}>Siguiente</Text>}
           </Pressable>
         </View>
       </View>
@@ -97,7 +99,6 @@ const styles = StyleSheet.create({
   containerNext: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 20,
   },
   logoContainer: {
     paddingVertical: 20,
@@ -135,8 +136,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.red,
     textAlign: 'center',
+    marginTop: 10,
   },
-  buttonNext: {
+  buttonNextBlue: {
     backgroundColor: colors.blue,
     width: 164,
     height: 50,
@@ -147,9 +149,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textNext: {
+  buttonNextWhite: {
+    backgroundColor: colors.white,
+    width: 164,
+    height: 50,
+    borderRadius: 50,
+    display: 'flex',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 60,
+  },
+  textNextWhite: {
     fontFamily: fonts.gotham.semiBold,
     color: colors.white,
+    fontWeight: 400,
+  },
+  textNextBlue: {
+    fontFamily: fonts.gotham.bold,
+    color: colors.blue,
+    fontWeight: 400,
+  },
+  textPin: {
+    color: colors.texts,
+    fontSize: 20,
+    fontWeight: 400,
+    fontFamily: fonts.gotham.semiBold,
+    textAlign: 'center',
+    marginTop: 42,
+    marginBottom: 20,
+  },
+  textPinTwo: {
+    color: colors.gray2,
+    fontFamily: fonts.gotham.regular,
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 400,
+    marginBottom: 40,
+  },
+  textOpacity: {
+    fontWeight: 400,
+    fontFamily: fonts.gotham.semiBold,
   },
 });
 
