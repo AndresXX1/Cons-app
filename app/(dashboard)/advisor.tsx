@@ -22,7 +22,7 @@ const AdvisorScreen = () => {
           </Text>
         </Text>
       </View>
-      <Pressable onPress={() => router.push('/benefits')}>
+      <Pressable onPress={() => router.push('benefits')}>
         <Text style={styles.textBack}>Volver al menú</Text>
       </Pressable>
     </SafeAreaView>

@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontFamily: fonts.gotham.bold,
     lineHeight: 44,
-    fontWeight: '700',
   },
   buttonPurple: {
     backgroundColor: colors.purple,

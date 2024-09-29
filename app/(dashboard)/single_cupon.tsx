@@ -87,12 +87,12 @@ const SingleCupon = () => {
   const [active, setActive] = useState(false);
 
   const routerUnregisteredUser = () => {
-    router.push('/(dashboard)/unregistered_user');
+    router.push('unregistered_user');
   };
 
   const routerNext = (code: string) => {
     router.push({
-      pathname: '/(dashboard)/user_high',
+      pathname: 'user_high',
       params: {
         code: code,
         nombre: nombre,

@@ -18,7 +18,7 @@ const EmailVerify = () => {
   const [code, setCode] = useState('');
 
   const routerNext = () => {
-    router.push('(auth)/signup2');
+    router.replace('(auth)/signup2');
   };
 
   const handleNext = async () => {

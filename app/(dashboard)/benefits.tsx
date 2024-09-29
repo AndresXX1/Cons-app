@@ -26,7 +26,7 @@ const BenefitsScreen = () => {
   };
 
   const routerUnregisteredUser = () => {
-    router.push('/(dashboard)/unregistered_user');
+    router.push('(dashboard)/unregistered_user');
   };
 
   const info = [
