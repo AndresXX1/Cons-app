@@ -5,16 +5,6 @@ import { useLocalSearchParams } from 'expo-router';
 import { fonts, colors, images } from '@/theme';
 import { useRef } from 'react';
 
-function extractDiscountCode(text: string) {
-  const regex = /Cod:\s*([A-Za-z0-9]+)/g;
-  const match = text.match(regex);
-  if (match && match.length > 0) {
-    return match[0].split(' ')[1];
-  } else {
-    return '';
-  }
-}
-
 const UserHigh = () => {
   const { nombre, descuento, uri, code } = useLocalSearchParams();
   const scrollViewRef = useRef<ScrollView>(null);
@@ -31,7 +21,7 @@ const UserHigh = () => {
 
             <View style={styles.buttonGreen}>
               <Text style={styles.buttonGreenText}>
-                Código: {extractDiscountCode(code as string)}
+                Código: {code}
               </Text>
             </View>
           </ScrollView>

@@ -17,7 +17,7 @@ export const createCupon = async ({
     });
     if (response.data.ok) {
       setActive(false);
-      routerNext(response.data.cupon);
+      routerNext(response.data.cupon.codigo);
     } else {
       setActive(false);
     }

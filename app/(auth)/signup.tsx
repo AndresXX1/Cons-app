@@ -173,8 +173,8 @@ const SignUp = () => {
     isAuth &&
     user !== null &&
     user?.first_name &&
-    user.last_name &&
-    user.birthday &&
+    user?.last_name &&
+    user?.birthday &&
     user?.email_verified === true
   )
     return <Redirect href="(dashboard)" />;
@@ -187,7 +187,7 @@ const SignUp = () => {
     isAuth &&
     user !== null &&
     user?.email_verified === true &&
-    (!user?.first_name || !user.last_name || !user.cuil || !user.birthday || !user.phone)
+    (!user?.first_name || !user?.last_name || !user?.cuil || !user?.birthday || !user.phone)
   ) {
     return <Redirect href="signup2" />;
   }
