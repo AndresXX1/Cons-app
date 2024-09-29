@@ -8,6 +8,7 @@ export const apiUrls = {
   logIn: () => `${baseUrl}/api/auth/log-in`,
   signUp: () => `${baseUrl}/api/auth/sign-up`,
   verifyCode: () => `${baseUrl}/api/auth/verify-email`,
+  googleSignIn: () => `${baseUrl}/api/auth/log-in-with-google`,
   resendVerifyCode: () => `${baseUrl}/api/auth/resend-code`,
   refreshToken: () => `${baseUrl}/api/auth/refresh-token`,
   logOut: () => `${baseUrl}/api/auth/log-out`,
@@ -21,7 +22,7 @@ export const apiUrls = {
   getNotices: () => `${baseUrl}/api/notice`,
   getProducts: () => `${baseUrl}/api/product`,
   //cupons
-  getCupons: () => `${baseUrl}/api/cupon`,  
+  getCupons: () => `${baseUrl}/api/cupon`,
   //banners
   getBannersHome: () => `${baseUrl}/api/banner/home`,
   getBannersCuponizate: () => `${baseUrl}/api/banner/cuponizate`,

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   View,
@@ -13,10 +13,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, images } from '@/theme';
 import { Redirect, useRouter } from 'expo-router';
+import * as Google from 'expo-auth-session/providers/google';
 import CustomProgressBar from '@/components/CustomProgressBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-import { registerInAsync } from '@/store/actions/auth';
+import { googleSignIn, registerInAsync } from '@/store/actions/auth';
 import * as Notifications from 'expo-notifications';
 
 const registerForPushNotificationsAsync = async () => {
@@ -51,11 +52,18 @@ const registerForPushNotificationsAsync = async () => {
 };
 
 const SignUp = () => {
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
+    webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
+    //iosClientId: '',
+  });
+
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
   const [active, setActive] = useState(false);
+  const [active2, setActive2] = useState(false);
   const [error, setError] = useState('');
 
   const [inputEmailValue, setInputEmailValue] = useState('');
@@ -100,10 +108,36 @@ const SignUp = () => {
   const handleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisibility(!confirmPasswordVisibility);
   };
-  /*
-  const handleNext = () => {
-    router.push('signup2');
-  };*/
+
+  const handleGoogleSignIn = async () => {
+    if (active || active2) {
+      return;
+    }
+    setActive2(true);
+    promptAsync();
+  };
+
+  const handleResponse = async () => {
+    if (response?.type === 'success' && response?.authentication?.accessToken) {
+      const tokenNotifications = await registerForPushNotificationsAsync();
+      console.log(response.authentication.accessToken, tokenNotifications);
+      dispatch(
+        googleSignIn({
+          token: response.authentication.accessToken,
+          tokenNotifications,
+          setActive: setActive2,
+          setError,
+          dispatch,
+        }),
+      );
+    } else {
+      setActive2(false);
+    }
+  };
+
+  useEffect(() => {
+    handleResponse();
+  }, [response]);
 
   const handleNext = async () => {
     if (!inputEmailValue) {
@@ -118,7 +152,8 @@ const SignUp = () => {
       setError('La contraseña debe coincidir');
       return;
     }
-    if (active) {
+
+    if (active || active2) {
       return;
     }
 
@@ -238,7 +273,10 @@ const SignUp = () => {
         </View>
         <Text style={styles.googleText}>O registrarse con tu cuenta de Google</Text>
         <View style={styles.googleIconContainer}>
-          <Image source={images.google_button} style={styles.googleIcon} />
+          <Pressable onPress={handleGoogleSignIn}>
+            {active2 && <ActivityIndicator size={32} color={colors.blue2} />}
+            {!active2 && <Image source={images.google_button} style={styles.googleIcon} />}
+          </Pressable>
         </View>
       </View>
       <StatusBar style="auto" />
