@@ -2,6 +2,33 @@ import { useAppDispatch } from '..';
 import { axiosInstance, getUserAsync } from '../actions/auth';
 import { apiUrls } from '../api';
 
+export const createCupon = async ({
+  id,
+  setActive,
+  routerNext,
+}: {
+  id: number;
+  setActive: (boolean: boolean) => void;
+  routerNext: (code: string) => void;
+}) => {
+  try {
+    const response = await axiosInstance.post(apiUrls.createCupon(), {
+      id,
+    });
+    if (response.data.ok) {
+      setActive(false);
+      routerNext(response.data.cupon);
+    } else {
+      setActive(false);
+    }
+    // eslint-disable-next-line
+  } catch (error: any) {
+    setActive(false);
+  } finally {
+    setActive(false);
+  }
+};
+
 export const verifyCode = async ({
   code,
   setError,

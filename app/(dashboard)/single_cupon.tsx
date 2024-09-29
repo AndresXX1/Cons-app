@@ -7,12 +7,17 @@ import {
   Pressable,
   TouchableOpacity,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { fonts, colors, images } from '@/theme';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
+import { createCupon } from '@/store/service/user';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const parseHtmlToComponents = (htmlString: string) => {
   const boldRegex = /<b>(.*?)<\/b>/g;
@@ -77,6 +82,35 @@ const parseHtmlToComponents = (htmlString: string) => {
 
 const SingleCupon = () => {
   const { id, nombre, descuento, uri, descripcion_micrositio } = useLocalSearchParams();
+  const router = useRouter();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [active, setActive] = useState(false);
+
+  const routerUnregisteredUser = () => {
+    router.push('/(dashboard)/unregistered_user');
+  };
+
+  const routerNext = (code: string) => {
+    router.push({
+      pathname: '/(dashboard)/user_high',
+      params: {
+        code: code,
+        nombre: nombre,
+        descuento: descuento,
+        uri: uri,
+      },
+    });
+  };
+
+  const handleGenerateCupon = async (id: number) => {
+    setActive(true);
+    await createCupon({
+      id,
+      setActive,
+      routerNext,
+    });
+  };
+
   const renderedContent = parseHtmlToComponents(descripcion_micrositio as string);
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -93,19 +127,25 @@ const SingleCupon = () => {
           <Image source={images.world} style={styles.imageWorld}></Image>
           <Text style={styles.onlineText}>Online</Text>
         </View>
-        <View style={styles.buttonGreen}>
-          <Text style={styles.buttonGreenText}>¡Quiero este cupón!</Text>
-        </View>
+        <Pressable
+          onPress={() => {
+            if (user?.cuponizate) {
+              handleGenerateCupon(Number(id));
+            } else {
+              routerUnregisteredUser();
+            }
+          }}>
+          <View style={styles.buttonGreen}>
+            {active && <ActivityIndicator size={22} color={colors.white} />}
+            {!active && <Text style={styles.buttonGreenText}>¡Quiero este cupón!</Text>}
+          </View>
+        </Pressable>
         <View style={styles.containerDescrip}>
           <Text style={styles.textDescrip}>Descripción del beneficio</Text>
           <Text style={styles.textDescrip}>-</Text>
         </View>
         <View style={styles.containerRest}>
           <Text style={styles.textRest}>{renderedContent}</Text>
-          {/*<Text style={styles.textRestBlack}>Pasos para acceder al beneficio:</Text>
-          <Text style={styles.textRest}>
-            1- Ingrese al link que figura al acceder al beneficio.
-          </Text>*/}
         </View>
       </ScrollView>
     </SafeAreaView>

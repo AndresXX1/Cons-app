@@ -1,23 +1,39 @@
-import { View, Text, Image, ScrollView, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { useLocalSearchParams } from 'expo-router';
 import { fonts, colors, images } from '@/theme';
 import { useRef } from 'react';
 
+function extractDiscountCode(text: string) {
+  const regex = /Cod:\s*([A-Za-z0-9]+)/g;
+  const match = text.match(regex);
+  if (match && match.length > 0) {
+    return match[0].split(' ')[1];
+  } else {
+    return '';
+  }
+}
+
 const UserHigh = () => {
+  const { nombre, descuento, uri, code } = useLocalSearchParams();
   const scrollViewRef = useRef<ScrollView>(null);
+
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <View style={styles.container}>
           <ScrollView style={styles.scrollView} ref={scrollViewRef}>
-            <Image source={images.image_recom} style={styles.imageRecom}></Image>
-            <Text style={styles.textDescount}>20%</Text>
-            <Text style={styles.textTitle}>Coderhouse Online</Text>
+            <Image source={{ uri: uri as string }} style={styles.imageRecom}></Image>
+            <Text style={styles.textDescount}>{descuento}</Text>
+            <Text style={styles.textTitle}>{nombre}</Text>
 
-            <Image source={images.image_qr} style={styles.imageQr}></Image>
-            <Text style={styles.textCode}>Código: 673918273</Text>
+            <View style={styles.buttonGreen}>
+              <Text style={styles.buttonGreenText}>
+                Código: {extractDiscountCode(code as string)}
+              </Text>
+            </View>
           </ScrollView>
         </View>
       </ScrollView>
@@ -43,6 +59,26 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  buttonGreen: {
+    backgroundColor: colors.purple,
+    height: 54,
+    width: '90%',
+    borderRadius: 50,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 'auto',
+    marginBottom: 34,
+  },
+  buttonGreenText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: colors.white,
+    fontSize: 20,
+    fontFamily: fonts.gotham.bold,
+    lineHeight: 26.338,
+    textTransform: 'capitalize',
   },
   btnBack: {
     display: 'flex',
@@ -72,7 +108,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 60,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: 900,
     lineHeight: 78.6,
     color: colors.texts,
   },
@@ -80,7 +115,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     textAlign: 'center',
     fontSize: 25,
-    fontWeight: 400,
     lineHeight: 32.75,
     fontFamily: fonts.gotham.regular,
     marginBottom: 48,
@@ -94,7 +128,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: 400,
     lineHeight: 32.75,
     fontFamily: fonts.gotham.regular,
     marginBottom: 30,

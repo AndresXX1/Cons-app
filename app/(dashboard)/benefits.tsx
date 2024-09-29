@@ -19,10 +19,14 @@ const BenefitsScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const scrollViewRef = useRef<ScrollView>(null);
-  const { cupons, cupons2, cupons3 } = useSelector((state: RootState) => state.auth);
+  const { user, cupons, cupons2, cupons3 } = useSelector((state: RootState) => state.auth);
 
   const getCupons = () => {
     dispatch(getCuponsAsync());
+  };
+
+  const routerUnregisteredUser = () => {
+    router.push('/(dashboard)/unregistered_user');
   };
 
   const info = [
@@ -66,9 +70,13 @@ const BenefitsScreen = () => {
               </View>
             ))}
           </View>
-          <View style={styles.buttonGreen}>
-            <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
-          </View>
+          {!user?.cuponizate && (
+            <Pressable onPress={routerUnregisteredUser}>
+              <View style={styles.buttonGreen}>
+                <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
+              </View>
+            </Pressable>
+          )}
           <View style={styles.containerView}>
             <Text style={styles.textRecom}>Recomendados</Text>
             <Text style={styles.textView}>Ver más</Text>
@@ -269,7 +277,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     marginHorizontal: 'auto',
-    marginVertical: 43,
+    marginTop: 43,
   },
   buttonGreenText: {
     color: colors.white,
@@ -294,6 +302,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingHorizontal: 24,
+    paddingTop: 42,
     justifyContent: 'space-between',
     marginBottom: 20,
     alignItems: 'flex-end',

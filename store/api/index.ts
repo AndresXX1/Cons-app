@@ -22,6 +22,7 @@ export const apiUrls = {
   getNotices: () => `${baseUrl}/api/notice`,
   getProducts: () => `${baseUrl}/api/product`,
   //cupons
+  createCupon: () => `${baseUrl}/api/cupon/create`,
   getCupons: () => `${baseUrl}/api/cupon`,
   //banners
   getBannersHome: () => `${baseUrl}/api/banner/home`,

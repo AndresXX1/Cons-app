@@ -13,6 +13,7 @@ import {
   getBannersAsync,
   registerInAsync,
   getCuponsAsync,
+  googleSignIn,
 } from '../actions/auth';
 
 const initialState: AuthSliceState = {
@@ -50,6 +51,12 @@ export const authSlice = createSlice({
         state.isAuth = true;
       })
       .addCase(registerInAsync.rejected, state => {
+        state.isAuth = false;
+      })
+      .addCase(googleSignIn.fulfilled, state => {
+        state.isAuth = true;
+      })
+      .addCase(googleSignIn.rejected, state => {
         state.isAuth = false;
       })
       .addCase(getUserAsync.fulfilled, (state, action) => {
@@ -183,4 +190,5 @@ export interface IUser {
   avatar: string;
   role: string;
   email_verified: boolean;
+  cuponizate: boolean;
 }

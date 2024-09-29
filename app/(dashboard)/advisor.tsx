@@ -12,7 +12,7 @@ const AdvisorScreen = () => {
       <View>
         <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
         <View style={styles.circle}>
-          <Image source={images.check_blue} style={styles.checkIcon} />
+          <Image source={images.check_purple} style={styles.checkIcon} />
         </View>
         <Text style={styles.title}>¡En breve un asesor se contactara con vos!</Text>
         <Text style={styles.textDescription}>
@@ -22,7 +22,7 @@ const AdvisorScreen = () => {
           </Text>
         </Text>
       </View>
-      <Pressable onPress={() => router.push('loan')}>
+      <Pressable onPress={() => router.push('/benefits')}>
         <Text style={styles.textBack}>Volver al menú</Text>
       </Pressable>
     </SafeAreaView>
@@ -32,7 +32,7 @@ const AdvisorScreen = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.skyBlue,
+    backgroundColor: colors.purple,
     justifyContent: 'space-between',
   },
   title: {
@@ -45,8 +45,6 @@ const styles = StyleSheet.create({
   circle: {
     width: 148,
     height: 148,
-    borderRadius: 75,
-    backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',

@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
   textInput: {
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
-    fontWeight: '400',
     height: 48,
     borderColor: colors.gray2,
     borderRadius: 10,
@@ -166,17 +165,14 @@ const styles = StyleSheet.create({
   textNextWhite: {
     fontFamily: fonts.gotham.semiBold,
     color: colors.white,
-    fontWeight: 400,
   },
   textNextBlue: {
     fontFamily: fonts.gotham.bold,
     color: colors.blue,
-    fontWeight: 400,
   },
   textPin: {
     color: colors.texts,
     fontSize: 20,
-    fontWeight: 400,
     fontFamily: fonts.gotham.semiBold,
     textAlign: 'center',
     marginTop: 42,
@@ -187,11 +183,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.regular,
     textAlign: 'center',
     fontSize: 16,
-    fontWeight: 400,
     marginBottom: 40,
   },
   textOpacity: {
-    fontWeight: 400,
     fontFamily: fonts.gotham.semiBold,
   },
 });

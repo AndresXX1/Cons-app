@@ -5,6 +5,7 @@ import { colors } from '@/theme';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+
 interface isMatchingRouteProps {
   routes: any;
   index: number;
@@ -34,6 +35,9 @@ const disableNavbarPages = [
   'news_detail',
   'my_data',
   'security',
+  'single_cupon',
+  'unregistered_user',
+  'user_high',
 ];
 
 const DashboardLayout = () => {
@@ -146,8 +150,45 @@ const DashboardLayout = () => {
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => (
-            <StackHeaderLeftGoBackBenefits title={'Volver atrás'} color={colors.blue} />
+            <StackHeaderLeftGoBackBenefits title={'Volver atrás'} color={colors.purple} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="unregistered_user"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'unregistered_user',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <StackHeaderLeftGoBackBenefits title={'Volver atrás'} color={colors.purple} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="user_high"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'user_high',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <StackHeaderLeftGoBackBenefits title={'Volver atrás'} color={colors.purple} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="advisor"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'advisor',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => null,
         }}
       />
       <Tabs.Screen
@@ -170,12 +211,6 @@ const DashboardLayout = () => {
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.white} />,
-        }}
-      />
-      <Tabs.Screen
-        name="advisor"
-        options={{
-          headerShown: false,
         }}
       />
       <Tabs.Screen
