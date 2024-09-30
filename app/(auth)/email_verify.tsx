@@ -18,7 +18,7 @@ const EmailVerify = () => {
   const [code, setCode] = useState('');
 
   const routerNext = () => {
-    router.replace('(auth)/signup2');
+    router.replace('/(auth)/signup2');
   };
 
   const handleNext = async () => {
@@ -51,7 +51,7 @@ const EmailVerify = () => {
   };
 
   if (!isAuth) {
-    return <Redirect href="(auth)" />;
+    return <Redirect href="/(auth)" />;
   }
 
   return (
