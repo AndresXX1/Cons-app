@@ -41,7 +41,7 @@ const AuthLayout = () => {
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
-          title: 'SignUp',
+          title: 'EmailVerify',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLogout title={'Volver atrás'} color={colors.blue} />,

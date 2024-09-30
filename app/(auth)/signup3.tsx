@@ -43,7 +43,7 @@ const SignUp3 = () => {
   const [selectedDateText, setSelectedDateText] = useState<string>('');
 
   const routerNext = () => {
-    router.push('(auth)/signup4');
+    router.push('/(auth)/signup4');
   };
 
   const handlePhoneFocus = () => {
@@ -113,7 +113,7 @@ const SignUp3 = () => {
   }, [user]);
 
   if (!isAuth) {
-    return <Redirect href="(auth)" />;
+    return <Redirect href="/(auth)" />;
   }
 
   return (
