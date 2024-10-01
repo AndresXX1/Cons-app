@@ -22,7 +22,11 @@ const NewsDetailScreen = () => {
         <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <View style={styles.containerNews}>
           <View>
-            <Image source={{ uri: apiUrls.imgNotice(notice.url) }} style={styles.imagenTitle} />
+            <Image
+              source={{ uri: apiUrls.imgNotice(notice.url) }}
+              style={styles.imagenTitle}
+              resizeMode="cover"
+            />
             <Text style={styles.newsTitle}>{notice.title}</Text>
             <Text style={styles.newsDescription}>{notice.description}</Text>
           </View>
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
   },
   imagenTitle: {
     width: '100%',
-    height: 300,
+    aspectRatio: 16 / 9,
     borderRadius: 9,
   },
   dateText: {
