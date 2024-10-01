@@ -25,14 +25,14 @@ const MenuAuth = () => {
         <Pressable
           style={styles.btnRegister}
           onPress={() => {
-            router.push('signup');
+            router.push('/(auth)/signup');
           }}>
           <Text style={styles.register}>Registrarme</Text>
         </Pressable>
         <Pressable
           style={styles.btnLogIn}
           onPress={() => {
-            router.push('login');
+            router.push('/(auth)/login');
           }}>
           <Text style={styles.logIn}>Iniciar Sesión</Text>
         </Pressable>

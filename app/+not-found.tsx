@@ -1,17 +1,18 @@
-import { Link, Stack } from 'expo-router';
+import { usePathname, Stack } from 'expo-router';
 import { StyleSheet, View, Text } from 'react-native';
 
 export default function NotFoundScreen() {
+  const pathname = usePathname();
+
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
       <View style={styles.container}>
-        <Text>This screen doesn't exist.</Text>
+        <Text>The route "{pathname}" doesn't exist.</Text>
       </View>
     </>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

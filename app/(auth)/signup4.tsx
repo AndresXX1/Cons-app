@@ -14,11 +14,11 @@ const SignUp4 = () => {
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
   const routerNext = () => {
-    router.push('(dashboard)');
+    router.replace('/(dashboard)');
   };
 
   if (!isAuth) {
-    return <Redirect href="(auth)" />;
+    return <Redirect href="/(auth)" />;
   }
 
   return (

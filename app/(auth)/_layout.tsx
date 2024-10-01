@@ -37,6 +37,17 @@ const AuthLayout = () => {
         }}
       />
       <Stack.Screen
+        name="email_verify"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'EmailVerify',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLogout title={'Volver atrás'} color={colors.blue} />,
+        }}
+      />
+      <Stack.Screen
         name="signup2"
         options={{
           headerTransparent: true,

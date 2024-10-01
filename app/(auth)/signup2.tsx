@@ -57,7 +57,7 @@ const SignUp2 = () => {
   };
 
   const routerNext = () => {
-    router.push('(auth)/signup3');
+    router.push('/(auth)/signup3');
   };
 
   const handleNext = async () => {
@@ -95,7 +95,7 @@ const SignUp2 = () => {
   }, [user]);
 
   if (!isAuth) {
-    return <Redirect href="(auth)" />;
+    return <Redirect href="/(auth)" />;
   }
 
   return (

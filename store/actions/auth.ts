@@ -105,6 +105,51 @@ export const registerInAsync = createAsyncThunk(
     }
   },
 );
+
+export const googleSignIn = createAsyncThunk(
+  'auth/googleSignIn',
+  async (
+    {
+      token,
+      tokenNotifications,
+      setActive,
+      setError,
+      dispatch,
+    }: {
+      token: string;
+      tokenNotifications: string;
+      setActive: (boolean: boolean) => void;
+      setError: (error: string) => void;
+      dispatch: ReturnType<typeof useAppDispatch>;
+    },
+    { rejectWithValue },
+  ) => {
+    setActive(true);
+    try {
+      const response = await axios.post(apiUrls.googleSignIn(), { token, tokenNotifications });
+      if (response.data.ok) {
+        await setItem(tokenAccess.tokenName, response.data.token);
+        await setItem(tokenAccess.refreshTokenName, response.data.refreshToken);
+        setupAxiosInterceptors(dispatch);
+        setActive(false);
+        dispatch(getUserAsync());
+        dispatch(getBannersAsync());
+        dispatch(getProductsAsync());
+        return {};
+      } else {
+        setActive(false);
+        setError(response.data.message);
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      setActive(false);
+      const message = error.response?.data?.message || 'Error al iniciar sesión';
+      setError(message);
+      return rejectWithValue('error');
+    }
+  },
+);
+
 export const logInAsync = createAsyncThunk(
   'auth/logInAsync',
   async (

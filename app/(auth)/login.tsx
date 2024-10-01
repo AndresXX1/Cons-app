@@ -1,9 +1,9 @@
 import { AppDispatch, RootState } from '@/store';
-import { logInAsync } from '@/store/actions/auth';
+import { googleSignIn, logInAsync } from '@/store/actions/auth';
 import { colors, fonts, images } from '@/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
-//import * as Google from 'expo-auth-session/providers/google';
+import * as Google from 'expo-auth-session/providers/google';
 import { Redirect, useNavigation } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -56,19 +56,18 @@ const registerForPushNotificationsAsync = async () => {
 };
 
 const LogIn = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  /*const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
-    androidClientId: '973276096874-10g1k706gbv3mcn98olk2r8trh64p246.apps.googleusercontent.com',
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
     //iosClientId: '',
-  });-*/
+  });
 
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
   const [active, setActive] = useState(false);
+  const [active2, setActive2] = useState(false);
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -106,19 +105,11 @@ const LogIn = () => {
       setError('Password is required');
       return;
     }
-    if (active) {
+    if (active || active2) {
       return;
     }
     const tokenNotifications = await registerForPushNotificationsAsync();
     dispatch(logInAsync({ data, tokenNotifications, setActive, setError, dispatch }));
-  };
-
-  const handleInputChange = (name: string, value: string) => {
-    setError('');
-    setData({
-      ...data,
-      [name]: value,
-    });
   };
 
   const navigation = useNavigation();
@@ -145,11 +136,56 @@ const LogIn = () => {
     };
   }, [keyboardVisible, navigation]);
 
-  if (isAuth && user?.first_name && user.last_name && user.birthday)
-    return <Redirect href="(dashboard)" />;
+  const handleGoogleSignIn = async () => {
+    if (active || active2) {
+      return;
+    }
+    setActive2(true);
+    promptAsync();
+  };
 
-  if ((!user?.first_name || !user.last_name || !user.cuil) && isAuth && user) {
-    return <Redirect href="signup2" />;
+  const handleResponse = async () => {
+    if (response?.type === 'success' && response?.authentication?.accessToken) {
+      const tokenNotifications = await registerForPushNotificationsAsync();
+      dispatch(
+        googleSignIn({
+          token: response.authentication.accessToken,
+          tokenNotifications,
+          setActive: setActive2,
+          setError,
+          dispatch,
+        }),
+      );
+    } else {
+      setActive2(false);
+    }
+  };
+
+  useEffect(() => {
+    handleResponse();
+  }, [response]);
+
+  if (
+    isAuth &&
+    user !== null &&
+    user?.first_name &&
+    user?.last_name &&
+    user?.birthday &&
+    user?.email_verified === true
+  )
+    return <Redirect href="/(dashboard)" />;
+
+  if (isAuth && user !== null && user?.email_verified === false) {
+    return <Redirect href="/(auth)/email_verify" />;
+  }
+
+  if (
+    isAuth &&
+    user !== null &&
+    user?.email_verified === true &&
+    (!user?.first_name || !user?.last_name || !user?.cuil || !user?.birthday || !user.phone)
+  ) {
+    return <Redirect href="/(auth)/signup2" />;
   }
 
   return (
@@ -211,7 +247,10 @@ const LogIn = () => {
         <Text style={[styles.textGoogle]}>O iniciar sesión con tu cuenta de Google</Text>
 
         <View style={styles.googleIconContainer}>
-          <Image source={images.google_button} style={styles.googleIcon} />
+          <Pressable onPress={handleGoogleSignIn}>
+            {active2 && <ActivityIndicator size={32} color={colors.blue2} />}
+            {!active2 && <Image source={images.google_button} style={styles.googleIcon} />}
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>

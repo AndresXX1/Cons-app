@@ -2,15 +2,26 @@ import { View, Text, Image, ScrollView, StyleSheet, Pressable } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { fonts, colors, images } from '@/theme';
+import { Redirect, useRouter } from 'expo-router';
 
 const UnregisteredUser = () => {
+  const router = useRouter();
+
+  const routerNext = () => {
+    router.push('/(dashboard)/advisor');
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
       <View style={styles.container}>
         <Text style={styles.textTitle}>¡Buena elección!</Text>
 
-        <Text style={styles.buttonPurple}>Suscribirse a estos beneficios</Text>
+        <Pressable onPress={routerNext}>
+          <View style={styles.buttonPurple}>
+            <Text style={styles.buttonPurpleText}>Suscribirse a estos beneficios</Text>
+          </View>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -24,6 +35,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    marginTop: 50,
     marginBottom: 50,
   },
   textTitle: {
@@ -34,7 +46,6 @@ const styles = StyleSheet.create({
     color: colors.texts,
     fontFamily: fonts.gotham.bold,
     lineHeight: 44,
-    fontWeight: '700',
   },
   buttonPurple: {
     backgroundColor: colors.purple,
@@ -44,14 +55,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: colors.white,
-    fontSize: 18,
-    fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
-    lineHeight: 25,
-    textTransform: 'capitalize',
     marginHorizontal: 'auto',
     marginTop: 36,
+  },
+  buttonPurpleText: {
+    color: colors.white,
+    fontSize: 18,
+    fontFamily: fonts.gotham.semiBold,
+    lineHeight: 25,
+    textTransform: 'capitalize',
   },
 });
 
