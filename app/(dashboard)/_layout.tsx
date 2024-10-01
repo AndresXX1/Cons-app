@@ -1,5 +1,6 @@
 import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
 import { StackHeaderLeftGoBackBenefits } from '@/components/StackHeaderLeftGoBackBenefits';
+import { StackHeaderLeftGoBackProfile } from '@/components/StackHeaderLeftGoBackProfile';
 import TabBar from '@/components/TabBar';
 import { colors } from '@/theme';
 import { Tabs } from 'expo-router';
@@ -89,7 +90,9 @@ const DashboardLayout = () => {
           title: 'help',
           headerTitle: () => null,
           headerTitleAlign: 'center',
-          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+          headerLeft: () => (
+            <StackHeaderLeftGoBackProfile title={'Volver atrás'} color={colors.blue} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -197,7 +200,9 @@ const DashboardLayout = () => {
           title: 'my_data',
           headerTitle: () => null,
           headerTitleAlign: 'center',
-          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+          headerLeft: () => (
+            <StackHeaderLeftGoBackProfile title={'Volver atrás'} color={colors.blue} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -208,7 +213,9 @@ const DashboardLayout = () => {
           title: 'security',
           headerTitle: () => null,
           headerTitleAlign: 'center',
-          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+          headerLeft: () => (
+            <StackHeaderLeftGoBackProfile title={'Volver atrás'} color={colors.blue} />
+          ),
         }}
       />
       <Tabs.Screen
