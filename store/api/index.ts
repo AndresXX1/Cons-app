@@ -1,6 +1,6 @@
-export const baseUrl = 'https://back5.maylandlabs.com';
+// export const baseUrl = 'https://back5.maylandlabs.com';
 
-//export const baseUrl = 'http://localhost:8001';
+export const baseUrl = 'http://localhost:8001';
 //export const baseUrl = "http://10.0.2.2:8001";
 
 export const apiUrls = {
@@ -29,6 +29,8 @@ export const apiUrls = {
   getBannersCuponizate: () => `${baseUrl}/api/banner/cuponizate`,
   getBannersArgencompras: () => `${baseUrl}/api/banner/argencompras`,
   imgBanner: (url: string) => `${baseUrl}/api/banner/${url}`,
+  //timer
+  registerViewTime: () => `${baseUrl}/api/timer`,
 };
 
 export const tokenAccess = {

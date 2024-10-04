@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import NavBar from '@/components/NavBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { Redirect, useRouter } from 'expo-router';
+import { registerViewTime } from '@/store/service/timer';
 
 const { width } = Dimensions.get('window');
 
@@ -30,6 +31,20 @@ const ProfileScreen = () => {
         scrollViewRef.current.scrollTo({ y: 0, animated: false });
       }
     }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      let seconds = 0;
+      const intervalId = setInterval(() => {
+        seconds += 1;
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+        registerViewTime({ time: seconds, view: 'profile' });
+      };
+    }, [])
   );
 
   return (
@@ -52,7 +67,7 @@ const ProfileScreen = () => {
           colors={['#F3E670', '#FFBA08']}
           style={styles.linearGradient}>
           <View>
-            <Text style={styles.points}>1500</Text>
+            <Text style={styles.points}>{user?.points}</Text>
             <Text style={styles.pointText}>puntos</Text>
           </View>
           <Pressable style={styles.buttonPoints}>

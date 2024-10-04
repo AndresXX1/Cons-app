@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { colors, images, fonts } from '@/theme';
@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
+import { registerViewTime } from '@/store/service/timer';
 
 const ShopScreen = () => {
   const { products } = useSelector((state: RootState) => state.auth);
@@ -47,6 +48,20 @@ const ShopScreen = () => {
         scrollViewRef.current.scrollTo({ y: 0, animated: false });
       }
     }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      let seconds = 0;
+      const intervalId = setInterval(() => {
+        seconds += 1;
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+        registerViewTime({ time: seconds, view: 'argencompras' });
+      };
+    }, [])
   );
 
   return (
