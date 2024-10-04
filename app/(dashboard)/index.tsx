@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { images, fonts, colors } from '@/theme';
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions } from 'react-native';
@@ -10,6 +10,7 @@ import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import Banners from '@/components/Banners';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { registerViewTime } from '@/store/service/timer';
 
 const { width } = Dimensions.get('window');
 
@@ -25,6 +26,20 @@ const HomeScreen = () => {
         scrollViewRef.current.scrollTo({ y: 0, animated: false });
       }
     }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      let seconds = 0;
+      const intervalId = setInterval(() => {
+        seconds += 1;
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+        registerViewTime({ time: seconds, view: 'home' });
+      };
+    }, [])
   );
 
   const data = [

@@ -191,4 +191,5 @@ export interface IUser {
   role: string;
   email_verified: boolean;
   cuponizate: boolean;
+  points: number;
 }

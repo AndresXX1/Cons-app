@@ -1,5 +1,5 @@
 import NavBar from '@/components/NavBar';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { images, colors, fonts } from '@/theme';
 import {
   View,
@@ -10,11 +10,12 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { getCuponsAsync } from '@/store/actions/auth';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { registerViewTime } from '@/store/service/timer';
 const BenefitsScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -51,6 +52,20 @@ const BenefitsScreen = () => {
   useEffect(() => {
     getCupons();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      let seconds = 0;
+      const intervalId = setInterval(() => {
+        seconds += 1;
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+        registerViewTime({ time: seconds, view: 'cuponizate' });
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
