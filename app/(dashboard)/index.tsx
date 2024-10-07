@@ -75,6 +75,9 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+      <Pressable style={styles.btnHelp} onPress={() => router.push('help')}>
+        <Image source={images.help} style={styles.helpIcon} />
+      </Pressable>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <NavBar />
         {<Banners banners={banners.home} />}
@@ -213,8 +216,8 @@ const styles = StyleSheet.create({
     width: width - 32,
     marginLeft: 16,
     height: 54,
-    gap: 4,
-    marginTop: 12,
+    gap: 2,
+    marginTop: 9,
   },
   moneyIcon: {
     width: 24,
@@ -224,7 +227,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: fonts.gotham.bold,
     fontSize: 20,
-    paddingTop: 3
   },
   line: {
     width: '90%',
@@ -241,13 +243,13 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 30,
     justifyContent: 'space-between',
-    marginTop: 10
   },
   textOffices: {
     color: '#575757',
     fontSize: 20,
-    fontFamily: fonts.gotham.regular,
+    fontFamily: fonts.gotham.thin,
     fontWeight: '400',
+    lineHeight: 26.2,
   },
   span: {
     fontWeight: '700',
@@ -272,7 +274,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   containerLocation: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
     display: 'flex',
     flexDirection: 'row',
     gap: 10,
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 29,
     paddingTop: 22,
-    fontFamily: fonts.gotham.regular,
+    fontFamily: fonts.gotham.thin,
     fontWeight: '400',
   },
   payTitleTwo: {
@@ -380,18 +382,18 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   textContact: {
-    fontFamily: fonts.gotham.regular,
     marginTop: 45,
     color: colors.texts,
     fontSize: 25,
     fontWeight: '400',
+    lineHeight: 28.5,
     textAlign: 'center',
   },
   textContactTwo: {
-    marginTop: 4,
     color: colors.texts,
     fontSize: 36,
     fontWeight: '400',
+    lineHeight: 28.5,
     fontFamily: fonts.gotham.semiBold,
     textAlign: 'center',
     marginBottom: 25,
@@ -401,7 +403,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 27,
     color: colors.texts,
-    fontFamily: fonts.gotham.regular,
+    fontFamily: fonts.gotham.thin,
     textAlign: 'center',
   },
   textHourTwo: {
