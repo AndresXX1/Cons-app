@@ -16,7 +16,7 @@ export function StackHeaderLeftGoBack({ color, title }: { color: string; title: 
         backgroundColor: colors.transparent,
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: 20,
+        marginLeft: 15,
         gap: 9,
       }}
       activeOpacity={1} // Evitar cambio de opacidad al presionar
