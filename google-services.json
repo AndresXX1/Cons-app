@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "209364068008",
+    "project_id": "argenpesos-88d9e",
+    "storage_bucket": "argenpesos-88d9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209364068008:android:d279f8efbb30987825049d",
+        "android_client_info": {
+          "package_name": "com.binarysorcerers.argenpesos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjUMguAX_wSrXov0tfYWvLfaVucSaLUt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

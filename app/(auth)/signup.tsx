@@ -40,7 +40,7 @@ const registerForPushNotificationsAsync = async () => {
 
     token = (
       await Notifications.getExpoPushTokenAsync({
-        projectId: 'e18f18ae-f643-49e3-a8e6-a68228cf0d96',
+        projectId: 'ba050b1f-eab5-4c81-a46d-6dd33f7ab0fd',
       })
     ).data;
 
@@ -200,7 +200,7 @@ const SignUp = () => {
         </View>
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={0} totalSteps={3} />
-        
+
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -269,7 +269,6 @@ const SignUp = () => {
               color={colors.blue}
             />
           </Pressable>
-
         </View>
         {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
         <View style={styles.containerNext}>
@@ -299,8 +298,8 @@ const styles = StyleSheet.create({
   },
   errorMsj: {
     fontFamily: fonts.gotham.regular,
-    color: "red",
-    textAlign: "center"
+    color: 'red',
+    textAlign: 'center',
   },
   containerNext: {
     alignItems: 'center',
