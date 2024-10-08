@@ -98,11 +98,11 @@ const LogIn = () => {
 
   const handleLogIn = async () => {
     if (!data.email) {
-      setError('Email is required');
+      setError('Ingresa un email');
       return;
     }
     if (!data.password) {
-      setError('Password is required');
+      setError('Ingresa una contraseña');
       return;
     }
     if (active || active2) {
@@ -197,7 +197,7 @@ const LogIn = () => {
       <View style={styles.form}>
         <Text style={styles.title}>Iniciar Sesión</Text>
 
-        {error !== '' && <Text>{error}</Text>}
+        
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -235,8 +235,9 @@ const LogIn = () => {
               color={colors.blue}
             />
           </Pressable>
+          
         </View>
-
+        {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
         <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
 
         <View style={styles.containerLogin}>
@@ -267,6 +268,12 @@ const styles = StyleSheet.create({
   },
   head: {
     marginTop:20,
+  },
+  errorMsj: {
+    fontFamily: fonts.gotham.regular,
+    marginTop: 10,
+    color: "red",
+    textAlign: "center"
   },
   title: {
     fontFamily: fonts.gotham.bold,

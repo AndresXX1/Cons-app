@@ -16,7 +16,7 @@ export function StackHeaderLeftGoBack({ color, title }: { color: string; title: 
         backgroundColor: colors.transparent,
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: 15,
+        marginLeft: 10,
         gap: 9,
       }}
       activeOpacity={1} // Evitar cambio de opacidad al presionar
@@ -32,7 +32,6 @@ export function StackHeaderLeftGoBack({ color, title }: { color: string; title: 
         style={{
           color: color,
           fontFamily: fonts.gotham.semiBold,
-          marginBottom: 2,
         }}>
         {title}
       </Text>

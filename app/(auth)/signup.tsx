@@ -141,11 +141,11 @@ const SignUp = () => {
 
   const handleNext = async () => {
     if (!inputEmailValue) {
-      setError('Introdusca un Email');
+      setError('Introduzca un Email');
       return;
     }
     if (!inputPasswordValue) {
-      setError('Introdusca una contraseña');
+      setError('Introduzca una contraseña');
       return;
     }
     if (inputConfirmPasswordValue !== inputPasswordValue) {
@@ -200,7 +200,7 @@ const SignUp = () => {
         </View>
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={0} totalSteps={3} />
-        {error !== '' && <Text>{error}</Text>}
+        
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -269,7 +269,9 @@ const SignUp = () => {
               color={colors.blue}
             />
           </Pressable>
+
         </View>
+        {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleNext}>
             {active && <ActivityIndicator size={22} color={colors.white} />}
@@ -294,6 +296,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 52,
     backgroundColor: colors.gray,
+  },
+  errorMsj: {
+    fontFamily: fonts.gotham.regular,
+    color: "red",
+    textAlign: "center"
   },
   containerNext: {
     alignItems: 'center',
@@ -324,21 +331,21 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
+    height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   textInput: {
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
-    height: 48,
+    height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   textInputHidden: {
     flex: 1,

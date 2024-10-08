@@ -18,7 +18,7 @@ export function StackHeaderLogout({ color, title }: { color: string; title: stri
         backgroundColor: colors.transparent,
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: 20,
+        marginLeft: 10,
         gap: 9,
       }}
       activeOpacity={1} // Evitar cambio de opacidad al presionar

@@ -18,7 +18,7 @@ const AuthLayout = () => {
         name="login"
         options={{
           headerTransparent: true,
-          headerStyle: { backgroundColor: colors.transparent,  },
+          headerStyle: { backgroundColor: colors.transparent },
           title: '',
           headerTitle: () => null,
           headerTitleAlign: 'center',
