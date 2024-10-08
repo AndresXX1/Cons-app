@@ -19,7 +19,7 @@ const AuthLayout = () => {
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
-          title: 'SignUp',
+          title: '',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.white} />,
