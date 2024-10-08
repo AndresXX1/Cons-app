@@ -44,7 +44,7 @@ const registerForPushNotificationsAsync = async () => {
 
     token = (
       await Notifications.getExpoPushTokenAsync({
-        projectId: 'e18f18ae-f643-49e3-a8e6-a68228cf0d96',
+        projectId: 'ba050b1f-eab5-4c81-a46d-6dd33f7ab0fd',
       })
     ).data;
 
@@ -195,7 +195,6 @@ const LogIn = () => {
       <View style={styles.form}>
         <Text style={styles.title}>Iniciar Sesión</Text>
 
-        
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -233,7 +232,6 @@ const LogIn = () => {
               color={colors.blue}
             />
           </Pressable>
-          
         </View>
         {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
         <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
@@ -267,13 +265,13 @@ const styles = StyleSheet.create({
     gap: 26,
   },
   head: {
-    marginTop:20,
+    marginTop: 20,
   },
   errorMsj: {
     fontFamily: fonts.gotham.regular,
     marginTop: 10,
-    color: "red",
-    textAlign: "center"
+    color: 'red',
+    textAlign: 'center',
   },
   title: {
     fontFamily: fonts.gotham.bold,
