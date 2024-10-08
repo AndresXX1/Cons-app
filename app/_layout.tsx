@@ -1,7 +1,8 @@
 import { Provider } from 'react-redux';
+import * as Notifications from 'expo-notifications';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store, AppDispatch, RootState } from '@/store';
@@ -14,6 +15,14 @@ const queryClient = new QueryClient();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const RootLayoutWrapper = () => {
   return (
@@ -31,6 +40,45 @@ const RootLayout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [appReady, setAppReady] = useState<boolean>(false);
   const { isLoading } = useSelector((state: RootState) => state.auth);
+
+  const notificationListener = useRef<Notifications.Subscription>();
+  const responseListener = useRef<Notifications.Subscription>();
+
+  const initNotificationListener = () => {
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      const payload = notification.request.content.data;
+      if (!payload) {
+        return;
+      }
+      const { action } = payload;
+      if (action) {
+        if (action === 'reload') {
+          //agregar un action segun la notificacion, talves redirigir a una noticia o algo
+          //dispatch();
+        }
+      }
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log('response: ', response);
+    });
+  };
+
+  const removeNotificationListener = () => {
+    if (!notificationListener.current || !responseListener.current) {
+      return;
+    }
+    Notifications.removeNotificationSubscription(notificationListener.current);
+    Notifications.removeNotificationSubscription(responseListener.current);
+  };
+
+  useEffect(() => {
+    initNotificationListener();
+
+    return () => {
+      removeNotificationListener();
+    };
+  }, []);
 
   const preloadAssets = async () => {
     try {
