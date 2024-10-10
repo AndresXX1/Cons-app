@@ -56,11 +56,11 @@ const registerForPushNotificationsAsync = async () => {
 };
 
 const LogIn = () => {
-//   const [request, response, promptAsync] = Google.useAuthRequest({
-//     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
-//     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
-//     //iosClientId: '',
-//   });
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
+    webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
+    //iosClientId: '',
+  });
 
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
@@ -136,35 +136,35 @@ const LogIn = () => {
     };
   }, [keyboardVisible, navigation]);
 
-  // const handleGoogleSignIn = async () => {
-  //   if (active || active2) {
-  //     return;
-  //   }
-  //   setActive2(true);
-  //   promptAsync();
-  // };
+  const handleGoogleSignIn = async () => {
+    if (active || active2) {
+      return;
+    }
+    setActive2(true);
+    promptAsync();
+  };
 
-  // const handleResponse = async () => {
-  //   if (response?.type === 'success' && response?.authentication?.accessToken) {
-  //     const tokenNotifications = await registerForPushNotificationsAsync();
-  //     dispatch(
-  //       googleSignIn({
-  //         token: response.authentication.accessToken,
-  //         tokenNotifications,
-  //         setActive: setActive2,
-  //         setError,
-  //         dispatch,
-  //       }),
-  //     );
-  //   } else {
-  //     setActive2(false);
-  //   }
-  // };
+  const handleResponse = async () => {
+    if (response?.type === 'success' && response?.authentication?.accessToken) {
+      const tokenNotifications = await registerForPushNotificationsAsync();
+      dispatch(
+        googleSignIn({
+          token: response.authentication.accessToken,
+          tokenNotifications,
+          setActive: setActive2,
+          setError,
+          dispatch,
+        }),
+      );
+    } else {
+      setActive2(false);
+    }
+  };
 
 
-  // useEffect(() => {
-  //   handleResponse();
-  // }, [response]);
+  useEffect(() => {
+    handleResponse();
+  }, [response]);
 
   if (
     isAuth &&
@@ -248,12 +248,12 @@ const LogIn = () => {
 
         <Text style={[styles.textGoogle]}>O iniciar sesión con tu cuenta de Google</Text>
 
-        {/* <View style={styles.googleIconContainer}>
+        <View style={styles.googleIconContainer}>
           <Pressable onPress={handleGoogleSignIn}>
             {active2 && <ActivityIndicator size={32} color={colors.blue2} />}
             {!active2 && <Image source={images.google_button} style={styles.googleIcon} />}
           </Pressable>
-        </View> */}
+        </View>
       </View>
     </SafeAreaView>
   );
