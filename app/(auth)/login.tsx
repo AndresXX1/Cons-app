@@ -56,11 +56,11 @@ const registerForPushNotificationsAsync = async () => {
 };
 
 const LogIn = () => {
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
-    webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
-    //iosClientId: '',
-  });
+//   const [request, response, promptAsync] = Google.useAuthRequest({
+//     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
+//     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
+//     //iosClientId: '',
+//   });
 
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
@@ -136,34 +136,35 @@ const LogIn = () => {
     };
   }, [keyboardVisible, navigation]);
 
-  const handleGoogleSignIn = async () => {
-    if (active || active2) {
-      return;
-    }
-    setActive2(true);
-    promptAsync();
-  };
+  // const handleGoogleSignIn = async () => {
+  //   if (active || active2) {
+  //     return;
+  //   }
+  //   setActive2(true);
+  //   promptAsync();
+  // };
 
-  const handleResponse = async () => {
-    if (response?.type === 'success' && response?.authentication?.accessToken) {
-      const tokenNotifications = await registerForPushNotificationsAsync();
-      dispatch(
-        googleSignIn({
-          token: response.authentication.accessToken,
-          tokenNotifications,
-          setActive: setActive2,
-          setError,
-          dispatch,
-        }),
-      );
-    } else {
-      setActive2(false);
-    }
-  };
+  // const handleResponse = async () => {
+  //   if (response?.type === 'success' && response?.authentication?.accessToken) {
+  //     const tokenNotifications = await registerForPushNotificationsAsync();
+  //     dispatch(
+  //       googleSignIn({
+  //         token: response.authentication.accessToken,
+  //         tokenNotifications,
+  //         setActive: setActive2,
+  //         setError,
+  //         dispatch,
+  //       }),
+  //     );
+  //   } else {
+  //     setActive2(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    handleResponse();
-  }, [response]);
+
+  // useEffect(() => {
+  //   handleResponse();
+  // }, [response]);
 
   if (
     isAuth &&
@@ -191,7 +192,9 @@ const LogIn = () => {
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+      <View style={styles.head}>
       <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+      </View>
       <View style={styles.form}>
         <Text style={styles.title}>Iniciar Sesión</Text>
 
@@ -245,12 +248,12 @@ const LogIn = () => {
 
         <Text style={[styles.textGoogle]}>O iniciar sesión con tu cuenta de Google</Text>
 
-        <View style={styles.googleIconContainer}>
+        {/* <View style={styles.googleIconContainer}>
           <Pressable onPress={handleGoogleSignIn}>
             {active2 && <ActivityIndicator size={32} color={colors.blue2} />}
             {!active2 && <Image source={images.google_button} style={styles.googleIcon} />}
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </SafeAreaView>
   );
@@ -258,10 +261,8 @@ const LogIn = () => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
     paddingTop: 52,
     backgroundColor: colors.blue2,
-    justifyContent: 'flex-end',
     gap: 26,
   },
   head: {
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
+    height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
   },
   textInputHidden: {
     flex: 1,
-    height: 48,
+    height: 56,
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
-    height: 48,
+    height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
@@ -356,7 +357,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     textAlign: 'center',
-    paddingTop: 10,
+    paddingTop: 20,
+    fontFamily: fonts.gotham.regular
   },
   containerLogin: {
     alignItems: 'center',

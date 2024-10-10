@@ -270,6 +270,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: colors.white,
     marginHorizontal: 'auto',
+    objectFit: 'contain'
   },
   hamburguerMenu: {
     width: 35,

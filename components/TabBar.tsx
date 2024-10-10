@@ -93,10 +93,11 @@ const TabBar = ({ state, descriptors, navigation, ...props }: BottomTabBarProps)
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#ffffff',
-    height: 51,
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    paddingVertical: 'auto',
     // shadowOffset: {
     //   width: 0,
     //   height: -2,
@@ -110,7 +111,6 @@ const styles = StyleSheet.create({
     borderColor: '#4DCCFF',
     marginTop: -32,
     marginHorizontal: -20,
-    marginBottom: 19,
     width: 64,
     height: 64,
     display: 'flex',
@@ -122,6 +122,8 @@ const styles = StyleSheet.create({
   icon: {
     width: 30,
     height: 30,
+    marginBottom: 7,
+
   },
   iconLogo: {
     width: 51,
