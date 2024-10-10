@@ -161,6 +161,7 @@ const LogIn = () => {
     }
   };
 
+
   useEffect(() => {
     handleResponse();
   }, [response]);
@@ -191,7 +192,9 @@ const LogIn = () => {
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+      <View style={styles.head}>
       <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+      </View>
       <View style={styles.form}>
         <Text style={styles.title}>Iniciar Sesión</Text>
 
@@ -258,10 +261,8 @@ const LogIn = () => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
     paddingTop: 52,
     backgroundColor: colors.blue2,
-    justifyContent: 'flex-end',
     gap: 26,
   },
   head: {
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
+    height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
   },
   textInputHidden: {
     flex: 1,
-    height: 48,
+    height: 56,
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
-    height: 48,
+    height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
@@ -356,7 +357,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     textAlign: 'center',
-    paddingTop: 10,
+    paddingTop: 20,
+    fontFamily: fonts.gotham.regular
   },
   containerLogin: {
     alignItems: 'center',

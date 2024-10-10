@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { colors, images, fonts } from '@/theme';
 import { Image } from 'react-native';
 import NavBar from '@/components/NavBar';
@@ -19,28 +19,6 @@ const ShopScreen = () => {
     name: string;
     price: string;
   }
-  const data = [
-    {
-      img: 'samsumg',
-      name: 'Samsung Galaxy A14 4G BLACK',
-      price: '$270.000',
-    },
-    {
-      img: 'samsumg',
-      name: 'Samsung Galaxy A14 4G BLACK',
-      price: '$270.000',
-    },
-    {
-      img: 'samsumg',
-      name: 'Samsung Galaxy A14 4G BLACK',
-      price: '$270.000',
-    },
-    {
-      img: 'samsumg',
-      name: 'Samsung Galaxy A14 4G BLACK',
-      price: '$270.000',
-    },
-  ];
 
   useFocusEffect(
     React.useCallback(() => {
@@ -56,7 +34,7 @@ const ShopScreen = () => {
       const intervalId = setInterval(() => {
         seconds += 1;
       }, 1000);
-
+      
       return () => {
         clearInterval(intervalId);
         registerViewTime({ time: seconds, view: 'argencompras' });
@@ -100,14 +78,16 @@ const ShopScreen = () => {
           <View style={styles.containerFeaturedFather}>
             {products.map((dat, key) => (
               <View key={key} style={styles.containerFeatured}>
+                <View style={styles.containerImage}>
                 <Image
                   source={{ uri: dat.images[1] ? dat.images[1].src : dat.images[0].src }}
                   style={styles.imageFeatured}></Image>
+                </View>
                 <View style={styles.containerFeaturedTwo}>
-                  <Text style={styles.textFeaturedBlue}>{dat.name.es}</Text>
-                  <Text style={styles.textFeaturedRed}>{dat.variants.price}</Text>
-                  <Text style={styles.buttonRed}>COMPRAR AHORA</Text>
-                  <Text style={styles.buttonBlue}>+ INFO</Text>
+                  <Text style={styles.textFeaturedBlue}>{dat.name.es.length > 35 ? dat.name.es.substring(0, 35) + "..." : dat.name.es}</Text>
+                  <Text style={styles.textFeaturedRed}>  ${parseInt(dat.variants[0].price, 10).toLocaleString('es-ES')}</Text>
+                  <Pressable style={styles.buttonRed}><Text style={styles.buttonText}>COMPRAR AHORA</Text></Pressable>
+                  <Pressable style={styles.buttonBlue}><Text style={styles.buttonText}>+ INFO</Text></Pressable>
                 </View>
               </View>
             ))}
@@ -121,6 +101,7 @@ const ShopScreen = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    fontFamily: fonts.gotham.regular,
   },
   container: {
     flex: 1,
@@ -150,8 +131,7 @@ const styles = StyleSheet.create({
   textLogo: {
     color: colors.texts,
     fontSize: 15,
-    fontFamily: fonts.gotham.semiBold,
-    fontWeight: '700',
+    fontFamily: fonts.gotham.bold,
     textAlign: 'center',
   },
   containerPoints: {
@@ -210,6 +190,7 @@ const styles = StyleSheet.create({
     color: colors.texts,
     lineHeight: 26.2,
     marginBottom: 30,
+    textTransform: 'uppercase',
   },
   containerFeaturedFather: {
     display: 'flex',
@@ -222,64 +203,74 @@ const styles = StyleSheet.create({
     width: 326,
     backgroundColor: colors.white,
     borderRadius: 12,
+    height: 224,
   },
   containerFeaturedTwo: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: 163,
     backgroundColor: colors.white,
     paddingVertical: 10,
-    paddingHorizontal: 7,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+  },
+  containerImage: {
+    overflow: 'hidden',
+    width: 163,
+    height:224,
+    borderRightColor: colors.gray4,
+    borderRightWidth: 2,
     borderRadius: 12,
   },
   imageFeatured: {
     width: 163,
-    height: 224,
+    height: "100%",
     borderRadius: 12,
     backgroundColor: '#F3F4F5',
+    objectFit: 'cover',
   },
   textFeaturedBlue: {
     color: colors.blue,
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: '700',
-    width: 122,
-    lineHeight: 24,
+    width: 130,
+    lineHeight: 20,
+    textTransform: 'capitalize',
   },
   textFeaturedRed: {
     color: colors.red,
     fontSize: 25,
     fontFamily: fonts.gotham.semiBold,
-    fontWeight: '700',
-    width: 167,
-    lineHeight: 19,
     paddingVertical: 18,
   },
   buttonRed: {
+    flex: 1,
     backgroundColor: colors.red,
-    color: colors.white,
-    height: 32,
     width: 151,
     textAlign: 'center',
-    textAlignVertical: 'center',
-    borderRadius: 50,
     fontSize: 12,
     fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
+    borderRadius: 100,
+    justifyContent: 'center',
+    maxHeight: 32
+
   },
   buttonBlue: {
+    flex: 1,
     backgroundColor: colors.blue,
-    color: colors.white,
-    height: 32,
     width: 151,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    borderRadius: 50,
+    alignItems: 'center',
+    borderRadius: 100,
     fontSize: 12,
-    fontFamily: fonts.gotham.bold,
-    fontWeight: '700',
     marginTop: 13,
+    justifyContent: 'center',
+    maxHeight: 32
+
   },
+  buttonText: {
+    textAlign: 'center',
+    fontFamily: fonts.gotham.bold,
+    color: colors.white,
+    fontSize: 12,
+    textTransform: 'uppercase',
+  }
 });
 
 export default ShopScreen;

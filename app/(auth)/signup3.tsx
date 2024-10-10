@@ -124,7 +124,6 @@ const SignUp3 = () => {
         </View>
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={3} totalSteps={4} />
-        {error !== '' && <Text>{error}</Text>}
 
         <TouchableOpacity style={{ opacity: 1 }} activeOpacity={1} onPress={showDatePicker}>
           <TextInput
@@ -161,6 +160,8 @@ const SignUp3 = () => {
             },
           ]}
         />
+        {error !== '' && <Text style={styles.error}>{error}</Text>}
+
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleNext}>
             {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
@@ -193,8 +194,6 @@ const styles = StyleSheet.create({
     height: 48,
   },
   form: {
-    flex: 1,
-    gap: 24,
     paddingHorizontal: 16,
   },
   title: {
@@ -203,17 +202,26 @@ const styles = StyleSheet.create({
     fontSize: 32,
     verticalAlign: 'middle',
     textAlign: 'center',
+    marginTop: 45,
+    marginBottom:20
   },
   textInput: {
     color: colors.black,
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
-    height: 48,
+    height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
     paddingHorizontal: 10,
+    marginTop:30
+  },
+  error: {
+    fontFamily: fonts.gotham.regular,
+    color: colors.red,
+    textAlign: 'center',
+    marginTop: 20
   },
   buttonNext: {
     backgroundColor: colors.blue,
@@ -225,6 +233,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:52
   },
   textNext: {
     fontFamily: fonts.gotham.semiBold,
@@ -244,3 +253,4 @@ const styles = StyleSheet.create({
 });
 
 export default SignUp3;
+

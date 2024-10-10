@@ -30,7 +30,7 @@ const AuthLayout = () => {
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
-          title: 'SignUp',
+          title: '',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
@@ -41,7 +41,7 @@ const AuthLayout = () => {
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
-          title: 'EmailVerify',
+          title: '',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLogout title={'Volver atrás'} color={colors.blue} />,
@@ -52,7 +52,7 @@ const AuthLayout = () => {
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
-          title: 'SignUp',
+          title: '',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLogout title={'Volver atrás'} color={colors.blue} />,
@@ -63,7 +63,7 @@ const AuthLayout = () => {
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
-          title: 'SignUp',
+          title: '',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
@@ -74,7 +74,7 @@ const AuthLayout = () => {
         options={{
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
-          title: 'SignUp',
+          title: '',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => null,

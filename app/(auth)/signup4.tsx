@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     textAlign: 'center',
     marginTop: 30,
+    lineHeight: 42,
   },
   center: {
     justifyContent: 'center',
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     fontFamily: fonts.gotham.regular,
     fontSize: 24,
-    lineHeight: 24,
+    lineHeight: 35,
     color: colors.white,
     textAlign: 'center',
     marginTop: 32,
