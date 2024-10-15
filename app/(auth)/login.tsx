@@ -1,6 +1,7 @@
 import { AppDispatch, RootState } from '@/store';
 import { googleSignIn, logInAsync } from '@/store/actions/auth';
 import { colors, fonts, images } from '@/theme';
+import { Link } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
 import * as Google from 'expo-auth-session/providers/google';
@@ -59,7 +60,7 @@ const LogIn = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
-    //iosClientId: '',
+    iosClientId: '',
   });
 
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
@@ -161,7 +162,6 @@ const LogIn = () => {
     }
   };
 
-
   useEffect(() => {
     handleResponse();
   }, [response]);
@@ -193,7 +193,7 @@ const LogIn = () => {
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <View style={styles.head}>
-      <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+        <Image source={images.logo} style={styles.logo} resizeMode="cover" />
       </View>
       <View style={styles.form}>
         <Text style={styles.title}>Iniciar Sesión</Text>
@@ -237,7 +237,9 @@ const LogIn = () => {
           </Pressable>
         </View>
         {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
-        <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
+        <Text style={[styles.textReset]}>
+          <Link href="/(auth)/pin_verification">¿Has olvidado tu contraseña?</Link>
+        </Text>
 
         <View style={styles.containerLogin}>
           <Pressable style={styles.buttonLogin} onPress={() => handleLogIn()}>
@@ -358,7 +360,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'center',
     paddingTop: 20,
-    fontFamily: fonts.gotham.regular
+    fontFamily: fonts.gotham.regular,
   },
   containerLogin: {
     alignItems: 'center',
