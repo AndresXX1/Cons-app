@@ -13,6 +13,7 @@ export const apiUrls = {
   refreshToken: () => `${baseUrl}/api/auth/refresh-token`,
   logOut: () => `${baseUrl}/api/auth/log-out`,
   forgetPassword: () => `${baseUrl}/api/auth/forget-password`,
+  verifyEmail: () => `${baseUrl}/api/auth/verify-email`,
   getUser: () => `/api/user`,
   updateFirstData: () => `${baseUrl}/api/user/first-data`,
   updateSecondData: () => `${baseUrl}/api/user/second-data`,

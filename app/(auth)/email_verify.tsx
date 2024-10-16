@@ -72,7 +72,6 @@ const EmailVerify = () => {
           }}
           onFilled={text => console.log(`OTP is ${text}`)}
         />
-        
       </View>
       <View style={styles.form}>
         <View style={styles.containerNext}>
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     marginBottom: 40,
-    lineHeight: 20
+    lineHeight: 20,
   },
   textOpacity: {
     fontFamily: fonts.gotham.semiBold,

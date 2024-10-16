@@ -197,6 +197,14 @@ export const logInAsync = createAsyncThunk(
   },
 );
 
+export const verifyEmail = createAsyncThunk(
+  'auth/verify_email',
+  async ({ email, userId }: { email: string; userId: number }) => {
+    const response = await axios.post(apiUrls.verifyEmail(), { email, userId });
+    return response.data;
+  },
+);
+
 export const verifySessionAsync = createAsyncThunk(
   'auth/verifySessionAsync',
   async ({ dispatch }: { dispatch: ReturnType<typeof useAppDispatch> }, { rejectWithValue }) => {
@@ -356,15 +364,18 @@ export const getUserAsync = createAsyncThunk(
   'auth/getUserAsync',
   async (_, { rejectWithValue }) => {
     try {
+      console.log('Realizando solicitud a la API para obtener el usuario...');
       const response = await axiosInstance.get(apiUrls.getUser());
+      console.log('Respuesta de la API:', response);
       if (response.data.ok) {
+        console.log('Datos obtenidos correctamente:', response.data);
         return response.data;
       } else {
+        console.log('La API devolvió un error.');
         return rejectWithValue('error');
       }
-      // eslint-disable-next-line
-    } catch (error: any) {
-      deleteAccess();
+    } catch (error) {
+      console.error('Error en getUserAsync:', error);
       return rejectWithValue('error');
     }
   },

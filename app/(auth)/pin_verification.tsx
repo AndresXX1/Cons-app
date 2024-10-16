@@ -1,93 +1,114 @@
-import { useState } from 'react';
-import { View, StyleSheet, Image, Pressable, Text, ActivityIndicator } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, StyleSheet, Pressable, Text, ActivityIndicator, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, fonts, images } from '@/theme';
 import { Redirect, useRouter } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-import { verifyCode, resendVerifyCode } from '@/store/service/user';
-import { OTPInputText } from '@/components/OTPInputText';
+import { verifyEmail } from '@/store/actions/auth';
+import { getUserAsync } from '@/store/actions/auth';
 
 const PinVerification = () => {
   const router = useRouter();
-  const { isAuth } = useSelector((state: RootState) => state.auth);
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [error, setError] = useState('');
   const [code, setCode] = useState('');
+  const [active, setActive] = useState(false);
+  const [active2, setActive2] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+  const [emailIsFocused, setEmailIsFocused] = useState(false);
+  const [data, setData] = useState({
+    email: '',
+  });
 
-  const routerNext = () => {
-    router.replace('/(auth)/signup2');
-  };
+  useEffect(() => {
+    console.log('isSubmitting:', isSubmitting);
+  }, [isSubmitting]);
 
   const handleNext = async () => {
-    if (code.length !== 5) {
-      setError('Introduce el codigo completo');
+    if (!data.email) {
+      setError('Introduzca un Email');
       return;
     }
-    if (isSubmitting || isSubmitting2) {
-      return;
+
+    setIsSubmitting(true); // Empieza a cargar
+    try {
+      console.log('Iniciando getUserAsync...'); // Depuración antes del dispatch
+      const userAction = await dispatch(getUserAsync());
+      console.log('Resultado de getUserAsync:', userAction);
+
+      // Verificamos si la acción se completó correctamente
+      if (getUserAsync.fulfilled.match(userAction)) {
+        const userId = userAction.payload.user.id; // Obtenemos el userId
+        console.log('User ID obtenido:', userId);
+
+        // Verificamos el email
+        const exists = await dispatch(verifyEmail({ email: data.email, userId }));
+        console.log('Respuesta de verificación:', exists);
+
+        if (exists.payload && exists.payload.ok) {
+          if (isAuth && user !== null && user?.email_verified === false) {
+            setRedirect(true);
+          } else {
+            setError('El email ya está verificado');
+          }
+        } else {
+          setError('El email no existe');
+        }
+      } else {
+        console.log('Error al obtener el usuario', userAction);
+        setError('Error al obtener el usuario');
+      }
+    } catch (error) {
+      console.error('Error en el bloque try-catch:', error);
+      setError('Error al verificar el email');
+    } finally {
+      console.log('Finalizando proceso, desactivando carga...');
+      setIsSubmitting(false); // Esto debería detener la carga
     }
-    setIsSubmitting(true);
-    await verifyCode({
-      code: code,
-      setError,
-      setIsSubmitting,
-      dispatch,
-      routerNext,
-    });
   };
 
-  const handleResendVerifyCode = async () => {
-    if (isSubmitting2 || isSubmitting) {
-      return;
-    }
-    setIsSubmitting2(true);
-    await resendVerifyCode({
-      setError,
-      setIsSubmitting: setIsSubmitting2,
-    });
+  const handleEmailFocus = () => {
+    setEmailIsFocused(true);
   };
 
-  if (!isAuth) {
-    return <Redirect href="/(auth)" />;
-  }
+  const handleEmailBlur = () => {
+    setEmailIsFocused(false);
+  };
 
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.form}>
-        <Text style={styles.textPin}>Pin de seguridad</Text>
-        <Text style={styles.textPinTwo}>
-          Introduce el pin que enviamos al correo{' '}
-          <Text style={styles.textOpacity}>name@name.com </Text>
-        </Text>
-        <OTPInputText
-          numberOfDigits={5}
-          focusColor={colors.blue2}
-          focusStickBlinkingDuration={500}
-          onTextChange={text => {
-            setError('');
-            setCode(text);
-          }}
-          onFilled={text => console.log(`OTP is ${text}`)}
+        <TextInput
+          placeholder="Email"
+          autoCapitalize="none"
+          placeholderTextColor={colors.gray2}
+          onFocus={handleEmailFocus}
+          onBlur={handleEmailBlur}
+          onChangeText={text => setData({ ...data, email: text })}
+          editable={!isSubmitting}
+          value={data.email}
+          style={[
+            styles.textInput,
+            {
+              borderColor: emailIsFocused ? colors.blue2 : colors.gray2,
+            },
+          ]}
         />
-        
-      </View>
-      <View style={styles.form}>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
         <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNextWhite} onPress={handleResendVerifyCode}>
-            {isSubmitting2 && <ActivityIndicator size={22} color={colors.blue} />}
-            {!isSubmitting2 && <Text style={styles.textNextBlue}>Reenviar Email</Text>}
+          <Pressable style={styles.buttonNextBlue} onPress={handleNext} disabled={isSubmitting}>
+            {isSubmitting ? (
+              <ActivityIndicator size={22} color={colors.white} />
+            ) : (
+              <Text style={styles.textNextWhite}>Siguiente</Text>
+            )}
           </Pressable>
         </View>
-        <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNextBlue} onPress={handleNext}>
-            {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
-            {!isSubmitting && <Text style={styles.textNextWhite}>Siguiente</Text>}
-          </Pressable>
-        </View>
-        {error !== '' && <Text style={styles.error}>{error}</Text>}
       </View>
     </SafeAreaView>
   );
@@ -116,6 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 24,
     paddingHorizontal: 16,
+    marginTop: 30,
   },
   title: {
     fontFamily: fonts.gotham.semiBold,
@@ -185,7 +207,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     marginBottom: 40,
-    lineHeight: 20
+    lineHeight: 20,
   },
   textOpacity: {
     fontFamily: fonts.gotham.semiBold,

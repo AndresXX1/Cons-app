@@ -1,7 +1,6 @@
 import { AppDispatch, RootState } from '@/store';
 import { googleSignIn, logInAsync } from '@/store/actions/auth';
 import { colors, fonts, images } from '@/theme';
-import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
 import * as Google from 'expo-auth-session/providers/google';
@@ -63,11 +62,11 @@ const LogIn = () => {
     iosClientId: '',
   });
 
-  const router = useRouter();
+  const navigation = useNavigation();
+  const [forgotPassword, setForgotPassword] = useState(false);
 
   const handleForgotPassword = () => {
-    console.log('Navegando a /pin_verification');
-    router.push('/(auth)/pin_verification');
+    setForgotPassword(true);
   };
 
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
@@ -120,7 +119,6 @@ const LogIn = () => {
     dispatch(logInAsync({ data, tokenNotifications, setActive, setError, dispatch }));
   };
 
-  const navigation = useNavigation();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -187,6 +185,10 @@ const LogIn = () => {
     return <Redirect href="/(auth)/email_verify" />;
   }
 
+  if (forgotPassword) {
+    return <Redirect href="/(auth)/pin_verification" />;
+  }
+
   if (
     isAuth &&
     user !== null &&
@@ -244,7 +246,7 @@ const LogIn = () => {
           </Pressable>
         </View>
         {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
-        <Pressable style={styles.textReset} onPress={handleForgotPassword}>
+        <Pressable style={styles.textReset} onPress={() => handleForgotPassword()}>
           <Text style={styles.textReset}>¿Has olvidado tu contraseña?</Text>
         </Pressable>
 
