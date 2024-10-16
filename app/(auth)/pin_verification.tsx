@@ -6,7 +6,7 @@ import { Redirect, useRouter } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { verifyEmail } from '@/store/actions/auth';
-import { getUserAsync } from '@/store/actions/auth';
+import * as Notifications from 'expo-notifications';
 
 const PinVerification = () => {
   const router = useRouter();
@@ -22,54 +22,57 @@ const PinVerification = () => {
   const [redirect, setRedirect] = useState(false);
   const [emailIsFocused, setEmailIsFocused] = useState(false);
   const [data, setData] = useState({
-    email: '',
+    userId: '',
   });
 
-  useEffect(() => {
-    console.log('isSubmitting:', isSubmitting);
-  }, [isSubmitting]);
+  const registerForPushNotificationsAsync = async () => {
+    try {
+      let token = '';
+
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+
+      let finalStatus = existingStatus;
+
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+
+        finalStatus = status;
+      }
+
+      if (finalStatus !== 'granted') {
+        return token;
+      }
+
+      token = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId: 'ba050b1f-eab5-4c81-a46d-6dd33f7ab0fd',
+        })
+      ).data;
+
+      return token;
+    } catch (error) {
+      console.error('Error al obtener el token de notificación:', error);
+      return '';
+    }
+  };
 
   const handleNext = async () => {
-    if (!data.email) {
+    if (!data.userId) {
       setError('Introduzca un Email');
       return;
     }
 
-    setIsSubmitting(true); // Empieza a cargar
-    try {
-      console.log('Iniciando getUserAsync...'); // Depuración antes del dispatch
-      const userAction = await dispatch(getUserAsync());
-      console.log('Resultado de getUserAsync:', userAction);
+    setIsSubmitting(true);
 
-      // Verificamos si la acción se completó correctamente
-      if (getUserAsync.fulfilled.match(userAction)) {
-        const userId = userAction.payload.user.id; // Obtenemos el userId
-        console.log('User ID obtenido:', userId);
-
-        // Verificamos el email
-        const exists = await dispatch(verifyEmail({ email: data.email, userId }));
-        console.log('Respuesta de verificación:', exists);
-
-        if (exists.payload && exists.payload.ok) {
-          if (isAuth && user !== null && user?.email_verified === false) {
-            setRedirect(true);
-          } else {
-            setError('El email ya está verificado');
-          }
-        } else {
-          setError('El email no existe');
-        }
-      } else {
-        console.log('Error al obtener el usuario', userAction);
-        setError('Error al obtener el usuario');
-      }
-    } catch (error) {
-      console.error('Error en el bloque try-catch:', error);
-      setError('Error al verificar el email');
-    } finally {
-      console.log('Finalizando proceso, desactivando carga...');
-      setIsSubmitting(false); // Esto debería detener la carga
-    }
+    // Asegúrate de que el código de verificación también se envíe si es necesario
+    dispatch(verifyEmail({ data, setActive, setError, dispatch }))
+      .then(() => {
+        // Usa la forma correcta para redirigir
+        router.push({ pathname: '/(auth)/email_verify' });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   const handleEmailFocus = () => {
@@ -89,9 +92,9 @@ const PinVerification = () => {
           placeholderTextColor={colors.gray2}
           onFocus={handleEmailFocus}
           onBlur={handleEmailBlur}
-          onChangeText={text => setData({ ...data, email: text })}
+          onChangeText={text => setData({ ...data, userId: text })}
           editable={!isSubmitting}
-          value={data.email}
+          value={data.userId}
           style={[
             styles.textInput,
             {

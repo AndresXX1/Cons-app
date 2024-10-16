@@ -50,9 +50,9 @@ const EmailVerify = () => {
     });
   };
 
-  if (!isAuth) {
-    return <Redirect href="/(auth)" />;
-  }
+  // if (!isAuth) {
+  //   return <Redirect href="/(auth)" />;
+  // }
 
   return (
     <SafeAreaView style={styles.root}>

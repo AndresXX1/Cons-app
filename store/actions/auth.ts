@@ -199,9 +199,40 @@ export const logInAsync = createAsyncThunk(
 
 export const verifyEmail = createAsyncThunk(
   'auth/verify_email',
-  async ({ email, userId }: { email: string; userId: number }) => {
-    const response = await axios.post(apiUrls.verifyEmail(), { email, userId });
-    return response.data;
+  async (
+    {
+      data, // Solo enviamos el `userId`
+      setActive,
+      setError,
+      dispatch,
+    }: {
+      data: {
+        userId: string;
+      };
+      setActive: (boolean: boolean) => void;
+      setError: (error: string) => void;
+      dispatch: ReturnType<typeof useAppDispatch>;
+    },
+    { rejectWithValue },
+  ) => {
+    setActive(true);
+    try {
+      const response = await axios.post(apiUrls.verifyEmail(), { userId: data.userId });
+      if (response.data.ok) {
+        setActive(false);
+        dispatch(getUserAsync());
+        return {};
+      } else {
+        setActive(false);
+        setError(response.data.message);
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      setActive(false);
+      const message = error.response?.data?.message || 'Email no encontrado';
+      setError(message);
+      return rejectWithValue('error');
+    }
   },
 );
 
