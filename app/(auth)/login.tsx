@@ -1,7 +1,7 @@
 import { AppDispatch, RootState } from '@/store';
 import { googleSignIn, logInAsync } from '@/store/actions/auth';
 import { colors, fonts, images } from '@/theme';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
 import * as Google from 'expo-auth-session/providers/google';
@@ -62,6 +62,13 @@ const LogIn = () => {
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
     iosClientId: '',
   });
+
+  const router = useRouter();
+
+  const handleForgotPassword = () => {
+    console.log('Navegando a /pin_verification');
+    router.push('/(auth)/pin_verification');
+  };
 
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
@@ -237,9 +244,9 @@ const LogIn = () => {
           </Pressable>
         </View>
         {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
-        <Text style={[styles.textReset]}>
-          <Link href="/(auth)/pin_verification">¿Has olvidado tu contraseña?</Link>
-        </Text>
+        <Pressable style={styles.textReset} onPress={handleForgotPassword}>
+          <Text style={styles.textReset}>¿Has olvidado tu contraseña?</Text>
+        </Pressable>
 
         <View style={styles.containerLogin}>
           <Pressable style={styles.buttonLogin} onPress={() => handleLogIn()}>
