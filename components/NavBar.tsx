@@ -1,19 +1,59 @@
 import { Text, View, StyleSheet, Image, Pressable } from 'react-native';
 import { colors, fonts, images } from '@/theme';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
 import { apiUrls } from '../store/api';
 import { usePathname, useRouter } from 'expo-router';
 import BannersArgenCompras from '@/components/BannersArgenCompras';
 import { TextInput } from 'react-native-gesture-handler';
+import { getCuponsAsync } from '@/store/actions/auth';
+import { useEffect, useState } from 'react';
 
 const NavBar = () => {
   const router = useRouter();
   const pathName = usePathname();
+  const dispatch = useDispatch<AppDispatch>();
+  const {
+    user,
+    banners,
+    cupons = [],
+    loadingCupons,
+  } = useSelector((state: RootState) => state.auth);
 
-  console.log(pathName);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoadingCupons, setIsLoadingCupons] = useState(false);
+  const [filteredCupons, setFilteredCupons] = useState([]);
+  const [error, setError] = useState('');
 
-  const { user, banners } = useSelector((state: RootState) => state.auth);
+  useEffect(() => {
+    if (pathName === '/benefits') {
+      setIsLoadingCupons(true);
+      dispatch(getCuponsAsync()).finally(() => setIsLoadingCupons(false));
+    }
+  }, [pathName, dispatch]);
+
+  const handleSearch = () => {
+    setIsLoadingCupons(true);
+    setError('');
+
+    // Llamar a la API para obtener los cupones
+    dispatch(getCuponsAsync())
+      .then(() => {
+        // Filtrar cupones por el término de búsqueda
+        const cuponsFiltered = cupons.filter(cupon =>
+          cupon.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+
+        if (cuponsFiltered.length > 0) {
+          setFilteredCupons(cuponsFiltered);
+        } else {
+          setError('No se encontró ningún cupón con ese nombre');
+          setFilteredCupons([]);
+        }
+      })
+      .finally(() => setIsLoadingCupons(false));
+  };
+
   if (pathName === '/') {
     return (
       <View style={styles.containerHome}>
@@ -110,9 +150,38 @@ const NavBar = () => {
           <Image source={images.cuponizate_white} style={styles.logo} resizeMode="cover" />
         </View>
         <View style={styles.containerInput}>
-          <TextInput style={styles.inputSearch} placeholder="¿Qué estás buscando?"></TextInput>
-          <Image source={images.magnifying_glass} style={styles.iconMagnifying} />
+          <TextInput
+            style={styles.inputSearch}
+            placeholder="¿Qué estás buscando?"
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+          />
+          <Pressable onPress={handleSearch}>
+            <Image source={images.magnifying_glass} style={styles.iconMagnifying} />
+          </Pressable>
         </View>
+
+        {isLoadingCupons ? (
+          <Text>Cargando cupones...</Text>
+        ) : error ? (
+          <Text>{error}</Text>
+        ) : (
+          <View style={styles.cuponContainer}>
+            {filteredCupons?.length > 0 ? (
+              filteredCupons?.map(cupon => (
+                <View key={cupon.id} >
+                  <Text style={styles.cuponTitle}>{cupon.nombre}</Text>
+                  <Text style={styles.cuponDescription}>{cupon.descripcion}</Text>
+                  <Pressable style={styles.cuponButton}>
+                    <Text style={styles.cuponButtonText}>Usar Cupón</Text>
+                  </Pressable>
+                </View>
+              ))
+            ) : (
+              <Text>No hay cupones disponibles</Text>
+            )}
+          </View>
+        )}
       </View>
     );
   }
@@ -270,7 +339,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: colors.white,
     marginHorizontal: 'auto',
-    objectFit: 'contain'
+    objectFit: 'contain',
   },
   hamburguerMenu: {
     width: 35,
@@ -293,6 +362,8 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
+    elevation: 5,
+    zIndex: 1
   },
   containerMenu: {
     display: 'flex',
@@ -320,11 +391,47 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   iconMagnifying: {
-    position: 'absolute',
+    position: 'relative',
     width: 24,
     height: 24,
-    left: 30,
-    bottom: 12,
+    left: 120,
+    bottom: 33,
+  },
+  cuponContainer: {
+    backgroundColor: '#ffffff',
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 10,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    zIndex: 1
+  },
+  cuponTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5,
+  },
+  cuponDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 10,
+  },
+  cuponButton: {
+    backgroundColor: colors.purple,
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  cuponButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 

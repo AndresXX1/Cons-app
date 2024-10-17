@@ -33,6 +33,7 @@ const initialState: AuthSliceState = {
     cuponizate: [],
     argencompras: [],
   },
+  loadingCupons: false,
 };
 
 export const authSlice = createSlice({
@@ -59,11 +60,22 @@ export const authSlice = createSlice({
       .addCase(googleSignIn.rejected, state => {
         state.isAuth = false;
       })
+      .addCase(getCuponsAsync.pending, state => {
+        state.loadingCupons = true;  
+      })
       .addCase(getUserAsync.fulfilled, (state, action) => {
+        state.loadingCupons = false;
+        state.cupons = action.payload.cupons;
+        state.cupons2 = action.payload.cupons2;
+        state.cupons3 = action.payload.cupons3;
         state.user = action.payload.user;
         state.smarter = action.payload.smarter;
       })
       .addCase(getUserAsync.rejected, state => {
+        state.loadingCupons = false;
+        state.cupons = [];
+        state.cupons2 = [];
+        state.cupons3 = [];
         state.isAuth = false;
       })
       .addCase(getProductsAsync.fulfilled, (state, action) => {
@@ -101,11 +113,13 @@ export const authSlice = createSlice({
         state.notices = [];
       })
       .addCase(getCuponsAsync.fulfilled, (state, action) => {
-        state.cupons = action.payload.cupons;
+        state.loadingCupons = false;
+        state.cupons = action.payload
         state.cupons2 = action.payload.cupons2;
         state.cupons3 = action.payload.cupons3;
       })
       .addCase(getCuponsAsync.rejected, state => {
+        state.loadingCupons = false;
         state.cupons = [];
         state.cupons2 = [];
         state.cupons3 = [];
@@ -158,6 +172,7 @@ export interface AuthSliceState {
     cuponizate: IBanner[];
     argencompras: IBanner[];
   };
+  loadingCupons: Boolean,
 }
 
 export interface ISmarter {

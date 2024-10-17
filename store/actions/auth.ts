@@ -395,14 +395,14 @@ export const getUserAsync = createAsyncThunk(
   'auth/getUserAsync',
   async (_, { rejectWithValue }) => {
     try {
-      console.log('Realizando solicitud a la API para obtener el usuario...');
+    
       const response = await axiosInstance.get(apiUrls.getUser());
-      console.log('Respuesta de la API:', response);
+     
       if (response.data.ok) {
-        console.log('Datos obtenidos correctamente:', response.data);
+     
         return response.data;
       } else {
-        console.log('La API devolvió un error.');
+       
         return rejectWithValue('error');
       }
     } catch (error) {
@@ -485,8 +485,9 @@ export const getCuponsAsync = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(apiUrls.getCupons());
+      
       if (response.data.ok) {
-        return response.data;
+        return Array.isArray(response.data.cupons) ? response.data.cupons : [];
       } else {
         return rejectWithValue('error');
       }

@@ -71,12 +71,12 @@ const BenefitsScreen = () => {
     <View style={styles.container}>
       <NavBar />
       <FocusAwareStatusBar backgroundColor={colors.transparent} barStyle="light-content" />
-      {cupons.length > 0 ? (
+      {cupons?.length > 0 ? (
         <ScrollView style={styles.scrollView} ref={scrollViewRef}>
           <Image source={images.image_benefits} style={styles.imageBenefits} />
           <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
           <View style={styles.containerCoupons}>
-            {info.map((inf, key) => (
+            {info?.map((inf, key) => (
               <View style={styles.couponsCont} key={key}>
                 <View style={styles.containerCouponsChildren}>
                   <Image source={images[inf.img]} style={styles.imageCategory}></Image>
@@ -98,7 +98,7 @@ const BenefitsScreen = () => {
           </View>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.recomContainer}>
-              {cupons.map((cupon, key) => {
+              {cupons?.map((cupon, key) => {
                 const descripcion_breve = cupon.descripcion_breve.replace(/<\/?p>/g, '').trim();
                 const descripcion_micrositio = cupon.descripcion_micrositio
                   .replace(/<\/?p>/g, '')
@@ -138,7 +138,7 @@ const BenefitsScreen = () => {
           </View>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.recomContainer}>
-              {cupons2.map((cupon, key) => {
+              {cupons2?.map((cupon, key) => {
                 const descripcion_breve = cupon.descripcion_breve.replace(/<\/?p>/g, '').trim();
                 const descripcion_micrositio = cupon.descripcion_micrositio
                   .replace(/<\/?p>/g, '')
@@ -178,7 +178,7 @@ const BenefitsScreen = () => {
           </View>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.recomContainer}>
-              {cupons3.map((cupon, key) => {
+              {cupons3?.map((cupon, key) => {
                 const descripcion_breve = cupon.descripcion_breve.replace(/<\/?p>/g, '').trim();
                 const descripcion_micrositio = cupon.descripcion_micrositio
                   .replace(/<\/?p>/g, '')

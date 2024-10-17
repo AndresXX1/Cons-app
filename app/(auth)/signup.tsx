@@ -120,7 +120,6 @@ const SignUp = () => {
   const handleResponse = async () => {
     if (response?.type === 'success' && response?.authentication?.accessToken) {
       const tokenNotifications = await registerForPushNotificationsAsync();
-      console.log(response.authentication.accessToken, tokenNotifications);
       dispatch(
         googleSignIn({
           token: response.authentication.accessToken,
