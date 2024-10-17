@@ -201,7 +201,7 @@ export const verifyEmail = createAsyncThunk(
   'auth/verify_email',
   async (
     {
-      data, // Solo enviamos el `userId`
+      data,
       setActive,
       setError,
       dispatch,

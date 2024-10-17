@@ -1,60 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { View, StyleSheet, Pressable, Text, ActivityIndicator, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, fonts, images } from '@/theme';
-import { Redirect, useRouter } from 'expo-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store';
+import { colors, fonts } from '@/theme';
+import { useRouter } from 'expo-router';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
 import { verifyEmail } from '@/store/actions/auth';
-import * as Notifications from 'expo-notifications';
 
 const PinVerification = () => {
   const router = useRouter();
-  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
-  const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [error, setError] = useState('');
-  const [code, setCode] = useState('');
   const [active, setActive] = useState(false);
-  const [active2, setActive2] = useState(false);
-  const [redirect, setRedirect] = useState(false);
   const [emailIsFocused, setEmailIsFocused] = useState(false);
   const [data, setData] = useState({
     userId: '',
   });
-
-  const registerForPushNotificationsAsync = async () => {
-    try {
-      let token = '';
-
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-
-      let finalStatus = existingStatus;
-
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-
-        finalStatus = status;
-      }
-
-      if (finalStatus !== 'granted') {
-        return token;
-      }
-
-      token = (
-        await Notifications.getExpoPushTokenAsync({
-          projectId: 'ba050b1f-eab5-4c81-a46d-6dd33f7ab0fd',
-        })
-      ).data;
-
-      return token;
-    } catch (error) {
-      console.error('Error al obtener el token de notificación:', error);
-      return '';
-    }
-  };
 
   const handleNext = async () => {
     if (!data.userId) {
@@ -64,10 +26,8 @@ const PinVerification = () => {
 
     setIsSubmitting(true);
 
-    // Asegúrate de que el código de verificación también se envíe si es necesario
     dispatch(verifyEmail({ data, setActive, setError, dispatch }))
       .then(() => {
-        // Usa la forma correcta para redirigir
         router.push({ pathname: '/(auth)/email_verify' });
       })
       .finally(() => {
