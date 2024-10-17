@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, Pressable } from 'react-native';
+import { Text, View, StyleSheet, Image, Pressable, ActivityIndicator } from 'react-native';
 import { colors, fonts, images } from '@/theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
@@ -30,20 +30,31 @@ const NavBar = () => {
       setIsLoadingCupons(true);
       dispatch(getCuponsAsync()).finally(() => setIsLoadingCupons(false));
     }
+
+
+    return () => {
+      setSearchTerm('');
+      setFilteredCupons([]);
+    };
   }, [pathName, dispatch]);
 
+  
+
   const handleSearch = () => {
+    if (searchTerm.trim() === '') {
+      setError('Por favor, ingresa un cupón');
+      return;
+    }
+  
     setIsLoadingCupons(true);
     setError('');
-
-    // Llamar a la API para obtener los cupones
+  
     dispatch(getCuponsAsync())
       .then(() => {
-        // Filtrar cupones por el término de búsqueda
         const cuponsFiltered = cupons.filter(cupon =>
           cupon.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
         );
-
+  
         if (cuponsFiltered.length > 0) {
           setFilteredCupons(cuponsFiltered);
         } else {
@@ -53,6 +64,8 @@ const NavBar = () => {
       })
       .finally(() => setIsLoadingCupons(false));
   };
+
+  const hasSearched = searchTerm.length > 0;
 
   if (pathName === '/') {
     return (
@@ -160,16 +173,16 @@ const NavBar = () => {
             <Image source={images.magnifying_glass} style={styles.iconMagnifying} />
           </Pressable>
         </View>
-
+  
         {isLoadingCupons ? (
-          <Text>Cargando cupones...</Text>
+          <ActivityIndicator size="large" color="#00ADB5" />
         ) : error ? (
-          <Text>{error}</Text>
-        ) : (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : hasSearched ? (  // Solo muestra los resultados si se ha hecho una búsqueda
           <View style={styles.cuponContainer}>
-            {filteredCupons?.length > 0 ? (
-              filteredCupons?.map(cupon => (
-                <View key={cupon.id} >
+            {filteredCupons.length > 0 ? (
+              filteredCupons.map(cupon => (
+                <View key={cupon.id}>
                   <Text style={styles.cuponTitle}>{cupon.nombre}</Text>
                   <Text style={styles.cuponDescription}>{cupon.descripcion}</Text>
                   <Pressable style={styles.cuponButton}>
@@ -178,10 +191,10 @@ const NavBar = () => {
                 </View>
               ))
             ) : (
-              <Text>No hay cupones disponibles</Text>
+              <Text>No se encontraron cupones</Text>
             )}
           </View>
-        )}
+        ) : null}
       </View>
     );
   }
@@ -433,6 +446,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  errorText: {
+    fontFamily: fonts.gotham.bold,
+    fontSize: 12,
+    color: colors.red,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  
 });
 
 export default NavBar;
