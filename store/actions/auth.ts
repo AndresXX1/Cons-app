@@ -236,6 +236,48 @@ export const verifyEmail = createAsyncThunk(
   },
 );
 
+export const forgetPassword = createAsyncThunk(
+  'auth/forget_password',
+  async (
+    {
+      data,
+      setActive,
+      setError,
+      dispatch,
+    }: {
+      data: {
+        email: string;
+      };
+      setActive: (boolean: boolean) => void;
+      setError: (error: string) => void;
+      dispatch: ReturnType<typeof useAppDispatch>;
+    },
+    { rejectWithValue },
+  ) => {
+    setActive(true);
+    try {
+      console.log('Enviando solicitud al backend con el email:', data.email);
+      console.log('URL de la API forgetPassword:', apiUrls.forgetPassword());
+      const response = await axios.post(apiUrls.forgetPassword(), { email: data.email });
+      if (response.data.ok) {
+        setActive(false);
+        dispatch(getUserAsync());
+        return {};
+      } else {
+        setActive(false);
+        setError(response.data.message);
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      setActive(false);
+      const message = error.response?.data?.message || 'Email no encontrado';
+      console.log('Error completo:', error);
+      setError(message);
+      return rejectWithValue('error');
+    }
+  },
+);
+
 export const verifySessionAsync = createAsyncThunk(
   'auth/verifySessionAsync',
   async ({ dispatch }: { dispatch: ReturnType<typeof useAppDispatch> }, { rejectWithValue }) => {
