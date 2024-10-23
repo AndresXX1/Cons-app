@@ -106,6 +106,50 @@ export const registerInAsync = createAsyncThunk(
   },
 );
 
+export const setPassword = createAsyncThunk(
+  'auth/setPassword',
+  async (
+    {
+      data,
+      setActive,
+      setError,
+      dispatch,
+    }: {
+      data: {
+        password: string;
+        confirmPassword: string;
+      };
+      setActive: (boolean: boolean) => void;
+      setError: (error: string) => void;
+      dispatch: ReturnType<typeof useAppDispatch>;
+    },
+    { rejectWithValue },
+  ) => {
+    setActive(true);
+    try {
+      const response = await axios.post(apiUrls.setPassword(), { ...data });
+      if (response.data.ok) {
+        await setItem(tokenAccess.tokenName, response.data.token);
+        await setItem(tokenAccess.refreshTokenName, response.data.refreshToken);
+        setupAxiosInterceptors(dispatch);
+        setActive(false);
+        dispatch(getUserAsync());
+        dispatch(getBannersAsync());
+        return {};
+      } else {
+        setActive(false);
+        setError(response.data.message);
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      setActive(false);
+      const message = error.response?.data?.message || 'Error al cambiar la contraseña';
+      setError(message);
+      return rejectWithValue('error');
+    }
+  },
+);
+
 export const googleSignIn = createAsyncThunk(
   'auth/googleSignIn',
   async (
@@ -437,14 +481,11 @@ export const getUserAsync = createAsyncThunk(
   'auth/getUserAsync',
   async (_, { rejectWithValue }) => {
     try {
-    
       const response = await axiosInstance.get(apiUrls.getUser());
-     
+
       if (response.data.ok) {
-     
         return response.data;
       } else {
-       
         return rejectWithValue('error');
       }
     } catch (error) {
@@ -527,7 +568,7 @@ export const getCuponsAsync = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(apiUrls.getCupons());
-      
+
       if (response.data.ok) {
         return Array.isArray(response.data.cupons) ? response.data.cupons : [];
       } else {

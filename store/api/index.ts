@@ -14,6 +14,7 @@ export const apiUrls = {
   logOut: () => `${baseUrl}/api/auth/log-out`,
   forgetPassword: () => `${baseUrl}/api/auth/forget-password`,
   verifyEmail: () => `${baseUrl}/api/auth/verify-email`,
+  setPassword: () => `${baseUrl}/api/auth/set-password`,
   getUser: () => `/api/user`,
   updateFirstData: () => `${baseUrl}/api/user/first-data`,
   updateSecondData: () => `${baseUrl}/api/user/second-data`,

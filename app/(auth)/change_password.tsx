@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import * as Google from 'expo-auth-session/providers/google';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
+import { setPassword } from '@/store/actions/auth';
 
 const ChangePassword = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -78,6 +79,15 @@ const ChangePassword = () => {
     if (active || active2) {
       return;
     }
+
+    dispatch(
+      setPassword({
+        data: { password: inputPasswordValue, confirmPassword: inputConfirmPasswordValue },
+        setActive,
+        setError,
+        dispatch,
+      }),
+    );
   };
 
   return (
@@ -141,7 +151,7 @@ const ChangePassword = () => {
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleNext}>
             {active && <ActivityIndicator size={22} color={colors.white} />}
-            {!active && <Text style={styles.textNext}>Siguiente</Text>}
+            {!active && <Text style={styles.textNext}>Confirmar</Text>}
           </Pressable>
         </View>
       </View>
