@@ -39,6 +39,7 @@ const disableNavbarPages = [
   'single_cupon',
   'unregistered_user',
   'user_high',
+  'payment_methods'
 ];
 
 const DashboardLayout = () => {
@@ -142,6 +143,17 @@ const DashboardLayout = () => {
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+        }}
+      />
+        <Tabs.Screen
+        name="payment_methods"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'payment_methods',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.white} />,
         }}
       />
       <Tabs.Screen

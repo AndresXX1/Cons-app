@@ -14,6 +14,7 @@ import {
   registerInAsync,
   getCuponsAsync,
   googleSignIn,
+  getBranchOffices,
 } from '../actions/auth';
 
 const initialState: AuthSliceState = {
@@ -24,6 +25,7 @@ const initialState: AuthSliceState = {
   isOnboarding: false,
   notices: [],
   products: [],
+  offices: [],
   cupons: [],
   cupons2: [],
   cupons3: [],
@@ -100,6 +102,12 @@ export const authSlice = createSlice({
       .addCase(getNoticeAsync.rejected, state => {
         state.notices = [];
       })
+      .addCase(getBranchOffices.fulfilled, (state, action) => {
+        state.offices = action.payload.branches;
+      })
+      .addCase(getBranchOffices.rejected, state => {
+        state.offices = [];
+      })
       .addCase(getCuponsAsync.fulfilled, (state, action) => {
         state.cupons = action.payload.cupons;
         state.cupons2 = action.payload.cupons2;
@@ -136,6 +144,7 @@ export interface INotice {
   date: string;
 }
 
+
 export interface IBanner {
   id: number;
   url: string;
@@ -148,6 +157,7 @@ export interface AuthSliceState {
   smarter: ISmarter | null;
   isOnboarding: boolean;
   notices: INotice[];
+  offices: IOffice[];
   products: any[];
   cupons: any[];
   cupons2: any[];
@@ -158,6 +168,19 @@ export interface AuthSliceState {
     cuponizate: IBanner[];
     argencompras: IBanner[];
   };
+}
+
+export interface IOffice {
+  id: number;
+  name: string;
+  image: string;
+  address: string;
+  schedules_1: string;
+  schedules_2: string;
+  whatsapp: string;
+  phone: string;
+  lat: string;
+  lon: string;
 }
 
 export interface ISmarter {

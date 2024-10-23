@@ -18,13 +18,13 @@ const Banners: React.FC<BannersProps> = ({ banners }) => {
     const interval = setInterval(() => {
       setIndex(prevIndex => (prevIndex + 1) % banners.length);
       animation.value = 0;
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    animation.value = withTiming(1, { duration: 500 });
+    animation.value = withTiming(1, { duration: 600 });
   }, [index]);
 
   const animatedStyle = useAnimatedStyle(() => {

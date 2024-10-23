@@ -31,6 +31,8 @@ export const apiUrls = {
   imgBanner: (url: string) => `${baseUrl}/api/banner/${url}`,
   //timer
   registerViewTime: () => `${baseUrl}/api/timer`,
+  //sucursales
+  getBranchOffices: () => `${baseUrl}/api/branch`,
 };
 
 export const tokenAccess = {

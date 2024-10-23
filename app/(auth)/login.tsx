@@ -249,10 +249,10 @@ const LogIn = () => {
         <Text style={[styles.textGoogle]}>O iniciar sesión con tu cuenta de Google</Text>
 
         <View style={styles.googleIconContainer}>
-          <Pressable onPress={handleGoogleSignIn}>
+          {/* <Pressable onPress={handleGoogleSignIn}>
             {active2 && <ActivityIndicator size={32} color={colors.blue2} />}
             {!active2 && <Image source={images.google_button} style={styles.googleIcon} />}
-          </Pressable>
+          </Pressable> */}
         </View>
       </View>
     </SafeAreaView>
