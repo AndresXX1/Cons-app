@@ -1,6 +1,6 @@
 import NavBar from '@/components/NavBar';
-import { colors, fonts } from '@/theme';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { colors, fonts, images } from '@/theme';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { useRouter } from 'expo-router';
@@ -12,6 +12,8 @@ const LoanScreen = () => {
   const { smarter } = useSelector((state: RootState) => state.auth);
   const router = useRouter();
 
+  console.log(smarter);
+
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
@@ -20,20 +22,34 @@ const LoanScreen = () => {
         Préstamos <Text style={styles.spanBold}>activos</Text>
       </Text>
       <View style={styles.containerButtons}>
-        {smarter?.credits.map((credit, key) => {
-          const formattedDate = credit.fechaLiquidacion.split('T')[0];
-          const buttonColor = credit.estado === 'Vigente' ? styles.buttonGreen : styles.buttonRed;
-          return (
-            <React.Fragment key={key}>
-              <Pressable style={buttonColor} onPress={() => router.push('settlement')}>
-                <Text style={styles.textButton}>
-                  Préstamo ${credit.capital.toLocaleString('es-ES', { minimumFractionDigits: 0 })}
-                </Text>
-              </Pressable>
-              <Text style={styles.textFinaly}>Liquidado el {formattedDate}</Text>
-            </React.Fragment>
-          );
-        })}
+        {smarter?.credits && smarter.credits.length > 0 ? (
+          smarter.credits.map((credit, key) => {
+            const formattedDate = credit.fechaLiquidacion.split('T')[0];
+            const buttonColor = credit.estado === 'Vigente' ? styles.buttonGreen : styles.buttonRed;
+            return (
+              <React.Fragment key={key}>
+                <Pressable style={buttonColor} onPress={() => router.push('settlement')}>
+                  <Text style={styles.textButton}>
+                    Préstamo ${credit.capital.toLocaleString('es-ES', { minimumFractionDigits: 0 })}
+                  </Text>
+                </Pressable>
+                <Text style={styles.textFinaly}>Liquidado el {formattedDate}</Text>
+              </React.Fragment>
+            );
+          })
+        ) : (
+          <View>
+            <Text style={styles.textWithoutLoan}>
+              Aún no tienes prestamos,{' '}
+              <Text style={styles.textWithoutLoanTwo}>¡consultá por el tuyo ahora!</Text>
+            </Text>
+
+            <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
+              <Image source={images.money_white} style={styles.moneyIcon} />
+              <Text style={styles.textButtonTwo}>QUIERO MI PRÉSTAMO</Text>
+            </Pressable>
+          </View>
+        )}
         {/*<Pressable style={styles.buttonGreen} onPress={() => router.push('settlement')}>
           <Text style={styles.textButton}>Préstamo $300.000</Text>
         </Pressable>
@@ -46,11 +62,11 @@ const LoanScreen = () => {
           <Text style={styles.textButton}>Préstamo $300.000</Text>
         </Pressable>
         <Text style={styles.textFinaly}>Liquidado el 10-05-2024</Text>*/}
-        <View style={styles.line}></View>
+        {/* <View style={styles.line}></View>
 
         <Pressable style={styles.buttonTransparent} onPress={() => {}}>
           <Text style={styles.textTransparent}>Préstamo en Proceso</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
     </SafeAreaView>
   );
@@ -150,6 +166,43 @@ const styles = StyleSheet.create({
     backgroundColor: '#E9E9E9',
     marginLeft: 'auto',
     marginRight: 'auto',
+  },
+  button: {
+    backgroundColor: colors.red,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    width: 328,
+    marginLeft: 16,
+    height: 54,
+    gap: 4,
+    marginTop: 12,
+  },
+  textButtonTwo: {
+    color: colors.white,
+    fontFamily: fonts.gotham.bold,
+    fontSize: 20,
+    paddingStart: 3,
+  },
+  moneyIcon: {
+    width: 24,
+    height: 24,
+  },
+  textWithoutLoan: {
+    fontSize: 20,
+    fontFamily: fonts.gotham.regular,
+    fontWeight: '300',
+    width: 300,
+    marginHorizontal: 'auto',
+    textAlign: 'center',
+    color: colors.texts,
+    paddingTop: 60,
+  },
+  textWithoutLoanTwo: {
+    fontWeight: '400',
+    fontFamily: fonts.gotham.semiBold,
   },
 });
 
