@@ -5,12 +5,12 @@ import { colors, fonts, images } from '@/theme';
 import { Redirect, useRouter } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-import { verifyCode, resendVerifyCode } from '@/store/service/user';
+import { verifyCode, resendVerifyCode, forgetPasswordCode } from '@/store/service/user';
 import { OTPInputText } from '@/components/OTPInputText';
 
 const ForgetPassword = () => {
   const router = useRouter();
-  const { isAuth } = useSelector((state: RootState) => state.auth);
+  const { isAuth, passwordToken } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -29,14 +29,17 @@ const ForgetPassword = () => {
     if (isSubmitting || isSubmitting2) {
       return;
     }
+
+    console.log(passwordToken)
     setIsSubmitting(true);
-    await verifyCode({
+    dispatch (forgetPasswordCode({
+      token: passwordToken.token,
       code: code,
       setError,
       setIsSubmitting,
       dispatch,
       routerNext,
-    });
+    }));
   };
 
   const handleResendVerifyCode = async () => {

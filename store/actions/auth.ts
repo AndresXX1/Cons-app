@@ -116,6 +116,8 @@ export const setPassword = createAsyncThunk(
       dispatch,
     }: {
       data: {
+        token: string,
+        code: string,
         password: string;
         confirmPassword: string;
       };
@@ -129,12 +131,7 @@ export const setPassword = createAsyncThunk(
     try {
       const response = await axios.post(apiUrls.setPassword(), { ...data });
       if (response.data.ok) {
-        await setItem(tokenAccess.tokenName, response.data.token);
-        await setItem(tokenAccess.refreshTokenName, response.data.refreshToken);
-        setupAxiosInterceptors(dispatch);
         setActive(false);
-        dispatch(getUserAsync());
-        dispatch(getBannersAsync());
         return {};
       } else {
         setActive(false);
@@ -304,9 +301,9 @@ export const forgetPassword = createAsyncThunk(
       console.log('URL de la API forgetPassword:', apiUrls.forgetPassword());
       const response = await axios.post(apiUrls.forgetPassword(), { email: data.email });
       if (response.data.ok) {
+        console.log(response.data)
         setActive(false);
-        dispatch(getUserAsync());
-        return {};
+        return response.data.token;
       } else {
         setActive(false);
         setError(response.data.message);

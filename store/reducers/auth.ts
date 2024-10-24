@@ -14,7 +14,9 @@ import {
   registerInAsync,
   getCuponsAsync,
   googleSignIn,
+  forgetPassword,
 } from '../actions/auth';
+import { forgetPasswordCode } from '../service/user';
 
 const initialState: AuthSliceState = {
   isAuth: false,
@@ -27,6 +29,10 @@ const initialState: AuthSliceState = {
   cupons: [],
   cupons2: [],
   cupons3: [],
+  passwordToken: {
+    token: "",
+    code: ""
+  },
   noticeId: null,
   banners: {
     home: [],
@@ -34,6 +40,7 @@ const initialState: AuthSliceState = {
     argencompras: [],
   },
   loadingCupons: false,
+  
 };
 
 export const authSlice = createSlice({
@@ -130,6 +137,12 @@ export const authSlice = createSlice({
       .addCase(getBannersAsync.fulfilled, (state, action) => {
         state.banners = action.payload;
       })
+      .addCase(forgetPassword.fulfilled, (state, action) => {
+        state.passwordToken.token = action.payload;
+      })
+      .addCase(forgetPasswordCode.fulfilled, (state, action) => {
+        state.passwordToken.code = action.payload;
+      })
       .addCase(getBannersAsync.rejected, state => {
         state.banners = {
           home: [],
@@ -166,6 +179,10 @@ export interface AuthSliceState {
   cupons: any[];
   cupons2: any[];
   cupons3: any[];
+  passwordToken: {
+    token: string,
+    code: string
+  };
   noticeId: number | null;
   banners: {
     home: IBanner[];

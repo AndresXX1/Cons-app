@@ -26,8 +26,6 @@ const PinVerification = () => {
 
     setIsSubmitting(true);
 
-    console.log('Datos enviados al backend:', { email: data.email });
-
     dispatch(forgetPassword({ data, setActive, setError, dispatch }))
       .then(() => {
         router.push({ pathname: '/(auth)/forget_password' });

@@ -3,7 +3,7 @@ import { View, StyleSheet, Pressable, Text, TextInput, ActivityIndicator } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts } from '@/theme';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import * as Google from 'expo-auth-session/providers/google';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
@@ -19,7 +19,7 @@ const ChangePassword = () => {
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { isAuth, user } = useSelector((state: RootState) => state.auth);
+  const { passwordToken } = useSelector((state: RootState) => state.auth);
   const [active, setActive] = useState(false);
   const [active2, setActive2] = useState(false);
   const [error, setError] = useState('');
@@ -75,19 +75,29 @@ const ChangePassword = () => {
       setError('La contraseña debe coincidir');
       return;
     }
-
+  
     if (active || active2) {
       return;
     }
-
-    dispatch(
+  
+    const result = await dispatch(
       setPassword({
-        data: { password: inputPasswordValue, confirmPassword: inputConfirmPasswordValue },
+        data: {
+          token: passwordToken.token,
+          code: passwordToken.code,
+          password: inputPasswordValue,
+          confirmPassword: inputConfirmPasswordValue,
+        },
         setActive,
         setError,
         dispatch,
-      }),
+      })
     );
+  
+    // Si el cambio de contraseña fue exitoso, redirigir al login
+    if (result && !error) {
+      router.push('/(auth)/login');
+    }
   };
 
   return (
