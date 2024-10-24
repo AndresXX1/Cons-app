@@ -155,7 +155,7 @@ const HomeScreen = () => {
         <Text style={styles.textHourTwo}>Lunes a viernes de 8 a 20hs</Text>
         <Text style={styles.textHourThree}>Sábados de 9 a 13hs.</Text>
 
-        {contact.map((data, key) => (
+        {contact?.map((data, key) => (
           <LinearGradient
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}

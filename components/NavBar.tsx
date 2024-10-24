@@ -31,30 +31,27 @@ const NavBar = () => {
       dispatch(getCuponsAsync()).finally(() => setIsLoadingCupons(false));
     }
 
-
     return () => {
       setSearchTerm('');
       setFilteredCupons([]);
     };
   }, [pathName, dispatch]);
 
-  
-
   const handleSearch = () => {
     if (searchTerm.trim() === '') {
       setError('Por favor, ingresa un cupón');
       return;
     }
-  
+
     setIsLoadingCupons(true);
     setError('');
-  
+
     dispatch(getCuponsAsync())
       .then(() => {
         const cuponsFiltered = cupons.filter(cupon =>
           cupon.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
         );
-  
+
         if (cuponsFiltered.length > 0) {
           setFilteredCupons(cuponsFiltered);
         } else {
@@ -143,7 +140,9 @@ const NavBar = () => {
         <View style={styles.LoanButtons}>
           <View />
           <Image source={images.logo} style={styles.logo} resizeMode="cover" />
-          <Image source={images.info} style={styles.infoLoan} resizeMode="cover" />
+          <Pressable onPress={() => router.push('loan_state')}>
+            <Image source={images.info} style={styles.infoLoan} resizeMode="cover" />
+          </Pressable>
         </View>
         <View style={styles.textsLoan}>
           <Text style={{ color: '#ffffff', fontSize: 25, fontFamily: fonts.gotham.semiBold }}>
@@ -173,12 +172,12 @@ const NavBar = () => {
             <Image source={images.magnifying_glass} style={styles.iconMagnifying} />
           </Pressable>
         </View>
-  
+
         {isLoadingCupons ? (
           <ActivityIndicator size="large" color="#00ADB5" />
         ) : error ? (
           <Text style={styles.errorText}>{error}</Text>
-        ) : hasSearched ? (  // Solo muestra los resultados si se ha hecho una búsqueda
+        ) : hasSearched ? ( // Solo muestra los resultados si se ha hecho una búsqueda
           <View style={styles.cuponContainer}>
             {filteredCupons.length > 0 ? (
               filteredCupons.map(cupon => (
@@ -376,7 +375,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
     elevation: 5,
-    zIndex: 1
+    zIndex: 1,
   },
   containerMenu: {
     display: 'flex',
@@ -422,7 +421,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
-    zIndex: 1
+    zIndex: 1,
   },
   cuponTitle: {
     fontSize: 18,
@@ -453,7 +452,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
   },
-  
 });
 
 export default NavBar;
