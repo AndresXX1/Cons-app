@@ -1,77 +1,91 @@
 import { useState } from 'react';
-import { View, StyleSheet, Pressable, Text, ActivityIndicator, TextInput } from 'react-native';
+import { View, StyleSheet, Image, Pressable, Text, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, fonts } from '@/theme';
-import { useRouter } from 'expo-router';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store';
-import { forgetPassword } from '@/store/actions/auth';
+import { colors, fonts, images } from '@/theme';
+import { Redirect, useRouter } from 'expo-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { verifyCode, resendVerifyCode, forgetPasswordCode } from '@/store/service/user';
+import { OTPInputText } from '@/components/OTPInputText';
 
-const PinVerification = () => {
+const ForgetPassword = () => {
   const router = useRouter();
+  const { isAuth, passwordToken } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [error, setError] = useState('');
-  const [active, setActive] = useState(false);
-  const [emailIsFocused, setEmailIsFocused] = useState(false);
-  const [data, setData] = useState({
-    email: '',
-  });
+  const [code, setCode] = useState('');
+
+  const routerNext = () => {
+    router.replace('/(auth)/change_password');
+  };
 
   const handleNext = async () => {
-    if (!data.email) {
-      setError('Introduzca un Email');
+    if (code.length !== 5) {
+      setError('Introduce el codigo completo');
+      return;
+    }
+    if (isSubmitting || isSubmitting2) {
       return;
     }
 
+    console.log(passwordToken)
     setIsSubmitting(true);
-
-    dispatch(forgetPassword({ data, setActive, setError, dispatch }))
-      .then(() => {
-        router.push({ pathname: '/(auth)/forget_password' });
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    dispatch (forgetPasswordCode({
+      token: passwordToken.token,
+      code: code,
+      setError,
+      setIsSubmitting,
+      dispatch,
+      routerNext,
+    }));
   };
 
-  const handleEmailFocus = () => {
-    setEmailIsFocused(true);
-  };
-
-  const handleEmailBlur = () => {
-    setEmailIsFocused(false);
+  const handleResendVerifyCode = async () => {
+    if (isSubmitting2 || isSubmitting) {
+      return;
+    }
+    setIsSubmitting2(true);
+    await resendVerifyCode({
+      setError,
+      setIsSubmitting: setIsSubmitting2,
+    });
   };
 
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.form}>
-        <TextInput
-          placeholder="Email"
-          autoCapitalize="none"
-          placeholderTextColor={colors.gray2}
-          onFocus={handleEmailFocus}
-          onBlur={handleEmailBlur}
-          onChangeText={text => setData({ ...data, email: text })}
-          editable={!isSubmitting}
-          value={data.email}
-          style={[
-            styles.textInput,
-            {
-              borderColor: emailIsFocused ? colors.blue2 : colors.gray2,
-            },
-          ]}
+        <Text style={styles.textPin}>Pin de seguridad</Text>
+        <Text style={styles.textPinTwo}>
+          Introduce el pin que enviamos al correo{' '}
+          <Text style={styles.textOpacity}>name@name.com </Text>
+        </Text>
+        <OTPInputText
+          numberOfDigits={5}
+          focusColor={colors.blue2}
+          focusStickBlinkingDuration={500}
+          onTextChange={text => {
+            setError('');
+            setCode(text);
+          }}
+          onFilled={text => console.log(`OTP is ${text}`)}
         />
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+      </View>
+      <View style={styles.form}>
         <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNextBlue} onPress={handleNext} disabled={isSubmitting}>
-            {isSubmitting ? (
-              <ActivityIndicator size={22} color={colors.white} />
-            ) : (
-              <Text style={styles.textNextWhite}>Siguiente</Text>
-            )}
+          <Pressable style={styles.buttonNextWhite} onPress={handleResendVerifyCode}>
+            {isSubmitting2 && <ActivityIndicator size={22} color={colors.blue} />}
+            {!isSubmitting2 && <Text style={styles.textNextBlue}>Reenviar Email</Text>}
           </Pressable>
         </View>
+        <View style={styles.containerNext}>
+          <Pressable style={styles.buttonNextBlue} onPress={handleNext}>
+            {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
+            {!isSubmitting && <Text style={styles.textNextWhite}>Siguiente</Text>}
+          </Pressable>
+        </View>
+        {error !== '' && <Text style={styles.error}>{error}</Text>}
       </View>
     </SafeAreaView>
   );
@@ -100,7 +114,6 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 24,
     paddingHorizontal: 16,
-    marginTop: 30,
   },
   title: {
     fontFamily: fonts.gotham.semiBold,
@@ -177,4 +190,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PinVerification;
+export default ForgetPassword;
