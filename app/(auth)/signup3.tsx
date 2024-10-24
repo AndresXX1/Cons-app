@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 
 import { Redirect, useRouter } from 'expo-router';
@@ -69,7 +70,6 @@ const SignUp3 = () => {
         month: '2-digit',
         year: 'numeric',
       }).format(selectedDate);
-      hideDatePicker();
       setSelectedDate(selectedDate);
       setSelectedDateText(formatDateString(formattedDate));
     }
@@ -125,25 +125,16 @@ const SignUp3 = () => {
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={3} totalSteps={4} />
 
-        <TouchableOpacity style={{ opacity: 1 }} activeOpacity={1} onPress={showDatePicker}>
+        <TouchableOpacity style={{ opacity: 1 }} activeOpacity={1}>
           <TextInput
+            onPress={showDatePicker}
             placeholder="Fecha de nacimiento"
             style={styles.textInput}
             value={selectedDateText}
             editable={false}
           />
         </TouchableOpacity>
-        {showPicker && (
-          <DatePicker
-            style={{
-              backgroundColor: colors.darkPurple,
-            }}
-            value={selectedDate}
-            display="spinner"
-            mode="date"
-            onChange={handleDateChange}
-          />
-        )}
+
         <TextInput
           placeholder="Teléfono"
           autoCapitalize="none"
@@ -160,6 +151,7 @@ const SignUp3 = () => {
             },
           ]}
         />
+
         {error !== '' && <Text style={styles.error}>{error}</Text>}
 
         <View style={styles.containerNext}>
@@ -169,6 +161,24 @@ const SignUp3 = () => {
           </Pressable>
         </View>
       </View>
+
+      <Modal visible={showPicker} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <DatePicker
+              style={{ width: '100%' }}
+              value={selectedDate}
+              display="spinner"
+              mode="date"
+              textColor="#000"
+              onChange={handleDateChange}
+            />
+            <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
+              <Text style={styles.textClose}>Confirmar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -203,7 +213,7 @@ const styles = StyleSheet.create({
     verticalAlign: 'middle',
     textAlign: 'center',
     marginTop: 45,
-    marginBottom:20
+    marginBottom: 20,
   },
   textInput: {
     color: colors.black,
@@ -215,13 +225,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     paddingHorizontal: 10,
-    marginTop:30
+    marginTop: 30,
   },
   error: {
     fontFamily: fonts.gotham.regular,
     color: colors.red,
     textAlign: 'center',
-    marginTop: 20
+    marginTop: 20,
   },
   buttonNext: {
     backgroundColor: colors.blue,
@@ -233,24 +243,40 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:52
+    marginTop: 52,
   },
   textNext: {
     fontFamily: fonts.gotham.semiBold,
     color: colors.white,
   },
-  input: {
-    backgroundColor: colors.transparent,
-    height: 50,
-    borderBottomColor: colors.white,
-    borderBottomWidth: 1,
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 350,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  buttonClose: {
+    marginTop: 20,
+    backgroundColor: colors.blue,
+    padding: 10,
+    borderRadius: 10,
+  },
+  textClose: {
+    color: 'white',
+    width: 100,
+    display: 'flex',
+    textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
-    color: colors.white,
-    fontSize: 26,
-    lineHeight: 29.12,
-    letterSpacing: -0.26,
+    height: 18,
+    paddingTop: 3,
   },
 });
 
 export default SignUp3;
-
