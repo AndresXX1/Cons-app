@@ -102,12 +102,6 @@ export const authSlice = createSlice({
       .addCase(getNoticeAsync.rejected, state => {
         state.notices = [];
       })
-      .addCase(getBranchOffices.fulfilled, (state, action) => {
-        state.offices = action.payload.branches;
-      })
-      .addCase(getBranchOffices.rejected, state => {
-        state.offices = [];
-      })
       .addCase(getCuponsAsync.fulfilled, (state, action) => {
         state.cupons = action.payload.cupons;
         state.cupons2 = action.payload.cupons2;

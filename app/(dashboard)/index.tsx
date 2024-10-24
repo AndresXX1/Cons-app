@@ -10,7 +10,6 @@ import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import Banners from '@/components/Banners';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
-import { getBranchOffices } from '@/store/actions/auth';
 import { registerViewTime } from '@/store/service/timer';
 import  Slider  from '@/components/Slider';
 
@@ -84,6 +83,7 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
+        <View style={styles.containerMain}>
         <NavBar />
 
         {<Banners banners={banners.home} />}
@@ -97,7 +97,7 @@ const HomeScreen = () => {
             </View>
           )
         }
-        <View style={styles.containerMain}>
+        
         <Pressable  style={styles.button} onPress={() => router.push('apply_for_loan')}>
           {({ pressed }) => (
           <View style={[styles.buttonContainer, { opacity: pressed ? 0.5 : 1 }]}>
@@ -183,13 +183,13 @@ const styles = StyleSheet.create({
   },
   containerMain: {
     backgroundColor: "#F1F2F2",
-    marginTop: 16,
   },
   banner: {
     width: width - 32,
     height: 212,
     marginLeft: 16,
     borderRadius: 10,
+    marginTop: 16,
   },
   containerTitle: {
     flexDirection: 'row',
@@ -295,6 +295,7 @@ const styles = StyleSheet.create({
     width: 242,
     marginHorizontal: 'auto',
     borderBottomColor: colors.blue,
+    textDecorationLine: 'underline',
   },
   containerPay: {
     backgroundColor: '#4DCCFF',

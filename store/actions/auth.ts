@@ -438,23 +438,6 @@ export const getNoticeAsync = createAsyncThunk(
   },
 );
 
-export const getBranchOffices = createAsyncThunk(
-  'auth/getBranchOfficesAsync',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get(apiUrls.getBranchOffices());
-      if (response.data.ok) {
-        return response.data;
-      } else {
-        return rejectWithValue('error');
-      }
-      // eslint-disable-next-line
-    } catch (error: any) {
-      deleteAccess();
-      return rejectWithValue('error');
-    }
-  },
-);
 
 
 export const getCuponsAsync = createAsyncThunk(

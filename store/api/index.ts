@@ -32,7 +32,6 @@ export const apiUrls = {
   //timer
   registerViewTime: () => `${baseUrl}/api/timer`,
   //sucursales
-  getBranchOffices: () => `${baseUrl}/api/branch`,
 };
 
 export const tokenAccess = {
