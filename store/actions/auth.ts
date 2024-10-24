@@ -480,6 +480,8 @@ export const getNoticeAsync = createAsyncThunk(
   },
 );
 
+
+
 export const getCuponsAsync = createAsyncThunk(
   'auth/getCuponsAsync',
   async (_, { rejectWithValue }) => {

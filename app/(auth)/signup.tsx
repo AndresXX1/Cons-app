@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 56,
+    minHeight: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',
-    height: 56,
+    minHeight: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
     borderWidth: 1,
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   },
   textInputHidden: {
     flex: 1,
-    height: 48,
+    minHeight: 48,
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
     fontWeight: '400',

@@ -14,6 +14,7 @@ import {
   registerInAsync,
   getCuponsAsync,
   googleSignIn,
+  getBranchOffices,
 } from '../actions/auth';
 
 const initialState: AuthSliceState = {
@@ -24,6 +25,7 @@ const initialState: AuthSliceState = {
   isOnboarding: false,
   notices: [],
   products: [],
+  offices: [],
   cupons: [],
   cupons2: [],
   cupons3: [],
@@ -150,6 +152,7 @@ export interface INotice {
   date: string;
 }
 
+
 export interface IBanner {
   id: number;
   url: string;
@@ -162,6 +165,7 @@ export interface AuthSliceState {
   smarter: ISmarter | null;
   isOnboarding: boolean;
   notices: INotice[];
+  offices: IOffice[];
   products: any[];
   cupons: any[];
   cupons2: any[];
@@ -173,6 +177,19 @@ export interface AuthSliceState {
     argencompras: IBanner[];
   };
   loadingCupons: Boolean,
+}
+
+export interface IOffice {
+  id: number;
+  name: string;
+  image: string;
+  address: string;
+  schedules_1: string;
+  schedules_2: string;
+  whatsapp: string;
+  phone: string;
+  lat: string;
+  lon: string;
 }
 
 export interface ISmarter {
