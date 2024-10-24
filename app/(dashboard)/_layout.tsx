@@ -1,6 +1,7 @@
 import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
 import { StackHeaderLeftGoBackBenefits } from '@/components/StackHeaderLeftGoBackBenefits';
 import { StackHeaderLeftGoBackProfile } from '@/components/StackHeaderLeftGoBackProfile';
+import { StackHeaderLeftGoLoan } from '@/components/StackHeaderLeftGoLoan';
 import TabBar from '@/components/TabBar';
 import { colors } from '@/theme';
 import { Tabs } from 'expo-router';
@@ -22,6 +23,7 @@ const isMatchingRoute = ({ routes, index }: isMatchingRouteProps) => {
 
 const disableNavbarPages = [
   'apply_for_loan',
+  'loan_state',
   'branch_offices',
   'points_questions',
   'borrow_money',
@@ -109,6 +111,17 @@ const DashboardLayout = () => {
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+        }}
+      />
+      <Tabs.Screen
+        name="loan_state"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'loan_state',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoLoan title={'Volver atrás'} color={colors.blue} />,
         }}
       />
       <Tabs.Screen

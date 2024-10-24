@@ -59,8 +59,15 @@ const LogIn = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
-    //iosClientId: '',
+    iosClientId: '',
   });
+
+  const navigation = useNavigation();
+  const [forgotPassword, setForgotPassword] = useState(false);
+
+  const handleForgotPassword = () => {
+    setForgotPassword(true);
+  };
 
   const { isAuth, user } = useSelector((state: RootState) => state.auth);
 
@@ -112,7 +119,6 @@ const LogIn = () => {
     dispatch(logInAsync({ data, tokenNotifications, setActive, setError, dispatch }));
   };
 
-  const navigation = useNavigation();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -161,7 +167,6 @@ const LogIn = () => {
     }
   };
 
-
   useEffect(() => {
     handleResponse();
   }, [response]);
@@ -180,6 +185,10 @@ const LogIn = () => {
     return <Redirect href="/(auth)/email_verify" />;
   }
 
+  if (forgotPassword) {
+    return <Redirect href="/(auth)/pin_verification" />;
+  }
+
   if (
     isAuth &&
     user !== null &&
@@ -193,7 +202,7 @@ const LogIn = () => {
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <View style={styles.head}>
-      <Image source={images.logo} style={styles.logo} resizeMode="cover" />
+        <Image source={images.logo} style={styles.logo} resizeMode="cover" />
       </View>
       <View style={styles.form}>
         <Text style={styles.title}>Iniciar Sesión</Text>
@@ -237,7 +246,9 @@ const LogIn = () => {
           </Pressable>
         </View>
         {error !== '' && <Text style={styles.errorMsj}>{error}</Text>}
-        <Text style={[styles.textReset]}>¿Has olvidado tu contraseña?</Text>
+        <Pressable style={styles.textReset} onPress={() => handleForgotPassword()}>
+          <Text style={styles.textReset}>¿Has olvidado tu contraseña?</Text>
+        </Pressable>
 
         <View style={styles.containerLogin}>
           <Pressable style={styles.buttonLogin} onPress={() => handleLogIn()}>
@@ -358,7 +369,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'center',
     paddingTop: 20,
-    fontFamily: fonts.gotham.regular
+    fontFamily: fonts.gotham.regular,
   },
   containerLogin: {
     alignItems: 'center',

@@ -197,6 +197,45 @@ export const logInAsync = createAsyncThunk(
   },
 );
 
+export const verifyEmail = createAsyncThunk(
+  'auth/verify_email',
+  async (
+    {
+      data,
+      setActive,
+      setError,
+      dispatch,
+    }: {
+      data: {
+        userId: string;
+      };
+      setActive: (boolean: boolean) => void;
+      setError: (error: string) => void;
+      dispatch: ReturnType<typeof useAppDispatch>;
+    },
+    { rejectWithValue },
+  ) => {
+    setActive(true);
+    try {
+      const response = await axios.post(apiUrls.verifyEmail(), { userId: data.userId });
+      if (response.data.ok) {
+        setActive(false);
+        dispatch(getUserAsync());
+        return {};
+      } else {
+        setActive(false);
+        setError(response.data.message);
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      setActive(false);
+      const message = error.response?.data?.message || 'Email no encontrado';
+      setError(message);
+      return rejectWithValue('error');
+    }
+  },
+);
+
 export const verifySessionAsync = createAsyncThunk(
   'auth/verifySessionAsync',
   async ({ dispatch }: { dispatch: ReturnType<typeof useAppDispatch> }, { rejectWithValue }) => {
@@ -356,15 +395,18 @@ export const getUserAsync = createAsyncThunk(
   'auth/getUserAsync',
   async (_, { rejectWithValue }) => {
     try {
+    
       const response = await axiosInstance.get(apiUrls.getUser());
+     
       if (response.data.ok) {
+     
         return response.data;
       } else {
+       
         return rejectWithValue('error');
       }
-      // eslint-disable-next-line
-    } catch (error: any) {
-      deleteAccess();
+    } catch (error) {
+      console.error('Error en getUserAsync:', error);
       return rejectWithValue('error');
     }
   },
@@ -445,8 +487,9 @@ export const getCuponsAsync = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(apiUrls.getCupons());
+      
       if (response.data.ok) {
-        return response.data;
+        return Array.isArray(response.data.cupons) ? response.data.cupons : [];
       } else {
         return rejectWithValue('error');
       }

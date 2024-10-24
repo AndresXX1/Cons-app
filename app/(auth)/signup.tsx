@@ -55,7 +55,7 @@ const SignUp = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
-    //iosClientId: '',
+    iosClientId: '',
   });
 
   const router = useRouter();
@@ -120,7 +120,6 @@ const SignUp = () => {
   const handleResponse = async () => {
     if (response?.type === 'success' && response?.authentication?.accessToken) {
       const tokenNotifications = await registerForPushNotificationsAsync();
-      console.log(response.authentication.accessToken, tokenNotifications);
       dispatch(
         googleSignIn({
           token: response.authentication.accessToken,

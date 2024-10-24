@@ -26,6 +26,17 @@ const AuthLayout = () => {
         }}
       />
       <Stack.Screen
+        name="pin_verification"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: '',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.white} />,
+        }}
+      />
+      <Stack.Screen
         name="signup"
         options={{
           headerTransparent: true,

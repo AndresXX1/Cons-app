@@ -1,92 +1,77 @@
 import { useState } from 'react';
-import { View, StyleSheet, Image, Pressable, Text, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Pressable, Text, ActivityIndicator, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, fonts, images } from '@/theme';
-import { Redirect, useRouter } from 'expo-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store';
-import { verifyCode, resendVerifyCode } from '@/store/service/user';
-import { OTPInputText } from '@/components/OTPInputText';
+import { colors, fonts } from '@/theme';
+import { useRouter } from 'expo-router';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { verifyEmail } from '@/store/actions/auth';
 
-const EmailVerify = () => {
+const PinVerification = () => {
   const router = useRouter();
-  const { isAuth } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [error, setError] = useState('');
-  const [code, setCode] = useState('');
-
-  const routerNext = () => {
-    router.replace('/(auth)/signup2');
-  };
+  const [active, setActive] = useState(false);
+  const [emailIsFocused, setEmailIsFocused] = useState(false);
+  const [data, setData] = useState({
+    userId: '',
+  });
 
   const handleNext = async () => {
-    if (code.length !== 5) {
-      setError('Introduce el codigo completo');
+    if (!data.userId) {
+      setError('Introduzca un Email');
       return;
     }
-    if (isSubmitting || isSubmitting2) {
-      return;
-    }
+
     setIsSubmitting(true);
-    await verifyCode({
-      code: code,
-      setError,
-      setIsSubmitting,
-      dispatch,
-      routerNext,
-    });
+
+    dispatch(verifyEmail({ data, setActive, setError, dispatch }))
+      .then(() => {
+        router.push({ pathname: '/(auth)/email_verify' });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
-  const handleResendVerifyCode = async () => {
-    if (isSubmitting2 || isSubmitting) {
-      return;
-    }
-    setIsSubmitting2(true);
-    await resendVerifyCode({
-      setError,
-      setIsSubmitting: setIsSubmitting2,
-    });
+  const handleEmailFocus = () => {
+    setEmailIsFocused(true);
   };
 
-  // if (!isAuth) {
-  //   return <Redirect href="/(auth)" />;
-  // }
+  const handleEmailBlur = () => {
+    setEmailIsFocused(false);
+  };
 
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.form}>
-        <Text style={styles.textPin}>Pin de seguridad</Text>
-        <Text style={styles.textPinTwo}>
-          Introduce el pin que enviamos al correo{' '}
-          <Text style={styles.textOpacity}>name@name.com </Text>
-        </Text>
-        <OTPInputText
-          numberOfDigits={5}
-          focusColor={colors.blue2}
-          focusStickBlinkingDuration={500}
-          onTextChange={text => {
-            setError('');
-            setCode(text);
-          }}
-          onFilled={text => console.log(`OTP is ${text}`)}
+        <TextInput
+          placeholder="Email"
+          autoCapitalize="none"
+          placeholderTextColor={colors.gray2}
+          onFocus={handleEmailFocus}
+          onBlur={handleEmailBlur}
+          onChangeText={text => setData({ ...data, userId: text })}
+          editable={!isSubmitting}
+          value={data.userId}
+          style={[
+            styles.textInput,
+            {
+              borderColor: emailIsFocused ? colors.blue2 : colors.gray2,
+            },
+          ]}
         />
-      </View>
-      <View style={styles.form}>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
         <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNextWhite} onPress={handleResendVerifyCode}>
-            {isSubmitting2 && <ActivityIndicator size={22} color={colors.blue} />}
-            {!isSubmitting2 && <Text style={styles.textNextBlue}>Reenviar Email</Text>}
+          <Pressable style={styles.buttonNextBlue} onPress={handleNext} disabled={isSubmitting}>
+            {isSubmitting ? (
+              <ActivityIndicator size={22} color={colors.white} />
+            ) : (
+              <Text style={styles.textNextWhite}>Siguiente</Text>
+            )}
           </Pressable>
         </View>
-        <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNextBlue} onPress={handleNext}>
-            {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
-            {!isSubmitting && <Text style={styles.textNextWhite}>Siguiente</Text>}
-          </Pressable>
-        </View>
-        {error !== '' && <Text style={styles.error}>{error}</Text>}
       </View>
     </SafeAreaView>
   );
@@ -115,6 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 24,
     paddingHorizontal: 16,
+    marginTop: 30,
   },
   title: {
     fontFamily: fonts.gotham.semiBold,
@@ -191,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EmailVerify;
+export default PinVerification;
