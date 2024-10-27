@@ -17,6 +17,7 @@ export const apiUrls = {
   getUser: () => `/api/user`,
   updateFirstData: () => `${baseUrl}/api/user/first-data`,
   updateSecondData: () => `${baseUrl}/api/user/second-data`,
+  updateDataId: (id: string)=> `${baseUrl}/api/user/${id}`,
   //services
   avatar: (url: string) => `${baseUrl}/avatar/${url}`,
   imgNotice: (url: string) => `${baseUrl}/notice/${url}`,

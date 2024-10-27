@@ -77,7 +77,7 @@ const HomeScreen = () => {
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <NavBar />
-        {<Banners banners={banners.home} />}
+        {<Banners banners={banners?.home} />}
         {
           smarter?.credits && smarter?.credits.length > 0 && (
             <View style={styles.containerTitle}>
@@ -104,7 +104,7 @@ const HomeScreen = () => {
           </View>
         </View>
         <View style={styles.containerLocation}>
-          {data.map((info, key) => (
+          {data?.map((info, key) => (
             <View style={styles.containerLocationTwo} key={key}>
               <Image source={images[info.image]} style={styles.locationImage}></Image>
               <View style={styles.locationThree}>

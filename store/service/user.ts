@@ -168,3 +168,40 @@ export const updateSecondData = async ({
     setIsSubmitting(false);
   }
 };
+
+export const updateUserNameAndLastName = async ({
+  id,
+  first_name,
+  last_name,
+  setError,
+  setIsSubmitting,
+  dispatch,
+  routerNext,
+}: {
+  id: string | number;
+  first_name: string;
+  last_name: string;
+  setError: (error: string) => void;
+  setIsSubmitting: (boolean: boolean) => void;
+  dispatch: ReturnType<typeof useAppDispatch>;
+  routerNext: () => void;
+}) => {
+  try {
+    setError('');
+    const response = await axiosInstance.put(`${apiUrls.updateDataId(id.toString())}`, {
+      first_name,
+      last_name,
+    });
+
+    if (response.data.ok) {
+      dispatch(getUserAsync());
+      routerNext();
+    } else {
+      setError(response.data.message);
+    }
+  } catch (error: any) {
+    setError(error.response?.data?.message || 'Error al actualizar los datos');
+  } finally {
+    setIsSubmitting(false); // Asegúrate de restablecer el estado de carga
+  }
+};

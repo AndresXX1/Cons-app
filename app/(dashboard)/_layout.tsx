@@ -2,6 +2,7 @@ import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
 import { StackHeaderLeftGoBackBenefits } from '@/components/StackHeaderLeftGoBackBenefits';
 import { StackHeaderLeftGoBackProfile } from '@/components/StackHeaderLeftGoBackProfile';
 import { StackHeaderLeftGoLoan } from '@/components/StackHeaderLeftGoLoan';
+import { StackHeaderLeftGoMyData } from '@/components/StackHeaderLeftGoMyData';
 import TabBar from '@/components/TabBar';
 import { colors } from '@/theme';
 import { Tabs } from 'expo-router';
@@ -41,6 +42,7 @@ const disableNavbarPages = [
   'single_cupon',
   'unregistered_user',
   'user_high',
+  'edit_name',
 ];
 
 const DashboardLayout = () => {
@@ -251,6 +253,17 @@ const DashboardLayout = () => {
           headerLeft: () => (
             <StackHeaderLeftGoBackProfile title={'Volver atrás'} color={colors.blue} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="edit_name"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'edit_name',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoMyData title={'Volver atrás'} color={colors.blue} />,
         }}
       />
       <Tabs.Screen
