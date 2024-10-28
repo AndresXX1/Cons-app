@@ -87,6 +87,7 @@ const HomeScreen = () => {
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <View style={styles.containerMain}>
         <NavBar />
+        {<Banners banners={banners?.home} />}
 
         {<Banners banners={banners.home} />}
         {

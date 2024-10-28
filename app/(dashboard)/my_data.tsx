@@ -1,29 +1,25 @@
 import React, { useRef } from 'react';
 import { colors, fonts, images } from '@/theme';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView, Pressable } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const MyDataScreen = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const scrollViewRef = useRef<ScrollView>(null);
+  const router = useRouter();
+
+  console.log(user);
 
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <Text style={styles.title}>Mis datos personales</Text>
-        <Text style={styles.progressText}>75% completo</Text>
-        <View style={styles.containerProgressBar}>
-          <LinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            colors={['#00A5E7', '#4DCCFF']}
-            style={styles.progressBar}></LinearGradient>
-        </View>
+
         <View style={styles.containerItem}>
           <Image source={images.for_you_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
@@ -33,26 +29,41 @@ const MyDataScreen = () => {
               {user && user.last_name !== '' ? user.last_name : ''}
             </Text>
           </View>
+          <Pressable onPress={() => router.push('edit_name')}>
+            <Image source={images.edit_square_blue} style={styles.editIcon} />
+          </Pressable>
         </View>
         <View style={styles.containerItem}>
           <Image source={images.id_card_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
             <Text style={styles.mainText}>CUIL</Text>
-            <Text style={styles.offText}>20-14800451-4</Text>
+            <Text style={styles.offText}>
+              {user?.cuil.slice(0, 2)}-{user?.cuil.slice(2, 10)}-{user?.cuil.slice(10)}
+            </Text>
           </View>
+          <Image source={images.edit_square_blue} style={styles.editIcon} />
         </View>
         <View style={styles.containerItem}>
           <Image source={images.cake_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
             <Text style={styles.mainText}>Fecha de nacimiento</Text>
-            <Text style={styles.offText}>13/06/1963</Text>
+            <Text style={styles.offText}>
+              {' '}
+              {user?.birthday
+                ? new Date(user.birthday).toLocaleDateString()
+                : 'Fecha no disponible'}
+            </Text>
           </View>
+          <Image source={images.edit_square_blue} style={styles.editIcon} />
         </View>
         <View style={styles.containerItem}>
           <Image source={images.dock_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
             <Text style={styles.mainText}>Teléfono</Text>
-            <Text style={styles.offText}>+54 11 6014-5191</Text>
+            <Text style={styles.offText}>
+              {user?.phone.slice(0, 3)} {user?.phone.slice(3, 5)} {user?.phone.slice(5, 9)}-
+              {user?.phone.slice(9)}
+            </Text>
           </View>
           <Image source={images.edit_square_blue} style={styles.editIcon} />
         </View>
@@ -62,7 +73,6 @@ const MyDataScreen = () => {
             <Text style={styles.mainText}>Email</Text>
             <Text style={styles.offText}>{user?.email}</Text>
           </View>
-          <Image source={images.edit_square_blue} style={styles.editIcon} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -107,7 +117,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
     marginTop: 10,
-    marginBottom: 40,
+    marginBottom: 20,
   },
   containerItem: {
     flexDirection: 'row',
