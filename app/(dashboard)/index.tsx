@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { images, fonts, colors } from '@/theme';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBar from '@/components/NavBar';
@@ -63,19 +63,21 @@ const HomeScreen = () => {
     }, [])
   );
 
-
   const contact = [
     {
       image: 'contact_1',
       title: 'WhatsApp',
+      redirect: 'https://wa.me/+541168164074', // WhatsApp link
     },
     {
       image: 'contact_2',
       title: 'Teléfono',
+      redirect: 'tel:08002202743', // Phone link
     },
     {
       image: 'contact_3',
       title: 'Vía mail',
+      redirect: 'mailto:atencionalcliente@argenpesos.com.ar', // Email link
     },
   ];
 
@@ -108,7 +110,7 @@ const HomeScreen = () => {
         </Pressable>
         <View style={styles.line}></View>
         
-        <Slider data={offices}/>
+        <Slider data={offices.slice(0, 6)}/>
 
         <Pressable onPress={() => router.push('branch_offices')}>
           <Text style={styles.textBlue}>Ver todas las sucursales</Text>
@@ -154,15 +156,22 @@ const HomeScreen = () => {
         <Text style={styles.textHourThree}>Sábados de 9 a 13hs.</Text>
 
         {contact?.map((data, key) => (
+          <Pressable
+          key={key}
+          onPress={() => Linking.openURL(data.redirect)} // Open respective link on press
+          >
+          {({ pressed }) => (
           <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           colors={['#00A5E7', '#4DCCFF']}
-          style={styles.containerContact}
+          style={[styles.containerContact, {opacity: pressed ? 0.5 : 1 }]}
             key={key}>
             <Image source={images[data.image]} style={styles.contactImage}></Image>
             <Text style={styles.contactText}>{data.title}</Text>
           </LinearGradient>
+          )}
+          </Pressable>
         ))}
         <View style={{ marginBottom: 80 }}></View>
           </View>
