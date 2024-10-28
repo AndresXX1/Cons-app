@@ -1,3 +1,4 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useAppDispatch } from '..';
 import { axiosInstance, getUserAsync } from '../actions/auth';
 import { apiUrls } from '../api';
@@ -63,6 +64,49 @@ export const verifyCode = async ({
     setIsSubmitting(false);
   }
 };
+
+export const forgetPasswordCode = createAsyncThunk(
+  'auth/forget-password-code',
+  async ({
+    token,
+    code,
+    setError,
+    setIsSubmitting,
+    dispatch,
+    routerNext,
+  }: {
+    token: string;
+    code: string;
+    setError: (error: string) => void;
+    setIsSubmitting: (boolean: boolean) => void;
+    dispatch: ReturnType<typeof useAppDispatch>;
+    routerNext: () => void;
+  }) => {
+    try {
+      setError('');
+      const response = await axiosInstance.post(apiUrls.forgetPasswordCode(), {
+        code,
+        token,
+      });
+      if (response.data.ok) {
+        setIsSubmitting(false);
+        routerNext();
+        console.log(response.data)
+        return response.data.code;
+      } else {
+        setIsSubmitting(false);
+        setError(response.data.message);
+      }
+      // eslint-disable-next-line
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'Error al enviar el codigo');
+      setIsSubmitting(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  },
+);
+
 
 export const resendVerifyCode = async ({
   setError,

@@ -14,7 +14,10 @@ import {
   registerInAsync,
   getCuponsAsync,
   googleSignIn,
+  forgetPassword,
+  getBranchOffices,
 } from '../actions/auth';
+import { forgetPasswordCode } from '../service/user';
 
 const initialState: AuthSliceState = {
   isAuth: false,
@@ -24,9 +27,14 @@ const initialState: AuthSliceState = {
   isOnboarding: false,
   notices: [],
   products: [],
+  offices: [],
   cupons: [],
   cupons2: [],
   cupons3: [],
+  passwordToken: {
+    token: "",
+    code: ""
+  },
   noticeId: null,
   banners: {
     home: [],
@@ -34,6 +42,7 @@ const initialState: AuthSliceState = {
     argencompras: [],
   },
   loadingCupons: false,
+  
 };
 
 export const authSlice = createSlice({
@@ -130,6 +139,12 @@ export const authSlice = createSlice({
       .addCase(getBannersAsync.fulfilled, (state, action) => {
         state.banners = action.payload;
       })
+      .addCase(forgetPassword.fulfilled, (state, action) => {
+        state.passwordToken.token = action.payload;
+      })
+      .addCase(forgetPasswordCode.fulfilled, (state, action) => {
+        state.passwordToken.code = action.payload;
+      })
       .addCase(getBannersAsync.rejected, state => {
         state.banners = {
           home: [],
@@ -150,6 +165,7 @@ export interface INotice {
   date: string;
 }
 
+
 export interface IBanner {
   id: number;
   url: string;
@@ -162,10 +178,15 @@ export interface AuthSliceState {
   smarter: ISmarter | null;
   isOnboarding: boolean;
   notices: INotice[];
+  offices: IOffice[];
   products: any[];
   cupons: any[];
   cupons2: any[];
   cupons3: any[];
+  passwordToken: {
+    token: string,
+    code: string
+  };
   noticeId: number | null;
   banners: {
     home: IBanner[];
@@ -173,6 +194,19 @@ export interface AuthSliceState {
     argencompras: IBanner[];
   };
   loadingCupons: Boolean,
+}
+
+export interface IOffice {
+  id: number;
+  name: string;
+  image: string;
+  address: string;
+  schedules_1: string;
+  schedules_2: string;
+  whatsapp: string;
+  phone: string;
+  lat: string;
+  lon: string;
 }
 
 export interface ISmarter {

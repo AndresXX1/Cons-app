@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { images, fonts, colors } from '@/theme';
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions } from 'react-native';
@@ -8,17 +8,37 @@ import NavBar from '@/components/NavBar';
 import { useRouter } from 'expo-router';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import Banners from '@/components/Banners';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@/store';
 import { registerViewTime } from '@/store/service/timer';
+import  Slider  from '@/components/Slider';
+
+
 
 const { width } = Dimensions.get('window');
 
 const HomeScreen = () => {
+  const [offices, setOffices] = useState([]);
+
   const { banners, smarter } = useSelector((state: RootState) => state.auth);
 
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    const fetchOffices = async () => {
+      try {
+       const response =  await fetch('https://back5.maylandlabs.com/api/branch')
+       const {branches} = await response.json()  
+       setOffices(branches) // branches 
+      } catch (error) {
+        console.error('Failed to fetch branch offices:', error);
+      }
+    };
+
+    fetchOffices();
+  }, []);
+  
 
   useFocusEffect(
     React.useCallback(() => {
@@ -27,6 +47,7 @@ const HomeScreen = () => {
       }
     }, []),
   );
+
 
   useFocusEffect(
     useCallback(() => {
@@ -42,20 +63,6 @@ const HomeScreen = () => {
     }, [])
   );
 
-  const data = [
-    {
-      image: 'location_liniers',
-      title: 'Liniers',
-      location: 'Av. Rivadavia 11640',
-      number: '6062-0475 15-2660-0019',
-    },
-    {
-      image: 'location_avellaneda',
-      title: 'Avellaneda',
-      location: 'Av. Mitre 531',
-      number: '4201-5784 / 6561 15-3252-5817',
-    },
-  ];
 
   const contact = [
     {
@@ -76,8 +83,11 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
+        <View style={styles.containerMain}>
         <NavBar />
         {<Banners banners={banners?.home} />}
+
+        {<Banners banners={banners.home} />}
         {
           smarter?.credits && smarter?.credits.length > 0 && (
             <View style={styles.containerTitle}>
@@ -88,33 +98,19 @@ const HomeScreen = () => {
             </View>
           )
         }
-        <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
+        
+        <Pressable  style={styles.button} onPress={() => router.push('apply_for_loan')}>
+          {({ pressed }) => (
+          <View style={[styles.buttonContainer, { opacity: pressed ? 0.5 : 1 }]}>
           <Image source={images.money_white} style={styles.moneyIcon} />
           <Text style={styles.textButton}>QUIERO MI PRÉSTAMO</Text>
+          </View>
+          )}
         </Pressable>
         <View style={styles.line}></View>
-        <View style={styles.containerOffices}>
-          <Text style={styles.textOffices}>
-            📍 Nuestras <Text style={styles.span}>sucursales</Text>
-          </Text>
-          <View style={styles.containerCircle}>
-            <View style={styles.circleBlue}></View>
-            <View style={styles.circleOffices}></View>
-            <View style={styles.circleOffices}></View>
-          </View>
-        </View>
-        <View style={styles.containerLocation}>
-          {data?.map((info, key) => (
-            <View style={styles.containerLocationTwo} key={key}>
-              <Image source={images[info.image]} style={styles.locationImage}></Image>
-              <View style={styles.locationThree}>
-                <Text style={styles.textLocation}>{info.title}</Text>
-                <Text style={styles.textLocationTwo}>{info.location}</Text>
-                <Text style={styles.textLocationTwo}>{info.number}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
+        
+        <Slider data={offices}/>
+
         <Pressable onPress={() => router.push('branch_offices')}>
           <Text style={styles.textBlue}>Ver todas las sucursales</Text>
         </Pressable>
@@ -142,11 +138,14 @@ const HomeScreen = () => {
             </View>
             <View style={styles.payContainerTwo}>
               <Image source={images.pay_4} style={styles.image_pay}></Image>
-              <Text style={styles.textPay}>Transferencia/</Text>
-              <Text style={styles.textPay}>Deposito</Text>
+              <Text style={styles.textPay}>Transferencia/Deposito</Text>
             </View>
           </View>
-          <Text style={styles.textPayFinally}>Ver todos los medios de pago</Text>
+          <Pressable onPress={() => router.push('payment_methods')}>
+          {({ pressed }) => (
+            <Text style={[styles.textPayFinally, { opacity: pressed ? 0.5 : 1 }]}>Ver todos los medios de pago</Text>
+          )}
+          </Pressable>
         </View>
         <Text style={styles.textContact}>¿Tenés dudas?</Text>
         <Text style={styles.textContactTwo}>Contactanos</Text>
@@ -157,16 +156,17 @@ const HomeScreen = () => {
 
         {contact?.map((data, key) => (
           <LinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            colors={['#00A5E7', '#4DCCFF']}
-            style={styles.containerContact}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          colors={['#00A5E7', '#4DCCFF']}
+          style={styles.containerContact}
             key={key}>
             <Image source={images[data.image]} style={styles.contactImage}></Image>
             <Text style={styles.contactText}>{data.title}</Text>
           </LinearGradient>
         ))}
         <View style={{ marginBottom: 80 }}></View>
+          </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -175,17 +175,22 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#F1F2F2',
+    backgroundColor: colors.blue2,
     alignItems: 'center',
   },
   scrollView: {
     width: '100%',
+    backgroundColor: colors.blue2,
+  },
+  containerMain: {
+    backgroundColor: "#F1F2F2",
   },
   banner: {
     width: width - 32,
     height: 212,
     marginLeft: 16,
     borderRadius: 10,
+    marginTop: 16,
   },
   containerTitle: {
     flexDirection: 'row',
@@ -216,6 +221,11 @@ const styles = StyleSheet.create({
     gap: 4,
     marginTop: 12,
   },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   moneyIcon: {
     width: 24,
     height: 24,
@@ -225,6 +235,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.bold,
     fontSize: 20,
     paddingStart: 3,
+    paddingTop: 3,
   },
   line: {
     width: '90%',
@@ -234,42 +245,6 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginTop: 20,
     marginBottom: 22,
-  },
-  containerOffices: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingLeft: 20,
-    paddingRight: 30,
-    justifyContent: 'space-between',
-    marginTop: 10
-  },
-  textOffices: {
-    color: '#575757',
-    fontSize: 20,
-    fontFamily: fonts.gotham.regular,
-    fontWeight: '400',
-  },
-  span: {
-    fontWeight: '700',
-    fontFamily: fonts.gotham.bold,
-  },
-  containerCircle: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-  },
-  circleOffices: {
-    backgroundColor: '#D9D9D9',
-    width: 10,
-    height: 10,
-    borderRadius: 20,
-  },
-  circleBlue: {
-    backgroundColor: colors.blue2,
-    width: 10,
-    height: 10,
-    borderRadius: 20,
   },
   containerLocation: {
     paddingHorizontal: 10,
@@ -321,6 +296,7 @@ const styles = StyleSheet.create({
     width: 242,
     marginHorizontal: 'auto',
     borderBottomColor: colors.blue,
+    textDecorationLine: 'underline',
   },
   containerPay: {
     backgroundColor: '#4DCCFF',
@@ -369,6 +345,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 20.8,
     fontFamily: fonts.gotham.bold,
+    textAlign: 'center',
   },
   textPayFinally: {
     fontSize: 20,
@@ -378,6 +355,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 44,
     marginBottom: 28,
+    textDecorationLine: 'underline',
   },
   textContact: {
     fontFamily: fonts.gotham.regular,

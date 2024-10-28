@@ -1,6 +1,6 @@
 export const baseUrl = 'https://back5.maylandlabs.com';
 
-// export const baseUrl = 'http://localhost:8001';
+//export const baseUrl = 'http://localhost:8001';
 //export const baseUrl = "http://10.0.2.2:8001";
 
 export const apiUrls = {
@@ -13,7 +13,9 @@ export const apiUrls = {
   refreshToken: () => `${baseUrl}/api/auth/refresh-token`,
   logOut: () => `${baseUrl}/api/auth/log-out`,
   forgetPassword: () => `${baseUrl}/api/auth/forget-password`,
+  forgetPasswordCode: () => `${baseUrl}/api/auth/forget-password-code`,
   verifyEmail: () => `${baseUrl}/api/auth/verify-email`,
+  setPassword: () => `${baseUrl}/api/auth/forget-password-new-password`,
   getUser: () => `/api/user`,
   updateFirstData: () => `${baseUrl}/api/user/first-data`,
   updateSecondData: () => `${baseUrl}/api/user/second-data`,
@@ -34,6 +36,7 @@ export const apiUrls = {
   imgBanner: (url: string) => `${baseUrl}/api/banner/${url}`,
   //timer
   registerViewTime: () => `${baseUrl}/api/timer`,
+  //sucursales
 };
 
 export const tokenAccess = {

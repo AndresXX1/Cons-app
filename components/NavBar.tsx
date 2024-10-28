@@ -8,6 +8,7 @@ import BannersArgenCompras from '@/components/BannersArgenCompras';
 import { TextInput } from 'react-native-gesture-handler';
 import { getCuponsAsync } from '@/store/actions/auth';
 import { useEffect, useState } from 'react';
+import { opacity } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
 
 const NavBar = () => {
   const router = useRouter();
@@ -69,11 +70,15 @@ const NavBar = () => {
       <View style={styles.containerHome}>
         <View style={styles.homeButtons}>
           <Pressable onPress={() => router.push('news')}>
+            {({ pressed }) => (      
+            <View style={{opacity: pressed ? 0.5 : 1}}>
             <Image
               source={images.breaking_news_white}
               style={styles.breakingNewsIcon}
               resizeMode="cover"
             />
+            </View> 
+            )}
           </Pressable>
           <Image source={images.logo} style={styles.logo} resizeMode="cover" />
           <Pressable onPress={() => router.push('notifications')}>
@@ -202,11 +207,7 @@ const NavBar = () => {
 
 const styles = StyleSheet.create({
   containerLoan: {
-    backgroundColor: '#00A5E7',
     height: 243,
-    justifyContent: 'space-between',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginBottom: 20,
@@ -229,13 +230,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerHome: {
-    backgroundColor: '#00A5E7',
-    height: 299,
+    backgroundColor: colors.blue2,
     justifyContent: 'space-between',
-    borderEndStartRadius: 20,
-    borderEndEndRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
+    borderEndEndRadius: 20,
+    borderEndStartRadius: 20,
     marginBottom: 20,
   },
   breakingNewsIcon: {
@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: fonts.gotham.bold,
     fontSize: 25,
+    marginTop: 22,
   },
   fullNameHome: {
     color: colors.white,
@@ -265,7 +266,8 @@ const styles = StyleSheet.create({
   },
   menuInfo: {
     width: '100%',
-    gap: 9,
+    gap: 10,
+    marginTop: 14,
   },
   level: {
     borderColor: '#006E9A',

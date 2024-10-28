@@ -106,6 +106,47 @@ export const registerInAsync = createAsyncThunk(
   },
 );
 
+export const setPassword = createAsyncThunk(
+  'auth/setPassword',
+  async (
+    {
+      data,
+      setActive,
+      setError,
+      dispatch,
+    }: {
+      data: {
+        token: string,
+        code: string,
+        password: string;
+        confirmPassword: string;
+      };
+      setActive: (boolean: boolean) => void;
+      setError: (error: string) => void;
+      dispatch: ReturnType<typeof useAppDispatch>;
+    },
+    { rejectWithValue },
+  ) => {
+    setActive(true);
+    try {
+      const response = await axios.post(apiUrls.setPassword(), { ...data });
+      if (response.data.ok) {
+        setActive(false);
+        return {};
+      } else {
+        setActive(false);
+        setError(response.data.message);
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      setActive(false);
+      const message = error.response?.data?.message || 'Error al cambiar la contraseña';
+      setError(message);
+      return rejectWithValue('error');
+    }
+  },
+);
+
 export const googleSignIn = createAsyncThunk(
   'auth/googleSignIn',
   async (
@@ -230,6 +271,48 @@ export const verifyEmail = createAsyncThunk(
     } catch (error: any) {
       setActive(false);
       const message = error.response?.data?.message || 'Email no encontrado';
+      setError(message);
+      return rejectWithValue('error');
+    }
+  },
+);
+
+export const forgetPassword = createAsyncThunk(
+  'auth/forget_password',
+  async (
+    {
+      data,
+      setActive,
+      setError,
+      dispatch,
+    }: {
+      data: {
+        email: string;
+      };
+      setActive: (boolean: boolean) => void;
+      setError: (error: string) => void;
+      dispatch: ReturnType<typeof useAppDispatch>;
+    },
+    { rejectWithValue },
+  ) => {
+    setActive(true);
+    try {
+      console.log('Enviando solicitud al backend con el email:', data.email);
+      console.log('URL de la API forgetPassword:', apiUrls.forgetPassword());
+      const response = await axios.post(apiUrls.forgetPassword(), { email: data.email });
+      if (response.data.ok) {
+        console.log(response.data)
+        setActive(false);
+        return response.data.token;
+      } else {
+        setActive(false);
+        setError(response.data.message);
+        return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      setActive(false);
+      const message = error.response?.data?.message || 'Email no encontrado';
+      console.log('Error completo:', error);
       setError(message);
       return rejectWithValue('error');
     }
@@ -395,14 +478,11 @@ export const getUserAsync = createAsyncThunk(
   'auth/getUserAsync',
   async (_, { rejectWithValue }) => {
     try {
-    
       const response = await axiosInstance.get(apiUrls.getUser());
-     
+
       if (response.data.ok) {
-     
         return response.data;
       } else {
-       
         return rejectWithValue('error');
       }
     } catch (error) {
@@ -480,12 +560,14 @@ export const getNoticeAsync = createAsyncThunk(
   },
 );
 
+
+
 export const getCuponsAsync = createAsyncThunk(
   'auth/getCuponsAsync',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(apiUrls.getCupons());
-      
+
       if (response.data.ok) {
         return Array.isArray(response.data.cupons) ? response.data.cupons : [];
       } else {
