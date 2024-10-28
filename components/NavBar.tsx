@@ -13,10 +13,7 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
   const router = useRouter();
   const pathName = usePathname();
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    user,
-    banners,
-  } = useSelector((state: RootState) => state.auth);
+  const { user, banners } = useSelector((state: RootState) => state.auth);
 
   if (pathName === '/') {
     return (
@@ -62,7 +59,7 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
           </Pressable>
           <Pressable style={styles.points}>
             <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
-              Tenés 1500 puntos
+              Tenés {user?.points} puntos
             </Text>
             <Image source={images.arrow_back_white} style={styles.homeBack} resizeMode="cover" />
           </Pressable>
@@ -125,7 +122,7 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
               style={styles.inputSearch}
               placeholder="Buscá un cupon..."
               value={searchTerm}
-              onChangeText={(text) => onSearchChange(text)}
+              onChangeText={text => onSearchChange(text)}
               placeholderTextColor={colors.gray2}
             />
             {searchTerm && (
