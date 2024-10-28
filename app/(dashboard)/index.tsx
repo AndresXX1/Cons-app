@@ -89,7 +89,6 @@ const HomeScreen = () => {
         <NavBar />
         {<Banners banners={banners?.home} />}
 
-        {<Banners banners={banners.home} />}
         {
           smarter?.credits && smarter?.credits.length > 0 && (
             <View style={styles.containerTitle}>
