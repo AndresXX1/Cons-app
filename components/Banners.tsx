@@ -21,7 +21,7 @@ const Banners: React.FC<BannersProps> = ({ banners }) => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [banners.length]);  // Dependency on banners.length to reset if banners change
 
   useEffect(() => {
     animation.value = withTiming(1, { duration: 600 });
@@ -35,7 +35,7 @@ const Banners: React.FC<BannersProps> = ({ banners }) => {
 
   return (
     <Animated.View style={[styles.banner, animatedStyle]}>
-      {banners.length > 0 && (
+      {banners.length > 0 && banners[index]?.url && (  // Check if banners and url are defined
         <ImageBackground
           source={{ uri: `https://back5.maylandlabs.com/banner/${banners[index].url}` }}
           style={styles.image}
