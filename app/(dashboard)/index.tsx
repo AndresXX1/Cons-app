@@ -100,11 +100,6 @@ const HomeScreen = () => {
             <Text style={styles.text}> tus</Text>
             <Text style={styles.textBold}> $300.000!</Text>
           </View>
-          )}
-        </Pressable>
-        <View style={styles.line}></View>
-        
-        <Slider data={offices?.slice(0, 6)}/>
 
           <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
             {({ pressed }) => (
@@ -114,6 +109,7 @@ const HomeScreen = () => {
               </View>
             )}
           </Pressable>
+        
           <View style={styles.line}></View>
 
           <Slider data={offices?.slice(0, 6)} />
@@ -308,10 +304,8 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     fontFamily: fonts.gotham.semiBold,
     fontWeight: '700',
-    borderBottomWidth: 1,
     width: 242,
     marginHorizontal: 'auto',
-    borderBottomColor: colors.blue,
     textDecorationLine: 'underline',
   },
   containerPay: {

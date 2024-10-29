@@ -5,9 +5,8 @@ import { AppDispatch, RootState } from '../store';
 import { apiUrls } from '../store/api';
 import { usePathname, useRouter } from 'expo-router';
 import BannersArgenCompras from '@/components/BannersArgenCompras';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { getCuponsAsync } from '@/store/actions/auth';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { TextInput } from 'react-native-gesture-handler';
+
 
 const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
   const router = useRouter();
@@ -143,6 +142,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginBottom: 20,
+    backgroundColor: colors.blue2,
+    borderEndEndRadius: 20,
+    borderEndStartRadius: 20,
   },
   LoanButtons: {
     flexDirection: 'row',

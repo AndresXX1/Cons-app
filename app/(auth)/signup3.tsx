@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Modal,
+  Platform,
 } from 'react-native';
 
 import { Redirect, useRouter } from 'expo-router';
@@ -21,12 +22,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateSecondData } from '@/store/service/user';
 
 const formatDateString = (date: string) => {
-  const spaceIndex = date.indexOf(' ');
-  const secondSpaceIndex = date.indexOf(' ', spaceIndex + 1);
-  const month =
-    date.slice(secondSpaceIndex + 1, secondSpaceIndex + 2).toUpperCase() +
-    date.slice(secondSpaceIndex + 2);
-  return date.slice(0, secondSpaceIndex + 1) + month;
+  const [day, month, year] = date.split('/');
+  return `${day}/${month}/${year}`;
 };
 
 const SignUp3 = () => {
@@ -63,25 +60,38 @@ const SignUp3 = () => {
     setShowPicker(false);
   };
 
-  const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
-    if (selectedDate) {
-      const formattedDate = new Intl.DateTimeFormat('es', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      }).format(selectedDate);
-      setSelectedDate(selectedDate);
-      setSelectedDateText(formatDateString(formattedDate));
+  const handleDateChange = (event: DateTimePickerEvent, date?: Date) => {
+    if (Platform.OS === 'android') {
+      if (event.type === 'set' && date) {
+        const formattedDate = new Intl.DateTimeFormat('es', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }).format(date);
+        setSelectedDate(date);
+        setSelectedDateText(formatDateString(formattedDate));
+      }
+      setShowPicker(false); // Oculta el DatePicker en Android después de seleccionar
+    } else {
+      if (date) {
+        const formattedDate = new Intl.DateTimeFormat('es', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }).format(date);
+        setSelectedDate(date);
+        setSelectedDateText(formatDateString(formattedDate));
+      }
     }
   };
 
   const handleNext = async () => {
-    if (!selectedDate) {
+    if (!selectedDateText) {
       setError('Fecha de nacimiento requerida');
       return;
     }
     if (!inputPhoneValue) {
-      setError('El telefono es requerido');
+      setError('El teléfono es requerido');
       return;
     }
     if (isSubmitting) {
@@ -125,9 +135,8 @@ const SignUp3 = () => {
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={3} totalSteps={4} />
 
-        <TouchableOpacity style={{ opacity: 1 }} activeOpacity={1}>
+        <TouchableOpacity onPress={showDatePicker} activeOpacity={1}>
           <TextInput
-            onPress={showDatePicker}
             placeholder="Fecha de nacimiento"
             style={styles.textInput}
             value={selectedDateText}
@@ -135,13 +144,42 @@ const SignUp3 = () => {
           />
         </TouchableOpacity>
 
+        {Platform.OS === 'ios' && (
+          <Modal visible={showPicker} transparent={true} animationType="slide">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <DatePicker
+                  style={{ width: '100%' }}
+                  value={selectedDate}
+                  display="spinner"
+                  mode="date"
+                  textColor="#000"
+                  onChange={handleDateChange}
+                />
+                <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
+                  <Text style={styles.textClose}>Confirmar</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+        )}
+
+        {Platform.OS === 'android' && showPicker && (
+          <DatePicker
+            value={selectedDate}
+            display="default"
+            mode="date"
+            onChange={handleDateChange}
+          />
+        )}
+
         <TextInput
           placeholder="Teléfono"
           autoCapitalize="none"
           placeholderTextColor={colors.gray2}
           onFocus={handlePhoneFocus}
           onBlur={handlePhoneBlur}
-          onChangeText={text => setInputPhoneValue(text)}
+          onChangeText={(text) => setInputPhoneValue(text)}
           editable={!isSubmitting}
           value={inputPhoneValue}
           style={[
@@ -161,24 +199,6 @@ const SignUp3 = () => {
           </Pressable>
         </View>
       </View>
-
-      <Modal visible={showPicker} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <DatePicker
-              style={{ width: '100%' }}
-              value={selectedDate}
-              display="spinner"
-              mode="date"
-              textColor="#000"
-              onChange={handleDateChange}
-            />
-            <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
-              <Text style={styles.textClose}>Confirmar</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };
@@ -210,7 +230,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.semiBold,
     color: colors.blue2,
     fontSize: 32,
-    verticalAlign: 'middle',
     textAlign: 'center',
     marginTop: 45,
     marginBottom: 20,
@@ -219,7 +238,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontFamily: fonts.gotham.regular,
     fontSize: 16,
-    fontWeight: '400',
     height: 56,
     borderColor: colors.gray2,
     borderRadius: 10,
@@ -238,9 +256,6 @@ const styles = StyleSheet.create({
     width: 164,
     height: 50,
     borderRadius: 50,
-    display: 'flex',
-    verticalAlign: 'middle',
-    textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 52,
@@ -251,15 +266,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-end', // Ajustado para que aparezca en la parte inferior
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: 350,
+    width: '100%',
     padding: 20,
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderTopLeftRadius: 10, // Ajustado para un mejor diseño
+    borderTopRightRadius: 10,
     alignItems: 'center',
   },
   buttonClose: {
@@ -270,12 +285,8 @@ const styles = StyleSheet.create({
   },
   textClose: {
     color: 'white',
-    width: 100,
-    display: 'flex',
     textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
-    height: 18,
-    paddingTop: 3,
   },
 });
 

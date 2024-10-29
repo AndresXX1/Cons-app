@@ -1,27 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { colors, fonts, images } from '@/theme';
-import { View, StyleSheet, Text, Image, ScrollView, Pressable, Linking } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const BranchOfficesScreen = () => {
-  const [offices, setOffices] = useState([]);
   const scrollViewRef = useRef<ScrollView>(null);
-  const fetchOffices = async () => {
-    try {
-     const response =  await fetch('https://back5.maylandlabs.com/api/branch')
-     const {branches} = await response.json()  
-     setOffices(branches) // branches 
-    } catch (error) {
-      console.error('Failed to fetch branch offices:', error);
-    }
-  };
-
-
-  useEffect(() => {
-    fetchOffices();
-  }, []);
-
   const data = [
     {
       image: 'location_liniers',
@@ -43,25 +27,25 @@ const BranchOfficesScreen = () => {
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <Text style={styles.title}>Nuestras sucursales</Text>
 
-        {offices?.map((info, key) => (
+        {data.map((info, key) => (
           <View style={styles.containerLocation} key={key}>
-            <Image source={{uri : `https://back5.maylandlabs.com/branch/${info.image}`}} style={styles.locationImage}></Image>
+            <Image source={images[info.image]} style={styles.locationImage}></Image>
             <View style={styles.locationThree}>
-              <Text style={styles.textLocation}>{info.name}</Text>
-              <Text style={styles.textLocationTwo}>{info.address}</Text>
-              <Text style={styles.textLocationThree}>{info.phone}</Text>
+              <Text style={styles.textLocation}>{info.title}</Text>
+              <Text style={styles.textLocationTwo}>{info.location}</Text>
+              <Text style={styles.textLocationThree}>{info.number}</Text>
               <Text style={styles.textLocationThree}>Lun a Vier 9:00 a 18:45 hs</Text>
               <Text style={styles.textLocationThree}>Sab 9:00 a 13:00 hs</Text>
             </View>
             <View style={styles.containerButtons}>
-              <Pressable style={styles.buttonGreen} onPress={() => {Linking.openURL(`https://wa.me/${info.whatsapp}`)}}>
+              <View style={styles.buttonGreen}>
                 <Image source={images.whatsapp} style={styles.imagenButtons} />
-                <Text style={styles.textButtonGreen}>Contacto</Text>
-              </Pressable>
-              <Pressable style={styles.buttonBlue} onPress={() => {Linking.openURL(info.url)}}>
+                <Text style={styles.textButtonGreen}>WhatsApp</Text>
+              </View>
+              <View style={styles.buttonBlue}>
                 <Image source={images.google_maps} style={styles.imagenButtons} />
-                <Text style={styles.textButtonBlue}>Ubicación</Text>
-              </Pressable>
+                <Text style={styles.textButtonBlue}>Google Maps</Text>
+              </View>
             </View>
           </View>
         ))}
@@ -155,11 +139,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 16,
     paddingTop: 16,
-    paddingHorizontal: 15,
-    justifyContent: 'space-between',
+    marginHorizontal: 'auto',
   },
   buttonGreen: {
     backgroundColor: '#05B922',
+    width: 156,
     height: 46,
     borderRadius: 50,
     display: 'flex',
@@ -168,7 +152,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: 16,
     gap: 3,
-    paddingHorizontal: 20,
   },
   textButtonGreen: {
     color: colors.white,
@@ -177,6 +160,7 @@ const styles = StyleSheet.create({
   },
   buttonBlue: {
     backgroundColor: colors.blue,
+    width: 156,
     height: 46,
     borderRadius: 50,
     display: 'flex',
@@ -184,8 +168,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 3,
-    paddingHorizontal: 20,
-
   },
   textButtonBlue: {
     color: colors.white,
