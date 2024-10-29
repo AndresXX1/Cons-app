@@ -3,8 +3,6 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { images, fonts, colors } from '@/theme';
 
 const SliderItem = ({ item }) => {
-
-
   return (
     <View style={styles.container}>
       <Image source={{ uri : `https://back5.maylandlabs.com/branch/${item.image}`}} style={styles.image} />
@@ -27,6 +25,7 @@ const styles = StyleSheet.create({
   },
   containerText: {
     padding: 10,
+    minHeight: 160,
   },
   image: {
     width: '100%',
@@ -37,16 +36,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     fontFamily: fonts.gotham.bold,
+    color: colors.blue,
   },
   location: {
     fontSize: 14,
     marginTop: 5,
     fontFamily: fonts.gotham.regular,
+    color: colors.texts,
   },
   number: {
     fontSize: 14,
     marginTop: 5,
     fontFamily: fonts.gotham.regular,
+    color: colors.texts,
   },
 });
 

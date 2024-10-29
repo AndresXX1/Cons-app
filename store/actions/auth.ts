@@ -116,8 +116,8 @@ export const setPassword = createAsyncThunk(
       dispatch,
     }: {
       data: {
-        token: string,
-        code: string,
+        token: string;
+        code: string;
         password: string;
         confirmPassword: string;
       };
@@ -301,7 +301,7 @@ export const forgetPassword = createAsyncThunk(
       console.log('URL de la API forgetPassword:', apiUrls.forgetPassword());
       const response = await axios.post(apiUrls.forgetPassword(), { email: data.email });
       if (response.data.ok) {
-        console.log(response.data)
+        console.log(response.data);
         setActive(false);
         return response.data.token;
       } else {
@@ -496,11 +496,25 @@ export const getProductsAsync = createAsyncThunk(
   'auth/getProductsAsync',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(apiUrls.getProducts());
+      const response = await axiosInstance.put(apiUrls.getProducts());
       if (response.data.ok) {
-        return response.data.products;
+        return response.data.products.products;
       } else {
         return rejectWithValue('error');
+      }
+    } catch (error: any) {
+      return rejectWithValue('error');
+    }
+  },
+);
+
+export const getCategoriesAsync = createAsyncThunk(
+  'auth/getCategoriesAsync',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(apiUrls.getCategories());
+      if (response.data.ok) {
+        return response.data.categories;
       }
     } catch (error: any) {
       return rejectWithValue('error');
@@ -559,8 +573,6 @@ export const getNoticeAsync = createAsyncThunk(
     }
   },
 );
-
-
 
 export const getCuponsAsync = createAsyncThunk(
   'auth/getCuponsAsync',

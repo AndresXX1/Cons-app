@@ -91,7 +91,7 @@ export const forgetPasswordCode = createAsyncThunk(
       if (response.data.ok) {
         setIsSubmitting(false);
         routerNext();
-        console.log(response.data)
+        console.log(response.data);
         return response.data.code;
       } else {
         setIsSubmitting(false);
@@ -106,7 +106,6 @@ export const forgetPasswordCode = createAsyncThunk(
     }
   },
 );
-
 
 export const resendVerifyCode = async ({
   setError,
@@ -213,18 +212,24 @@ export const updateSecondData = async ({
   }
 };
 
-export const updateUserNameAndLastName = async ({
+export const updateUserData = async ({
   id,
   first_name,
   last_name,
+  cuil,
+  phone,
+  birthday,
   setError,
   setIsSubmitting,
   dispatch,
   routerNext,
 }: {
   id: string | number;
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
+  cuil?: string;
+  phone?: string;
+  birthday?: Date;
   setError: (error: string) => void;
   setIsSubmitting: (boolean: boolean) => void;
   dispatch: ReturnType<typeof useAppDispatch>;
@@ -232,11 +237,23 @@ export const updateUserNameAndLastName = async ({
 }) => {
   try {
     setError('');
-    const response = await axiosInstance.put(`${apiUrls.updateDataId(id.toString())}`, {
-      first_name,
-      last_name,
-    });
+    const dataToUpdate: {
+      first_name?: string;
+      last_name?: string;
+      cuil?: string;
+      phone?: string;
+      birthday?: Date;
+    } = {};
+    if (first_name) dataToUpdate.first_name = first_name;
+    if (last_name) dataToUpdate.last_name = last_name;
+    if (cuil) dataToUpdate.cuil = cuil;
+    if (phone) dataToUpdate.phone = phone;
+    if (birthday) dataToUpdate.birthday = birthday;
 
+    const response = await axiosInstance.put(
+      `${apiUrls.updateDataId(id.toString())}`,
+      dataToUpdate,
+    );
     if (response.data.ok) {
       dispatch(getUserAsync());
       routerNext();
@@ -246,6 +263,6 @@ export const updateUserNameAndLastName = async ({
   } catch (error: any) {
     setError(error.response?.data?.message || 'Error al actualizar los datos');
   } finally {
-    setIsSubmitting(false); // Asegúrate de restablecer el estado de carga
+    setIsSubmitting(false);
   }
 };

@@ -16,51 +16,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { router } from 'expo-router';
 
-const EditName = () => {
+const EditPhone = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const scrollViewRef = useRef<ScrollView>(null);
   const dispatch = useDispatch<AppDispatch>();
-
   const [error, setError] = useState('');
-  const [inputNameValue, setInputNameValue] = useState( user?.first_name||'');
-  const [inputLastNameValue, setInputLastNameValue] = useState(user?.last_name || '');
-
-  const [nameIsFocused, setNameIsFocused] = useState(false);
-  const [lastNameIsFocused, setLastNameIsFocused] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log(inputNameValue, inputLastNameValue);
+  const [inputPhoneValue, setInputPhoneValue] = useState(user?.phone || '');
+  const [phoneIsFocused, setPhoneIsFocused] = useState(false);
 
-  const handleNameFocus = () => {
-    setNameIsFocused(true);
-  };
-
-  const handleNameBlur = () => {
-    setNameIsFocused(false);
-  };
-
-  const handleLastNameFocus = () => {
-    setLastNameIsFocused(true);
-  };
-
-  const handleLastNameBlur = () => {
-    setLastNameIsFocused(false);
-  };
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const routerNext = () => {
     router.push('/my_data');
   };
 
+  const handlePhoneFocus = () => {
+    setPhoneIsFocused(true);
+  };
+
+  const handlePhoneBlur = () => {
+    setPhoneIsFocused(false);
+  };
+
   const handleSave = async () => {
-    if (!inputNameValue) {
-      setError('El nombre es requerido');
-      return;
-    }
-    if (!inputLastNameValue) {
-      setError('El apellido es requerido');
-      return;
-    }
     if (isSubmitting) {
       return;
     }
@@ -70,8 +49,7 @@ const EditName = () => {
 
     await updateUserData({
       id: userId,
-      first_name: inputNameValue,
-      last_name: inputLastNameValue,
+      phone: inputPhoneValue,
       setError,
       setIsSubmitting,
       dispatch,
@@ -85,34 +63,18 @@ const EditName = () => {
         <FocusAwareStatusBar backgroundColor={colors.gray} barStyle="dark-content" />
         <View style={styles.contentContainer}>
           <TextInput
-            placeholder="Nombre"
+            placeholder="Teléfono"
             autoCapitalize="none"
             placeholderTextColor={colors.gray2}
-            onFocus={handleNameFocus}
-            onBlur={handleNameBlur}
-            onChangeText={text => setInputNameValue(text)}
-            value={inputNameValue}
+            onFocus={handlePhoneFocus}
+            onBlur={handlePhoneBlur}
+            onChangeText={text => setInputPhoneValue(text)}
             editable={!isSubmitting}
+            value={inputPhoneValue}
             style={[
               styles.textInput,
               {
-                borderColor: nameIsFocused ? colors.blue2 : colors.gray2,
-              },
-            ]}
-          />
-          <TextInput
-            placeholder="Apellido"
-            autoCapitalize="none"
-            placeholderTextColor={colors.gray2}
-            onFocus={handleLastNameFocus}
-            onBlur={handleLastNameBlur}
-            value={inputLastNameValue}
-            onChangeText={text => setInputLastNameValue(text)}
-            editable={!isSubmitting}
-            style={[
-              styles.textInput,
-              {
-                borderColor: lastNameIsFocused ? colors.blue2 : colors.gray2,
+                borderColor: phoneIsFocused ? colors.blue2 : colors.gray2,
               },
             ]}
           />
@@ -184,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditName;
+export default EditPhone;

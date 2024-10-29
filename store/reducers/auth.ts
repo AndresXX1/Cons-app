@@ -15,6 +15,8 @@ import {
   getCuponsAsync,
   googleSignIn,
   forgetPassword,
+  getCategoriesAsync,
+
 } from '../actions/auth';
 import { forgetPasswordCode } from '../service/user';
 
@@ -26,6 +28,7 @@ const initialState: AuthSliceState = {
   isOnboarding: false,
   notices: [],
   products: [],
+  categories: [],
   offices: [],
   cupons: [],
   cupons2: [],
@@ -91,6 +94,12 @@ export const authSlice = createSlice({
       })
       .addCase(getProductsAsync.rejected, state => {
         state.products = [];
+      })
+      .addCase(getCategoriesAsync.fulfilled, (state, action) => {
+        state.categories = action.payload;
+      })
+      .addCase(getCategoriesAsync.rejected, state => {
+        state.categories = [];
       })
       .addCase(verifySessionAsync.fulfilled, state => {
         state.isLoading = false;
@@ -180,6 +189,7 @@ export interface AuthSliceState {
   notices: INotice[];
   offices: IOffice[];
   products: any[];
+  categories: any[];
   cupons: any[];
   cupons2: any[];
   cupons3: any[];

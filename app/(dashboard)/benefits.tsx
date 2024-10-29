@@ -55,6 +55,28 @@ const BenefitsScreen = () => {
     router.push('(dashboard)/unregistered_user');
   };
 
+
+
+  const info = [
+    {
+      text: 'Compras',
+      img: 'shopping',
+    },
+    {
+      text: 'Gastronomía',
+      img: 'local_pizza',
+    },
+    {
+      text: 'Indumentaria',
+      img: 'apparel',
+    },
+    {
+      text: 'Educación',
+      img: 'school',
+    },
+  ];
+
+
   // Función para limpiar la búsqueda
   const onClearSearch = useCallback(() => {
     setSearchTerm('');
@@ -277,6 +299,7 @@ const BenefitsScreen = () => {
                     <Text style={styles.sadFace}>😞</Text>
                     <Text style={styles.errorText}>{error}</Text>
                     <Text style={styles.errorText2}>Prueba con otra búsqueda</Text>
+
                   </View>
                 ) : isLoadingCategoryCupons ? (
                   <ActivityIndicator size="large" color={colors.purple} />
@@ -307,7 +330,33 @@ const BenefitsScreen = () => {
             ) : (
               // Renderizar las secciones predeterminadas si no hay búsqueda ni categoría seleccionada
               <>
-                {/* Recomendados */}
+
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={images.image_benefits}
+                    resizeMode="contain"
+                    style={styles.imageBenefits}
+                  />
+                </View>
+                <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
+                <View style={styles.containerCoupons}>
+                  {info?.map((inf, key) => (
+                    <View style={styles.couponsCont} key={key}>
+                      <View style={styles.containerCouponsChildren}>
+                        <Image source={images[inf.img]} style={styles.imageCategory}></Image>
+                      </View>
+                      <Text style={styles.textCouponsChildren}>{inf.text}</Text>
+                    </View>
+                  ))}
+                </View>
+                {!user?.cuponizate && (
+                  <Pressable onPress={routerUnregisteredUser}>
+                    <View style={styles.buttonGreen}>
+                      <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
+                    </View>
+                  </Pressable>
+                )}
+
                 <View style={styles.containerView}>
                   <Text style={styles.textRecom}>Recomendados</Text>
                   <Text style={styles.textView}>Ver más</Text>
@@ -482,6 +531,7 @@ const styles = StyleSheet.create({
   containerError: {
     paddingBottom: 500,
     paddingTop: 60,
+    maxWidth: 250,
   },
   imageBenefits: {
     width: '95%',

@@ -1,7 +1,7 @@
 export const baseUrl = 'https://back5.maylandlabs.com';
 
-//export const baseUrl = 'http://localhost:8001';
-//export const baseUrl = "http://10.0.2.2:8001";
+// export const baseUrl = 'http://localhost:8001';
+// export const baseUrl = "http://10.0.2.2:8001";
 
 export const apiUrls = {
   // user Auth
@@ -25,7 +25,10 @@ export const apiUrls = {
   imgNotice: (url: string) => `${baseUrl}/notice/${url}`,
   //notices
   getNotices: () => `${baseUrl}/api/notice`,
+  // products
   getProducts: () => `${baseUrl}/api/product`,
+  // categories
+  getCategories: () => `${baseUrl}/api/category`,
   //cupons
   createCupon: () => `${baseUrl}/api/cupon/create`,
   getCupons: () => `${baseUrl}/api/cupon`,
