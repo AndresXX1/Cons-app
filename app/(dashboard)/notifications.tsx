@@ -42,7 +42,7 @@ const NotificationsScreen = () => {
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <Text style={styles.title}>Notificaciones</Text>
         <View style={styles.conteinerNotifications}>
-          {notifications.map(item => {
+          {notifications?.map(item => {
             return (
               <View key={item.id} style={styles.notification}>
                 <View>
