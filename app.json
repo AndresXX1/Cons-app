@@ -4,7 +4,7 @@
     "title": "ArgenPesos",
     "description": "Una aplicación que te ayuda a mirar tu beneficios en ArgenPesos",
     "slug": "argen-pesos",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "automatic",
@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "52"
+      "buildNumber": "53"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +23,7 @@
         "backgroundColor": "#13B4EF"
       },
       "permissions": ["android.permission.NOTIFICATIONS"],
-      "versionCode": 52,
+      "versionCode": 53,
       "package": "com.binarysorcerers.argenpesos",
       "googleServicesFile": "./google-services.json"
     },
