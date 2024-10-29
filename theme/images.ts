@@ -97,6 +97,7 @@ export const images: { [key: string]: ImageSourcePropType } = {
   hourglass: require('@/assets/images/hourglass.png'),
   x_modal: require('@/assets/images/x_modal.png'),
   location: require('@/assets/images/location.png'),
+  qr_billetera: require('@/assets/images/qr_billetera.png'),
   // Mockups
   mockup_1: require('@/assets/mockups/01.png'),
   mockup_2: require('@/assets/mockups/02.png'),
