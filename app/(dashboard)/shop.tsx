@@ -90,9 +90,9 @@ const ShopScreen = () => {
             {productsShop.map((dat, key) => (
               <View key={key} style={styles.containerFeatured}>
                 <View style={styles.containerImage}>
-                  <img
+                  <Image
                     src={`https://back7.maylandlabs.com/product/${dat.image}`}
-                    style={styles.imageFeatured}></img>
+                    style={styles.imageFeatured}></Image>
                 </View>
                 <View style={styles.containerFeaturedTwo}>
                   <Text style={styles.textFeaturedBlue}>

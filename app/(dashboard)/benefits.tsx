@@ -330,33 +330,6 @@ const BenefitsScreen = () => {
             ) : (
               // Renderizar las secciones predeterminadas si no hay búsqueda ni categoría seleccionada
               <>
-
-                <View style={styles.imageContainer}>
-                  <Image
-                    source={images.image_benefits}
-                    resizeMode="contain"
-                    style={styles.imageBenefits}
-                  />
-                </View>
-                <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
-                <View style={styles.containerCoupons}>
-                  {info?.map((inf, key) => (
-                    <View style={styles.couponsCont} key={key}>
-                      <View style={styles.containerCouponsChildren}>
-                        <Image source={images[inf.img]} style={styles.imageCategory}></Image>
-                      </View>
-                      <Text style={styles.textCouponsChildren}>{inf.text}</Text>
-                    </View>
-                  ))}
-                </View>
-                {!user?.cuponizate && (
-                  <Pressable onPress={routerUnregisteredUser}>
-                    <View style={styles.buttonGreen}>
-                      <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
-                    </View>
-                  </Pressable>
-                )}
-
                 <View style={styles.containerView}>
                   <Text style={styles.textRecom}>Recomendados</Text>
                   <Text style={styles.textView}>Ver más</Text>
@@ -588,7 +561,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     marginHorizontal: 'auto',
-    marginTop: 43,
+    marginTop: 20,
   },
   buttonGreenText: {
     color: colors.white,

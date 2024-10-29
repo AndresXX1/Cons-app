@@ -2,27 +2,30 @@ import React, { useRef, useState, useEffect } from 'react';
 import { colors, fonts, images } from '@/theme';
 import { View, StyleSheet, Text, Pressable, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { axiosInstance } from '@/store/actions/auth';
 
 const NotificationsScreen = () => {
   const scrollViewRef = useRef<ScrollView>(null);
-  // const [notification, setNotifications] = useState([]);
-  
+  const [notifications, setNotifications] = useState([]);
+
   // const fetchNotifications = async () => {
   //   try {
-  //    const response =  await fetch('https://back5.maylandlabs.com/api/notifications/appNotification')
-  //    const data = await response.json()  
-  //    setNotifications(data)
-  //    console.log(data);
-      
+  //     const response = await axiosInstance.get('/api/notifications/appNotification');
+  //     if (response.data.ok) {
+  //       setNotifications(response.data.notifications);
+  //       console.log(response.data.notifications);
+  //     } else {
+  //       console.error('Error al obtener las notificaciones:', response.data.message);
+  //     }
   //   } catch (error) {
-  //     console.error('Failed to fetch branch notifications:', error);
+  //     console.error('Failed to fetch notifications:', error);
   //   }
   // };
 
-
   // useEffect(() => {
-  //   fetchNotifications()
-  // })
+  //   fetchNotifications();
+  // }, []);
+
   const list = [
     {
       id: 1,
