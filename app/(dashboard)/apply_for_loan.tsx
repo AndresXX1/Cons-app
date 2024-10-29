@@ -1,23 +1,56 @@
-import React, { useRef } from 'react';
-import { colors, fonts } from '@/theme';
-import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { colors, fonts, images } from '@/theme';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  ScrollView,
+  Modal,
+  Image,
+  TextInput,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { useRouter } from 'expo-router';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { FontAwesome } from '@expo/vector-icons';
 
 const ApplyForLoanScreen = () => {
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
 
   const { user, smarter } = useSelector((state: RootState) => state.auth);
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  const isEligible = smarter?.offer;
-  const loanAmount = isEligible ? smarter.offer.maximoCapital : '0';
-  const monthlyPayment = isEligible ? smarter.offer.maximoCuota : '0';
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const branches = [
+    { id: 'VARELAAPP', name: 'Florencio Varela' },
+    { id: 'SOLANOAPP', name: 'San Francisco Solano' },
+    { id: 'SANFERNANDOAPP', name: 'San Fernando' },
+    { id: 'BERAZATEGUIAPP', name: 'Berazategui' },
+    { id: 'SANJUSTOAPP', name: 'San Justo' },
+    { id: 'LANUSAPP', name: 'Lanus' },
+    { id: 'LOMASAPP', name: 'Lomas' },
+    { id: 'SANMIGUEL2APP', name: 'San Miguel 2' },
+    { id: 'AVELLANEDAAPP', name: 'Avellaneda' },
+    { id: 'ONLINEAPP', name: 'Online' },
+    { id: 'QUILMESAPP', name: 'Quilmes' },
+    { id: 'SANJOSEAPP', name: 'San Jose' },
+    { id: 'LINIERSAPP', name: 'Liniers' },
+    { id: 'LAFERREREAPP', name: 'Laferrere' },
+    { id: 'MORENOAPP', name: 'Moreno' },
+    { id: 'DHOGARAPP', name: 'Dulce Hogar' },
+    { id: 'GRANDULCEAPP', name: 'La Gran Dulce' },
+  ];
 
   return (
     <SafeAreaView style={styles.root}>
@@ -27,50 +60,66 @@ const ApplyForLoanScreen = () => {
           style={styles.scrollView}
           ref={scrollViewRef}
           contentContainerStyle={styles.scrollViewContent}>
-          {isEligible ? (
-            <>
-              <Text style={styles.title}>Quiero Mi Préstamo</Text>
-              <LinearGradient
-                start={{ x: 0.5, y: 0 }}
-                end={{ x: 0.5, y: 1 }}
-                colors={['#F3E670', '#FFBA08']}
-                style={styles.gradientBorder}>
-                <View style={styles.containerLoan}>
-                  <Text style={styles.textLoan}>
-                    Préstamo disponible de{'\n'}
-                    <Text style={styles.textPriceLoan}>${loanAmount}</Text>
-                  </Text>
-                </View>
-              </LinearGradient>
-              <Text style={styles.textShare}>
-                12 cuotas <Text style={styles.textShareSpan}>de ${monthlyPayment}</Text>
+          <Text style={styles.title}>Quiero Mi Préstamo</Text>
+          <LinearGradient
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}
+            colors={['#F3E670', '#FFBA08']}
+            style={styles.gradientBorder}>
+            <View style={styles.containerLoan}>
+              <Text style={styles.textLoan}>
+                Préstamo disponible de{'\n'}
+                <Text style={styles.textPriceLoan}>$300.000</Text>
               </Text>
-              <Pressable onPress={() => router.push('borrow_money')} style={styles.buttonRed}>
-                <Text style={styles.textRed}>¡LO QUIERO AHORA!</Text>
-              </Pressable>
-              <Pressable onPress={() => router.push('more_options')}>
-                <Text style={styles.textBlue}>Ver otras opciones</Text>
-              </Pressable>
-            </>
-          ) : (
-            <View style={styles.notEligibleContainer}>
-              <View style={styles.iconContainer}>
-                <FontAwesome name="frown-o" size={64} color="#D32F2F" />
-              </View>
-              <Text style={styles.notEligibleText}>
-                Aun no tienes una oferta disponible,{' '}
-                <Text style={styles.boldText}>contacta a un asesor</Text> para que evalue tu
-                situación.
-              </Text>
-              <Pressable style={styles.contactButton}>
-                <Text style={styles.contactButtonText}>CONTACTAR ASESOR</Text>
-              </Pressable>
             </View>
-          )}
+          </LinearGradient>
+          <View style={styles.buttonRed}>
+            <Pressable onPress={() => openModal()}>
+              <Text style={styles.textRed}>¡LO QUIERO AHORA!</Text>
+            </Pressable>
+          </View>
+          <Pressable onPress={() => openModal()}>
+            <Text style={styles.textBlue}>Ver otras opciones</Text>
+          </Pressable>
+          <Modal visible={isModalVisible} transparent={true} animationType="slide">
+            <View style={styles.overlay}>
+              <View style={styles.modalContainer}>
+                <View style={styles.containerModal}>
+                  <Text style={styles.textSurcursal}>¿En que sucursal te encontrás?</Text>
+                  <Pressable onPress={closeModal}>
+                    <Image source={images.x_modal} style={styles.imgX} />
+                  </Pressable>
+                </View>
+                <View style={styles.containerInput}>
+                  <TextInput
+                    style={styles.inputSearch}
+                    placeholder="Escribe el nombre de sucursal..."
+                    placeholderTextColor={colors.gray2}
+                  />
+                </View>
+                <View style={styles.containerLoca}>
+                  <ScrollView style={styles.scrollView} ref={scrollViewRef}>
+                    {branches.map((branch, index) => {
+                      return (
+                        <View key={index}>
+                          <View style={styles.containerLocation}>
+                            <Image source={images.location} />
+                            <Text style={styles.textLocation}>{branch.name}</Text>
+                          </View>
+                          <View style={styles.line}></View>
+                        </View>
+                      );
+                    })}
+                  </ScrollView>
+                </View>
+
+                <View style={styles.surcursalButton}>
+                  <Text style={styles.textSurcur}>No me encuentro en una sucursal</Text>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
-        <Text style={styles.textFinally}>
-          La otorgación del préstamo está sujeta a{'\n'}análisis de riesgo crediticio.
-        </Text>
       </View>
     </SafeAreaView>
   );
@@ -90,7 +139,6 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingTop: 52,
   },
   back: {
     width: '100%',
@@ -121,7 +169,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
     marginBottom: 40,
-    marginTop: 52,
   },
   containerLoan: {
     backgroundColor: colors.blue2,
@@ -240,6 +287,100 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontFamily: fonts.gotham.bold,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '90%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  containerModal: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'center',
+  },
+  textSurcursal: {
+    color: colors.texts,
+    fontSize: 16,
+    fontFamily: fonts.gotham.bold,
+    fontWeight: '400',
+  },
+  imgX: {
+    width: 24,
+    height: 24,
+  },
+  containerLoca: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '100%',
+    marginTop: 20,
+    maxHeight: 190,
+    overflow: 'hidden',
+  },
+  containerLocation: {
+    flexDirection: 'row',
+    display: 'flex',
+    gap: 10,
+    width: 'auto',
+    alignItems: 'center',
+  },
+  line: {
+    width: 280,
+    height: 1,
+    backgroundColor: colors.texts,
+    marginVertical: 20,
+    marginRight: 15,
+  },
+  textLocation: {
+    fontSize: 14,
+    fontFamily: fonts.gotham.bold,
+    color: colors.texts,
+    fontWeight: '700',
+  },
+  surcursalButton: {
+    backgroundColor: colors.blue2,
+    height: 41,
+    width: 290,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textSurcur: {
+    color: colors.white,
+    fontSize: 14,
+    fontFamily: fonts.gotham.semiBold,
+    fontWeight: '400',
+  },
+  inputSearch: {
+    flex: 1,
+    paddingVertical: 15,
+    backgroundColor: colors.white,
+    paddingLeft: 8,
+    fontFamily: fonts.gotham.regular,
+    fontSize: 14,
+  },
+  containerInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 25,
+    marginBottom: 15,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    borderWidth: 2,
+    borderColor: colors.texts,
+    width: 290,
   },
 });
 

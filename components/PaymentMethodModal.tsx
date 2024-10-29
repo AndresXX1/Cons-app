@@ -1,4 +1,5 @@
 // PaymentMethodModal.tsx
+import { colors, fonts, images } from '@/theme';
 import React from 'react';
 import { Modal, View, Text, StyleSheet, Pressable, Image } from 'react-native';
 
@@ -72,11 +73,13 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
     <Modal visible={isVisible} transparent={true} animationType="slide">
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.title}>{modalContent.title}</Text>
+          <View style={styles.containerModal}>
+            <Text style={styles.textSurcursal}>{modalContent.title}</Text>
+            <Pressable onPress={onClose}>
+              <Image source={images.x_modal} style={styles.imgX} />
+            </Pressable>
+          </View>
           <Text style={styles.description}>{modalContent.description}</Text>
-          <Pressable onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>Cerrar</Text>
-          </Pressable>
         </View>
       </View>
     </Modal>
@@ -117,9 +120,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     borderRadius: 5,
   },
-  closeButtonText: {
-    color: 'white',
-    fontSize: 16,
+  containerModal: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 11,
+  },
+  textSurcursal: {
+    color: colors.texts,
+    fontSize: 18,
+    fontFamily: fonts.gotham.bold,
+    fontWeight: '700',
+  },
+  imgX: {
+    width: 24,
+    height: 24,
   },
 });
 
