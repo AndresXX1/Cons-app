@@ -16,36 +16,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { router } from 'expo-router';
 
-const EditName = () => {
+const EditCuil = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const scrollViewRef = useRef<ScrollView>(null);
   const dispatch = useDispatch<AppDispatch>();
-
   const [error, setError] = useState('');
-  const [inputNameValue, setInputNameValue] = useState( user?.first_name||'');
-  const [inputLastNameValue, setInputLastNameValue] = useState(user?.last_name || '');
-
-  const [nameIsFocused, setNameIsFocused] = useState(false);
-  const [lastNameIsFocused, setLastNameIsFocused] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log(inputNameValue, inputLastNameValue);
+  const [inputCUILValue, setInputCUILValue] = useState(user?.cuil || '');
+  const [cUILIsFocused, setCUILIsFocused] = useState(false);
 
-  const handleNameFocus = () => {
-    setNameIsFocused(true);
+  const handleCUILFocus = () => {
+    setCUILIsFocused(true);
   };
 
-  const handleNameBlur = () => {
-    setNameIsFocused(false);
-  };
-
-  const handleLastNameFocus = () => {
-    setLastNameIsFocused(true);
-  };
-
-  const handleLastNameBlur = () => {
-    setLastNameIsFocused(false);
+  const handleCUILBlur = () => {
+    setCUILIsFocused(false);
   };
 
   const routerNext = () => {
@@ -53,12 +38,8 @@ const EditName = () => {
   };
 
   const handleSave = async () => {
-    if (!inputNameValue) {
-      setError('El nombre es requerido');
-      return;
-    }
-    if (!inputLastNameValue) {
-      setError('El apellido es requerido');
+    if (!inputCUILValue) {
+      setError('El cuil es requerido');
       return;
     }
     if (isSubmitting) {
@@ -70,56 +51,37 @@ const EditName = () => {
 
     await updateUserData({
       id: userId,
-      first_name: inputNameValue,
-      last_name: inputLastNameValue,
+      cuil: inputCUILValue,
       setError,
       setIsSubmitting,
       dispatch,
       routerNext,
     });
   };
-
+  const scrollViewRef = useRef<ScrollView>(null);
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.gray} barStyle="dark-content" />
         <View style={styles.contentContainer}>
           <TextInput
-            placeholder="Nombre"
+            placeholder="CUIL"
             autoCapitalize="none"
             placeholderTextColor={colors.gray2}
-            onFocus={handleNameFocus}
-            onBlur={handleNameBlur}
-            onChangeText={text => setInputNameValue(text)}
-            value={inputNameValue}
+            onFocus={handleCUILFocus}
+            onBlur={handleCUILBlur}
+            value={inputCUILValue}
+            onChangeText={text => setInputCUILValue(text)}
             editable={!isSubmitting}
             style={[
               styles.textInput,
               {
-                borderColor: nameIsFocused ? colors.blue2 : colors.gray2,
-              },
-            ]}
-          />
-          <TextInput
-            placeholder="Apellido"
-            autoCapitalize="none"
-            placeholderTextColor={colors.gray2}
-            onFocus={handleLastNameFocus}
-            onBlur={handleLastNameBlur}
-            value={inputLastNameValue}
-            onChangeText={text => setInputLastNameValue(text)}
-            editable={!isSubmitting}
-            style={[
-              styles.textInput,
-              {
-                borderColor: lastNameIsFocused ? colors.blue2 : colors.gray2,
+                borderColor: cUILIsFocused ? colors.blue2 : colors.gray2,
               },
             ]}
           />
         </View>
-
         {error !== '' && <Text style={styles.error}>{error}</Text>}
-
         <View style={styles.containerNext}>
           <Pressable style={styles.buttonNext} onPress={handleSave}>
             {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
@@ -184,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditName;
+export default EditCuil;

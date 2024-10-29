@@ -43,7 +43,10 @@ const disableNavbarPages = [
   'unregistered_user',
   'user_high',
   'edit_name',
-  'payment_methods'
+  'edit_cuil',
+  'edit_birthdate',
+  'edit_phone',
+  'payment_methods',
 ];
 
 const DashboardLayout = () => {
@@ -160,7 +163,7 @@ const DashboardLayout = () => {
           headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
         }}
       />
-        <Tabs.Screen
+      <Tabs.Screen
         name="payment_methods"
         options={{
           headerTransparent: true,
@@ -273,6 +276,39 @@ const DashboardLayout = () => {
           headerTransparent: true,
           headerStyle: { backgroundColor: colors.transparent },
           title: 'edit_name',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoMyData title={'Volver atrás'} color={colors.blue} />,
+        }}
+      />
+      <Tabs.Screen
+        name="edit_cuil"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'edit_cuil',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoMyData title={'Volver atrás'} color={colors.blue} />,
+        }}
+      />
+      <Tabs.Screen
+        name="edit_birthdate"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'edit_birthdate',
+          headerTitle: () => null,
+          headerTitleAlign: 'center',
+          headerLeft: () => <StackHeaderLeftGoMyData title={'Volver atrás'} color={colors.blue} />,
+        }}
+      />
+      <Tabs.Screen
+        name="edit_phone"
+        options={{
+          headerTransparent: true,
+          headerStyle: { backgroundColor: colors.transparent },
+          title: 'edit_phone',
           headerTitle: () => null,
           headerTitleAlign: 'center',
           headerLeft: () => <StackHeaderLeftGoMyData title={'Volver atrás'} color={colors.blue} />,
