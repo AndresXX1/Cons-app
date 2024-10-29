@@ -568,8 +568,12 @@ export const getCuponsAsync = createAsyncThunk(
     try {
       const response = await axiosInstance.get(apiUrls.getCupons());
 
-      if (response.data.ok) {
-        return Array.isArray(response.data.cupons) ? response.data.cupons : [];
+      if (response.data.ok) {        
+        return {
+          cupons: response.data.cupons,
+          cupons2: response.data.cupons2,
+          cupons3: response.data.cupons3
+        };
       } else {
         return rejectWithValue('error');
       }

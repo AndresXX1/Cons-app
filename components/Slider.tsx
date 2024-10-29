@@ -13,7 +13,7 @@ const Slider = ({ data }) => {
 
   const keyExtractor = useCallback((_, index) => index.toString(), []);
 
-  const renderItem = useCallback(({ item, index }) => (
+  const renderItem = useCallback(({ item , index }) => (
     <View style={styles.slide}>
       <SliderItem item={data[index * 2]} index={index * 2} />
       {index * 2 + 1 < data.length && (
@@ -35,7 +35,7 @@ const Slider = ({ data }) => {
   };
 
   const renderDots = () => {
-    const totalPages = Math.ceil(data.length / pageSize);
+    const totalPages = Math.ceil(data?.length / pageSize);
     return (
       <View style={styles.dotContainer}>
         {Array.from({ length: totalPages }, (_, index) => (

@@ -119,7 +119,9 @@ const SingleCupon = () => {
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <View style={styles.back}></View>
+        <View style={styles.imageContainer}>
         <Image source={{ uri: uri as string }} style={styles.imageRecom}></Image>
+        </View>
         <Text style={styles.textDescount}>{descuento}</Text>
         <Text style={styles.textTitle}>{nombre}</Text>
         <Text style={styles.textBenefits}>Puedes usar este beneficio en:</Text>
@@ -180,6 +182,10 @@ const styles = StyleSheet.create({
     gap: 9,
     marginVertical: 24,
   },
+  imageContainer: {
+    borderRadius: 1000,
+    overflow: 'hidden',
+  },
   arrow: {
     width: 14,
     height: 24,
@@ -194,6 +200,7 @@ const styles = StyleSheet.create({
     height: 149,
     marginTop: 37,
     marginHorizontal: 'auto',
+    borderRadius: 20,
   },
   textDescount: {
     textAlign: 'center',
@@ -274,6 +281,7 @@ const styles = StyleSheet.create({
     lineHeight: 26.2,
     fontFamily: fonts.gotham.regular,
     marginBottom: 21,
+    textAlign: 'center',
   },
   containerRest: {
     marginHorizontal: 25,

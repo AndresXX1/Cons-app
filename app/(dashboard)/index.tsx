@@ -110,7 +110,7 @@ const HomeScreen = () => {
         </Pressable>
         <View style={styles.line}></View>
         
-        <Slider data={offices.slice(0, 6)}/>
+        <Slider data={offices?.slice(0, 6)}/>
 
         <Pressable onPress={() => router.push('branch_offices')}>
           <Text style={styles.textBlue}>Ver todas las sucursales</Text>
