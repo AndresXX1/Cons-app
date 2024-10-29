@@ -1,6 +1,6 @@
-export const baseUrl = 'https://back5.maylandlabs.com';
+// export const baseUrl = 'https://back5.maylandlabs.com';
 
-// export const baseUrl = 'http://localhost:8001';
+export const baseUrl = 'http://localhost:8001';
 // export const baseUrl = "http://10.0.2.2:8001";
 
 export const apiUrls = {
@@ -14,6 +14,7 @@ export const apiUrls = {
   logOut: () => `${baseUrl}/api/auth/log-out`,
   forgetPassword: () => `${baseUrl}/api/auth/forget-password`,
   forgetPasswordCode: () => `${baseUrl}/api/auth/forget-password-code`,
+  applyForLoan: (branchName: string) => `${baseUrl}/api/user/getOffer/12/${branchName}`,
   verifyEmail: () => `${baseUrl}/api/auth/verify-email`,
   setPassword: () => `${baseUrl}/api/auth/forget-password-new-password`,
   getUser: () => `/api/user`,

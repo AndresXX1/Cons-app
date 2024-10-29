@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
+import { applyForLoan } from '@/store/service/user';
 
 
 const ApplyForLoanScreen = () => {
@@ -34,6 +35,12 @@ const ApplyForLoanScreen = () => {
       setModalVisible(false);
     }, [])
   );
+
+  const handlePush = async (branchName: string) => {
+    await applyForLoan(branchName)
+    closeModal();
+    router.push(`/borrow_money`);
+  }
 
   const closeModal = () => {
     setModalVisible(false);
@@ -121,8 +128,7 @@ const ApplyForLoanScreen = () => {
                           <View key={index}>
                             <Pressable
                               onPress={() => {
-                                closeModal(); // Cierra el modal antes de navegar
-                                router.push(`/borrow_money`);
+                                handlePush(branch.id)
                               }}>
                               <View style={styles.containerLocation}>
                                 <Image source={images.location} />
