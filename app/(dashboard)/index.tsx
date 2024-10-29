@@ -1,7 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { images, fonts, colors } from '@/theme';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, Dimensions, Linking } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Pressable,
+  Dimensions,
+  Linking,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import NavBar from '@/components/NavBar';
@@ -11,9 +20,7 @@ import Banners from '@/components/Banners';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { registerViewTime } from '@/store/service/timer';
-import  Slider  from '@/components/Slider';
-
-
+import Slider from '@/components/Slider';
 
 const { width } = Dimensions.get('window');
 
@@ -28,9 +35,9 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchOffices = async () => {
       try {
-       const response =  await fetch('https://back5.maylandlabs.com/api/branch')
-       const {branches} = await response.json()  
-       setOffices(branches) // branches 
+        const response = await fetch('https://back5.maylandlabs.com/api/branch');
+        const { branches } = await response.json();
+        setOffices(branches); // branches
       } catch (error) {
         console.error('Failed to fetch branch offices:', error);
       }
@@ -38,7 +45,6 @@ const HomeScreen = () => {
 
     fetchOffices();
   }, []);
-  
 
   useFocusEffect(
     React.useCallback(() => {
@@ -47,7 +53,6 @@ const HomeScreen = () => {
       }
     }, []),
   );
-
 
   useFocusEffect(
     useCallback(() => {
@@ -60,7 +65,7 @@ const HomeScreen = () => {
         clearInterval(intervalId);
         registerViewTime({ time: seconds, view: 'home' });
       };
-    }, [])
+    }, []),
   );
 
   const contact = [
@@ -86,95 +91,93 @@ const HomeScreen = () => {
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <View style={styles.containerMain}>
-        <NavBar />
-        {<Banners banners={banners?.home} />}
+          <NavBar />
+          {<Banners banners={banners?.home} />}
 
-        {
-          smarter?.credits && smarter?.credits.length > 0 && (
-            <View style={styles.containerTitle}>
-              <Text style={styles.text}>¡Llevate</Text>
-              <Text style={styles.textBold}> HOY</Text>
-              <Text style={styles.text}> tus</Text>
-              <Text style={styles.textBold}> $300.000!</Text>
-            </View>
-          )
-        }
-        
-        <Pressable  style={styles.button} onPress={() => router.push('apply_for_loan')}>
-          {({ pressed }) => (
-          <View style={[styles.buttonContainer, { opacity: pressed ? 0.5 : 1 }]}>
-          <Image source={images.money_white} style={styles.moneyIcon} />
-          <Text style={styles.textButton}>QUIERO MI PRÉSTAMO</Text>
+          <View style={styles.containerTitle}>
+            <Text style={styles.text}>¡Llevate</Text>
+            <Text style={styles.textBold}> HOY</Text>
+            <Text style={styles.text}> tus</Text>
+            <Text style={styles.textBold}> $300.000!</Text>
           </View>
-          )}
-        </Pressable>
-        <View style={styles.line}></View>
-        
-        <Slider data={offices.slice(0, 6)}/>
 
-        <Pressable onPress={() => router.push('branch_offices')}>
-          <Text style={styles.textBlue}>Ver todas las sucursales</Text>
-        </Pressable>
-
-        <View style={styles.containerPay}>
-          <Text style={styles.payTitle}>Medios de pago</Text>
-          <Text style={styles.payTitleTwo}>para tu cuota</Text>
-          <View style={styles.payContainer}>
-            <View style={styles.payContainerTwo}>
-              <Image source={images.pay_1} style={styles.image_pay}></Image>
-              <Text style={styles.textPay}>Pago</Text>
-              <Text style={styles.textPay}>en línea</Text>
-            </View>
-            <View style={styles.payContainerTwo}>
-              <Image source={images.pay_2} style={styles.image_pay}></Image>
-              <Text style={styles.textPay}>Pago</Text>
-              <Text style={styles.textPay}>fácil</Text>
-            </View>
-          </View>
-          <View style={styles.payContainer}>
-            <View style={styles.payContainerTwo}>
-              <Image source={images.pay_3} style={styles.image_pay}></Image>
-              <Text style={styles.textPay}>Mercado</Text>
-              <Text style={styles.textPay}>Pago</Text>
-            </View>
-            <View style={styles.payContainerTwo}>
-              <Image source={images.pay_4} style={styles.image_pay}></Image>
-              <Text style={styles.textPay}>Transferencia/Deposito</Text>
-            </View>
-          </View>
-          <Pressable onPress={() => router.push('payment_methods')}>
-          {({ pressed }) => (
-            <Text style={[styles.textPayFinally, { opacity: pressed ? 0.5 : 1 }]}>Ver todos los medios de pago</Text>
-          )}
+          <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
+            {({ pressed }) => (
+              <View style={[styles.buttonContainer, { opacity: pressed ? 0.5 : 1 }]}>
+                <Image source={images.money_white} style={styles.moneyIcon} />
+                <Text style={styles.textButton}>QUIERO MI PRÉSTAMO</Text>
+              </View>
+            )}
           </Pressable>
+          <View style={styles.line}></View>
+
+          <Slider data={offices.slice(0, 6)} />
+
+          <Pressable onPress={() => router.push('branch_offices')}>
+            <Text style={styles.textBlue}>Ver todas las sucursales</Text>
+          </Pressable>
+
+          <View style={styles.containerPay}>
+            <Text style={styles.payTitle}>Medios de pago</Text>
+            <Text style={styles.payTitleTwo}>para tu cuota</Text>
+            <View style={styles.payContainer}>
+              <View style={styles.payContainerTwo}>
+                <Image source={images.pay_1} style={styles.image_pay}></Image>
+                <Text style={styles.textPay}>Pago</Text>
+                <Text style={styles.textPay}>en línea</Text>
+              </View>
+              <View style={styles.payContainerTwo}>
+                <Image source={images.pay_2} style={styles.image_pay}></Image>
+                <Text style={styles.textPay}>Pago</Text>
+                <Text style={styles.textPay}>fácil</Text>
+              </View>
+            </View>
+            <View style={styles.payContainer}>
+              <View style={styles.payContainerTwo}>
+                <Image source={images.pay_3} style={styles.image_pay}></Image>
+                <Text style={styles.textPay}>Mercado</Text>
+                <Text style={styles.textPay}>Pago</Text>
+              </View>
+              <View style={styles.payContainerTwo}>
+                <Image source={images.pay_4} style={styles.image_pay}></Image>
+                <Text style={styles.textPay}>Transferencia/Deposito</Text>
+              </View>
+            </View>
+            <Pressable onPress={() => router.push('payment_methods')}>
+              {({ pressed }) => (
+                <Text style={[styles.textPayFinally, { opacity: pressed ? 0.5 : 1 }]}>
+                  Ver todos los medios de pago
+                </Text>
+              )}
+            </Pressable>
+          </View>
+          <Text style={styles.textContact}>¿Tenés dudas?</Text>
+          <Text style={styles.textContactTwo}>Contactanos</Text>
+
+          <Text style={styles.textHour}>Horario de atención:</Text>
+          <Text style={styles.textHourTwo}>Lunes a viernes de 8 a 20hs</Text>
+          <Text style={styles.textHourThree}>Sábados de 9 a 13hs.</Text>
+
+          {contact?.map((data, key) => (
+            <Pressable
+              key={key}
+              onPress={() => Linking.openURL(data.redirect)} // Open respective link on press
+            >
+              {({ pressed }) => (
+                <LinearGradient
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  colors={['#00A5E7', '#4DCCFF']}
+                  style={[styles.containerContact, { opacity: pressed ? 0.5 : 1 }]}
+                  key={key}>
+                  <Image source={images[data.image]} style={styles.contactImage}></Image>
+                  <Text style={styles.contactText}>{data.title}</Text>
+                </LinearGradient>
+              )}
+            </Pressable>
+          ))}
+          <View style={{ marginBottom: 80 }}></View>
         </View>
-        <Text style={styles.textContact}>¿Tenés dudas?</Text>
-        <Text style={styles.textContactTwo}>Contactanos</Text>
-
-        <Text style={styles.textHour}>Horario de atención:</Text>
-        <Text style={styles.textHourTwo}>Lunes a viernes de 8 a 20hs</Text>
-        <Text style={styles.textHourThree}>Sábados de 9 a 13hs.</Text>
-
-        {contact?.map((data, key) => (
-          <Pressable
-          key={key}
-          onPress={() => Linking.openURL(data.redirect)} // Open respective link on press
-          >
-          {({ pressed }) => (
-          <LinearGradient
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          colors={['#00A5E7', '#4DCCFF']}
-          style={[styles.containerContact, {opacity: pressed ? 0.5 : 1 }]}
-            key={key}>
-            <Image source={images[data.image]} style={styles.contactImage}></Image>
-            <Text style={styles.contactText}>{data.title}</Text>
-          </LinearGradient>
-          )}
-          </Pressable>
-        ))}
-        <View style={{ marginBottom: 80 }}></View>
-          </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue2,
   },
   containerMain: {
-    backgroundColor: "#F1F2F2",
+    backgroundColor: '#F1F2F2',
   },
   banner: {
     width: width - 32,
@@ -354,6 +357,7 @@ const styles = StyleSheet.create({
     lineHeight: 20.8,
     fontFamily: fonts.gotham.bold,
     textAlign: 'center',
+    maxWidth: 150,
   },
   textPayFinally: {
     fontSize: 20,

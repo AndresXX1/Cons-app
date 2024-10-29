@@ -41,7 +41,9 @@ const MyDataScreen = () => {
               {user?.cuil.slice(0, 2)}-{user?.cuil.slice(2, 10)}-{user?.cuil.slice(10)}
             </Text>
           </View>
-          <Image source={images.edit_square_blue} style={styles.editIcon} />
+          <Pressable onPress={() => router.push('edit_cuil')}>
+            <Image source={images.edit_square_blue} style={styles.editIcon} />
+          </Pressable>
         </View>
         <View style={styles.containerItem}>
           <Image source={images.cake_blue} style={styles.mainIcon} />
@@ -54,7 +56,9 @@ const MyDataScreen = () => {
                 : 'Fecha no disponible'}
             </Text>
           </View>
-          <Image source={images.edit_square_blue} style={styles.editIcon} />
+          <Pressable onPress={() => router.push('edit_birthdate')}>
+            <Image source={images.edit_square_blue} style={styles.editIcon} />
+          </Pressable>
         </View>
         <View style={styles.containerItem}>
           <Image source={images.dock_blue} style={styles.mainIcon} />
@@ -65,7 +69,9 @@ const MyDataScreen = () => {
               {user?.phone.slice(9)}
             </Text>
           </View>
-          <Image source={images.edit_square_blue} style={styles.editIcon} />
+          <Pressable onPress={() => router.push('edit_phone')}>
+            <Image source={images.edit_square_blue} style={styles.editIcon} />
+          </Pressable>
         </View>
         <View style={styles.containerItem}>
           <Image source={images.mail_blue} style={styles.mainIcon} />

@@ -3,7 +3,6 @@ import { View, Dimensions, StyleSheet, FlatList, Pressable, Text } from 'react-n
 import SliderItem from './SliderItem';
 import { images, fonts, colors } from '@/theme';
 
-
 const { width } = Dimensions.get('window');
 
 const Slider = ({ data }) => {
@@ -13,21 +12,24 @@ const Slider = ({ data }) => {
 
   const keyExtractor = useCallback((_, index) => index.toString(), []);
 
-  const renderItem = useCallback(({ item, index }) => (
-    <View style={styles.slide}>
-      <SliderItem item={data[index * 2]} index={index * 2} />
-      {index * 2 + 1 < data.length && (
-        <SliderItem item={data[index * 2 + 1]} index={index * 2 + 1} />
-      )}
-    </View>
-  ), [data]);
+  const renderItem = useCallback(
+    ({ item, index }) => (
+      <View style={styles.slide}>
+        <SliderItem item={data[index * 2]} index={index * 2} />
+        {index * 2 + 1 < data.length && (
+          <SliderItem item={data[index * 2 + 1]} index={index * 2 + 1} />
+        )}
+      </View>
+    ),
+    [data],
+  );
 
-  const handleScroll = useCallback((event) => {
+  const handleScroll = useCallback(event => {
     const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
     setActiveIndex(newIndex);
   }, []);
 
-  const scrollToIndex = (index) => {
+  const scrollToIndex = index => {
     if (flatListRef.current) {
       flatListRef.current.scrollToIndex({ index, animated: true });
       setActiveIndex(index);
@@ -51,30 +53,28 @@ const Slider = ({ data }) => {
 
   return (
     <View>
-    <View style={styles.containerOffices}>
-          <Text style={styles.textOffices}>
-            📍 Nuestras <Text style={styles.span}>sucursales</Text>
-          </Text>
-          <View style={styles.containerCircle}>
-          {renderDots()}
-          </View>
-        </View>
-    <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        data={Array.from({ length: Math.ceil(data.length / pageSize) }, (_, i) => i)}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={width}
-        decelerationRate="fast"
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
-      />
-    </View>
+      <View style={styles.containerOffices}>
+        <Text style={styles.textOffices}>
+          📍 Nuestras <Text style={styles.span}>sucursales</Text>
+        </Text>
+        <View style={styles.containerCircle}>{renderDots()}</View>
+      </View>
+      <View style={styles.container}>
+        <FlatList
+          ref={flatListRef}
+          data={Array.from({ length: Math.ceil(data.length / pageSize) }, (_, i) => i)}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={width}
+          decelerationRate="fast"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          contentContainerStyle={{ paddingHorizontal: 16 }}
+        />
+      </View>
     </View>
   );
 };
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     width: width, // Full width of screen
     justifyContent: 'flex-start',
     gap: 16,
+    paddingLeft: 25,
   },
   containerOffices: {
     display: 'flex',
