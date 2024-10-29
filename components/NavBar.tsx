@@ -46,20 +46,20 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
           </Text>
         </View>
         <View style={styles.menuInfo}>
-          <Pressable style={styles.level}>
-            {smarter?.credits[0].categoria ? 
-              <Image source={images[smarter.credits[0].categoria]} style={styles.platinumIcon} resizeMode="cover" />
-              :
-              <Image source={images.sinRango} style={styles.platinumIcon} resizeMode="cover" />
-            }
-            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.regular }}>
-              Estas en el nivel
-            </Text>
-            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
-              {' '}
-              {smarter ? smarter.credits[0].categoria : "Sin Rango"}
-            </Text>
-          </Pressable>
+        <Pressable style={styles.level}>
+  {smarter && smarter.credits && smarter.credits.length > 0 && smarter.credits[0].categoria ? 
+    <Image source={images[smarter.credits[0].categoria]} style={styles.platinumIcon} resizeMode="cover" />
+    :
+    <Image source={images.sinRango} style={styles.platinumIcon} resizeMode="cover" />
+  }
+  <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.regular }}>
+    Estas en el nivel
+  </Text>
+  <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
+    {' '}
+    {smarter && smarter.credits && smarter.credits.length > 0 ? smarter.credits[0].categoria : "Sin Rango"}
+  </Text>
+</Pressable>
           <Pressable style={styles.points}>
             <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
               Tenés {user?.points} puntos
