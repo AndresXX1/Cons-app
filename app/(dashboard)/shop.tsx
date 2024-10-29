@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { colors, images, fonts } from '@/theme';
@@ -9,9 +9,23 @@ import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { registerViewTime } from '@/store/service/timer';
+import { axiosInstance } from '@/store/actions/auth';
+import { apiUrls } from '@/store/api';
+import axios from 'axios';
 
 const ShopScreen = () => {
   const { products } = useSelector((state: RootState) => state.auth);
+  const [productsShop, setProductsShop] = useState<any[]>(products);
+  const [categories, setCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    axiosInstance.get(apiUrls.getCategories()).then(res => setCategories(res.data.categories));
+  }, []);
+
+  async function getProductsByCategory(categoryId: number) {
+    const response = await axios.put('https://back5.maylandlabs.com/api/product', { categoryIds: [categoryId] });
+    setProductsShop(response.data.products.products);
+  }
 
   const scrollViewRef = useRef<ScrollView>(null);
   interface data {
@@ -34,12 +48,12 @@ const ShopScreen = () => {
       const intervalId = setInterval(() => {
         seconds += 1;
       }, 1000);
-      
+
       return () => {
         clearInterval(intervalId);
         registerViewTime({ time: seconds, view: 'argencompras' });
       };
-    }, [])
+    }, []),
   );
 
   return (
@@ -48,46 +62,52 @@ const ShopScreen = () => {
       <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <NavBar />
         <View style={styles.container}>
-          <View style={styles.containerLogo}>
-            <View style={styles.ContainerLogoDest}>
-              <Image source={images.logo_featured} style={styles.logo}></Image>
-              <Text style={styles.textLogo}>Productos{'\n'}destacados</Text>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <View style={styles.containerLogo}>
+              {categories.map(category => (
+                <View key={category.id} style={styles.ContainerLogoDest}>
+                  <Pressable onPress={() => getProductsByCategory(category.id)}>
+                    <Image
+                      source={{
+                        uri: 'https://cdn.discordapp.com/attachments/888839207185948763/1300675873778962432/assets.png?ex=6721b44d&is=672062cd&hm=f84c526ad11576c0e2a20920293fc822cd31e7c2428c39368d716413309cc057&',
+                      }}
+                      style={styles.logo}></Image>
+                  </Pressable>
+                  <Text style={styles.textLogo}>{category.name}</Text>
+                </View>
+              ))}
             </View>
-            <View style={styles.ContainerLogoDest}>
-              <Image source={images.logo_electro} style={styles.logo}></Image>
-              <Text style={styles.textLogo}>Electro</Text>
-            </View>
-            <View style={styles.ContainerLogoDest}>
-              <Image source={images.logo_phone} style={styles.logo}></Image>
-              <Text style={styles.textLogo}>Celulares</Text>
-            </View>
-          </View>
-          <View style={styles.containerPoints}>
-            <View style={styles.containerPointsRed}></View>
-            <View style={styles.containerPointsGrey}></View>
-          </View>
-          <View style={styles.line}></View>
+          </ScrollView>
 
-          <View style={styles.containerFilter}>
+          {/* <View style={styles.containerFilter}>
             <Image source={images.filter} style={styles.imageFilter}></Image>
             <Text style={styles.textFilter}>Filtrar</Text>
-          </View>
+          </View> */}
 
           <Text style={styles.textProduct}>PRODUCTOS DESTACADOS</Text>
 
           <View style={styles.containerFeaturedFather}>
-            {products.map((dat, key) => (
+            {productsShop.map((dat, key) => (
               <View key={key} style={styles.containerFeatured}>
                 <View style={styles.containerImage}>
-                <Image
-                  source={{ uri: dat.images[1] ? dat.images[1].src : dat.images[0].src }}
-                  style={styles.imageFeatured}></Image>
+                  <img
+                    src={`https://back7.maylandlabs.com/product/${dat.image}`}
+                    style={styles.imageFeatured}></img>
                 </View>
                 <View style={styles.containerFeaturedTwo}>
-                  <Text style={styles.textFeaturedBlue}>{dat.name.es.length > 35 ? dat.name.es.substring(0, 35) + "..." : dat.name.es}</Text>
-                  <Text style={styles.textFeaturedRed}>  ${parseInt(dat.variants[0].price, 10).toLocaleString('es-ES')}</Text>
-                  <Pressable style={styles.buttonRed}><Text style={styles.buttonText}>COMPRAR AHORA</Text></Pressable>
-                  <Pressable style={styles.buttonBlue}><Text style={styles.buttonText}>+ INFO</Text></Pressable>
+                  <Text style={styles.textFeaturedBlue}>
+                    {dat.name.length > 35 ? dat.name.es.substring(0, 35) + '...' : dat.name.es}
+                  </Text>
+                  <Text style={styles.textFeaturedRed}>
+                    {' '}
+                    ${parseInt(dat.price, 10).toLocaleString('es-ES')}
+                  </Text>
+                  <Pressable style={styles.buttonRed}>
+                    <Text style={styles.buttonText}>COMPRAR AHORA</Text>
+                  </Pressable>
+                  <Pressable style={styles.buttonBlue}>
+                    <Text style={styles.buttonText}>+ INFO</Text>
+                  </Pressable>
                 </View>
               </View>
             ))}
@@ -191,6 +211,7 @@ const styles = StyleSheet.create({
     lineHeight: 26.2,
     marginBottom: 30,
     textTransform: 'uppercase',
+    paddingTop: 80,
   },
   containerFeaturedFather: {
     display: 'flex',
@@ -214,14 +235,14 @@ const styles = StyleSheet.create({
   containerImage: {
     overflow: 'hidden',
     width: 163,
-    height:224,
+    height: 224,
     borderRightColor: colors.gray4,
     borderRightWidth: 2,
     borderRadius: 12,
   },
   imageFeatured: {
     width: 163,
-    height: "100%",
+    height: '100%',
     borderRadius: 12,
     backgroundColor: '#F3F4F5',
     objectFit: 'cover',
@@ -249,8 +270,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.bold,
     borderRadius: 100,
     justifyContent: 'center',
-    maxHeight: 32
-
+    maxHeight: 32,
   },
   buttonBlue: {
     flex: 1,
@@ -261,8 +281,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 13,
     justifyContent: 'center',
-    maxHeight: 32
-
+    maxHeight: 32,
   },
   buttonText: {
     textAlign: 'center',
@@ -270,7 +289,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 12,
     textTransform: 'uppercase',
-  }
+  },
 });
 
 export default ShopScreen;
