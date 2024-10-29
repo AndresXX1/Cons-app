@@ -228,6 +228,7 @@ export interface ICredito {
   capital: number;
   fechaLiquidacion: string;
   estado: string;
+  categoria: string;
 }
 
 export interface IOffer {

@@ -12,7 +12,7 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
   const router = useRouter();
   const pathName = usePathname();
   const dispatch = useDispatch<AppDispatch>();
-  const { user, banners } = useSelector((state: RootState) => state.auth);
+  const { user, banners, smarter } = useSelector((state: RootState) => state.auth);
 
   if (pathName === '/') {
     return (
@@ -47,13 +47,17 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
         </View>
         <View style={styles.menuInfo}>
           <Pressable style={styles.level}>
-            <Image source={images.platinum} style={styles.platinumIcon} resizeMode="cover" />
+            {smarter?.credits[0].categoria ? 
+              <Image source={images[smarter.credits[0].categoria]} style={styles.platinumIcon} resizeMode="cover" />
+              :
+              <Image source={images.sinRango} style={styles.platinumIcon} resizeMode="cover" />
+            }
             <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.regular }}>
               Estas en el nivel
             </Text>
             <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
               {' '}
-              Platino
+              {smarter ? smarter.credits[0].categoria : "Sin Rango"}
             </Text>
           </Pressable>
           <Pressable style={styles.points}>

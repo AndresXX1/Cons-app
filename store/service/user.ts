@@ -132,6 +132,22 @@ export const resendVerifyCode = async ({
   }
 };
 
+export const applyForLoan = async (branchName: string) => {
+  try {
+    const response = await axiosInstance.get(apiUrls.applyForLoan(branchName));
+    if (response.data.ok) {
+      return true
+    } else {
+      return false
+    }
+    // eslint-disable-next-line
+  } catch (error: any) {
+    console.log(error)
+  } finally {
+    return
+  }
+};
+
 export const updateFirstData = async ({
   first_name,
   last_name,
