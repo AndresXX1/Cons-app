@@ -36,7 +36,7 @@ const NewsScreen = () => {
         <View style={styles.containerNews}>
           {notices.map(notice => {
             return (
-              <View key={notice.id}>
+              <View style={styles.newsCard} key={notice.id}>
                 <Image source={{ uri: apiUrls.imgNotice(notice.url) }} style={styles.imagenTitle} />
                 <Text style={styles.date}>{notice.date}</Text>
                 <Text style={styles.newsTitle}>{notice.title}</Text>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     paddingTop: 52,
-    backgroundColor: colors.white,
+    backgroundColor: colors.gray,
   },
   scrollView: {
     width: '100%',
@@ -71,6 +71,11 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  newsCard: {
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    paddingBottom: 20,
   },
   btnBack: {
     display: 'flex',

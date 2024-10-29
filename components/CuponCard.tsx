@@ -30,11 +30,6 @@ const styles = StyleSheet.create({
     height: 149,
     marginBottom: 5,
   },
-  pressedCard: {
-    opacity: 0.8,
-    borderWidth: 1,
-    borderColor: colors.g
-  },
   recomText1: {
     textAlign: 'center',
     fontSize: 10,

@@ -100,6 +100,11 @@ const HomeScreen = () => {
             <Text style={styles.text}> tus</Text>
             <Text style={styles.textBold}> $300.000!</Text>
           </View>
+          )}
+        </Pressable>
+        <View style={styles.line}></View>
+        
+        <Slider data={offices?.slice(0, 6)}/>
 
           <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
             {({ pressed }) => (

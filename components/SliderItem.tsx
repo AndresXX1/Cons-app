@@ -5,7 +5,7 @@ import { images, fonts, colors } from '@/theme';
 const SliderItem = ({ item }) => {
   return (
     <View style={styles.container}>
-      <Image source={images['location_avellaneda']} style={styles.image} />
+      <Image source={{ uri : `https://back5.maylandlabs.com/branch/${item.image}`}} style={styles.image} />
       <View style={styles.containerText}>
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.location}>{item.address}</Text>

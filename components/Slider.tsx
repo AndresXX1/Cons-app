@@ -12,17 +12,15 @@ const Slider = ({ data }) => {
 
   const keyExtractor = useCallback((_, index) => index.toString(), []);
 
-  const renderItem = useCallback(
-    ({ item, index }) => (
-      <View style={styles.slide}>
-        <SliderItem item={data[index * 2]} index={index * 2} />
-        {index * 2 + 1 < data.length && (
-          <SliderItem item={data[index * 2 + 1]} index={index * 2 + 1} />
-        )}
-      </View>
-    ),
-    [data],
-  );
+
+  const renderItem = useCallback(({ item , index }) => (
+    <View style={styles.slide}>
+      <SliderItem item={data[index * 2]} index={index * 2} />
+      {index * 2 + 1 < data.length && (
+        <SliderItem item={data[index * 2 + 1]} index={index * 2 + 1} />
+      )}
+    </View>
+  ), [data]);
 
   const handleScroll = useCallback(event => {
     const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);

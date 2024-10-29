@@ -1,10 +1,28 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { colors, fonts, images } from '@/theme';
 import { View, StyleSheet, Text, Pressable, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NotificationsScreen = () => {
   const scrollViewRef = useRef<ScrollView>(null);
+  // const [notification, setNotifications] = useState([]);
+  
+  // const fetchNotifications = async () => {
+  //   try {
+  //    const response =  await fetch('https://back5.maylandlabs.com/api/notifications/appNotification')
+  //    const data = await response.json()  
+  //    setNotifications(data)
+  //    console.log(data);
+      
+  //   } catch (error) {
+  //     console.error('Failed to fetch branch notifications:', error);
+  //   }
+  // };
+
+
+  // useEffect(() => {
+  //   fetchNotifications()
+  // })
   const list = [
     {
       id: 1,
@@ -64,7 +82,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     paddingTop: 52,
-    backgroundColor: colors.white,
+    backgroundColor: colors.gray,
   },
   scrollView: {
     width: '100%',
@@ -113,6 +131,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    marginBottom: 16,
   },
   notificationTitle: {
     color: colors.texts,

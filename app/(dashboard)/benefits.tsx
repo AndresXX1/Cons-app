@@ -1,6 +1,4 @@
-import NavBar from '@/components/NavBar';
-import { useFocusEffect, useRouter } from 'expo-router';
-import { images, colors, fonts } from '@/theme';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,7 +9,9 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
-import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import NavBar from '@/components/NavBar';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { images, colors, fonts } from '@/theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { getCuponsAsync } from '@/store/actions/auth';
@@ -23,12 +23,22 @@ const BenefitsScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const scrollViewRef = useRef<ScrollView>(null);
-  const { user, cupons, cupons2, cupons3 } = useSelector((state: RootState) => state.auth);
 
-  // Estado para búsqueda
+  // Obtener los cupones del estado
+  const { user, cupons = [], cupons2 = [], cupons3 = [] } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  // Estado para categorías
+  const [categories, setCategories] = useState([]);
+
+  // Estado para búsqueda y categoría seleccionada
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoryCupons, setCategoryCupons] = useState([]);
   const [error, setError] = useState('');
   const [showClearButton, setShowClearButton] = useState(false);
+  const [isLoadingCategoryCupons, setIsLoadingCategoryCupons] = useState(false);
 
   // Función para obtener cupones
   const getCupons = () => {
@@ -36,13 +46,16 @@ const BenefitsScreen = () => {
   };
 
   // Función para manejar el cambio en el campo de búsqueda
-  const onSearchChange = text => {
+  const onSearchChange = (text: string) => {
     setSearchTerm(text);
+    setSelectedCategory(null); // Limpiar la categoría seleccionada al buscar
   };
 
   const routerUnregisteredUser = () => {
     router.push('(dashboard)/unregistered_user');
   };
+
+
 
   const info = [
     {
@@ -63,26 +76,128 @@ const BenefitsScreen = () => {
     },
   ];
 
+
   // Función para limpiar la búsqueda
   const onClearSearch = useCallback(() => {
     setSearchTerm('');
     setError('');
   }, []);
 
+  // Función para manejar la selección de una categoría
+  const handleCategoryPress = (category) => {
+    setSelectedCategory(category);
+    setSearchTerm('');
+    fetchCategoryCupons(category.final_id);
+  };
+
+  const handleClearCategoryPress = () => {
+    setSelectedCategory(null);
+    setSearchTerm('');
+    setCategoryCupons([]);
+  };
+
+  // Función para obtener cupones de una categoría
+  const fetchCategoryCupons = async (final_id) => {
+    setIsLoadingCategoryCupons(true);
+    try {
+      const response = await fetch(`https://back5.maylandlabs.com/api/cupon/${final_id}`);
+      const data = await response.json();
+      if (data.ok) {
+        setCategoryCupons(data.cupons);
+      } else {
+        console.error('Error fetching category cupons:', data);
+        setCategoryCupons([]);
+      }
+    } catch (error) {
+      console.error('Error fetching category cupons:', error);
+      setCategoryCupons([]);
+    } finally {
+      setIsLoadingCategoryCupons(false);
+    }
+  };
+
+  // Agregar categoría a cada cupón
+  const cuponsWithCategory = cupons?.map((cupon) => ({
+    ...cupon,
+    category: 'Recomendados',
+  }));
+  const cupons2WithCategory = cupons2?.map((cupon) => ({
+    ...cupon,
+    category: 'Beneficios en seguros',
+  }));
+  const cupons3WithCategory = cupons3?.map((cupon) => ({
+    ...cupon,
+    category: 'Viajes y traslados',
+  }));
+
+  // Combinar y eliminar duplicados
+  const allCupons = useMemo(() => {
+    const combined = [
+      ...(cuponsWithCategory || []),
+      ...(cupons2WithCategory || []),
+      ...(cupons3WithCategory || []),
+    ];
+    const uniqueCupons = Array.from(
+      new Map(combined.map((item) => [item.id, item])).values()
+    );
+    return uniqueCupons;
+  }, [cuponsWithCategory, cupons2WithCategory, cupons3WithCategory]);
+
   // Filtrar cupones basado en el término de búsqueda
   const filteredCupons = useMemo(() => {
     if (searchTerm.length >= 1) {
-      const filtered = cupons.filter(cupon =>
-        cupon.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
+      return allCupons.filter((cupon) =>
+        cupon.nombre.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setError(filtered.length === 0 ? 'No se encontró ningún cupón con ese nombre' : '');
-      setShowClearButton(true);
-      return filtered;
     }
-    setShowClearButton(false);
-    setError('');
-    return cupons;
-  }, [searchTerm, cupons]);
+    return allCupons;
+  }, [searchTerm, allCupons]);
+
+  // Actualizar el estado de error y showClearButton
+  useEffect(() => {
+    if (searchTerm.length >= 1) {
+      const hasNoResults = filteredCupons.length === 0;
+      setError(hasNoResults ? 'No se encontró ningún cupón con ese nombre' : '');
+      setShowClearButton(true);
+    } else if (selectedCategory) {
+      const hasNoResults = categoryCupons.length === 0;
+      setError(hasNoResults ? 'No se encontraron cupones para esta categoría' : '');
+      setShowClearButton(false);
+    } else {
+      setError('');
+      setShowClearButton(false);
+    }
+  }, [searchTerm, filteredCupons, selectedCategory, categoryCupons]);
+
+  // Filtrado basado en categoría (para vista general)
+  const recommendedCupons = allCupons.filter(
+    (cupon) => cupon.category === 'Recomendados'
+  );
+  const segurosCupons = allCupons.filter(
+    (cupon) => cupon.category === 'Beneficios en seguros'
+  );
+  const viajesCupons = allCupons.filter(
+    (cupon) => cupon.category === 'Viajes y traslados'
+  );
+
+  // Obtener categorías del backend
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('https://back5.maylandlabs.com/api/cupon/category');
+        const data = await response.json();
+        if (data.ok) {
+          setCategories(data.categories);
+        } else {
+          console.error('Error fetching categories:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     getCupons();
@@ -106,7 +221,7 @@ const BenefitsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FocusAwareStatusBar backgroundColor={colors.purple} barStyle="light-content" />
-      {cupons?.length > 0 ? (
+      {allCupons.length > 0 ? (
         <ScrollView style={styles.scrollView} ref={scrollViewRef}>
           <View style={styles.containerMain}>
             {/* Pasando las funciones y el estado relacionados con la búsqueda al NavBar */}
@@ -114,20 +229,82 @@ const BenefitsScreen = () => {
               searchTerm={searchTerm}
               onSearchChange={onSearchChange}
               onClearSearch={onClearSearch}
-              showClearButton={showClearButton}
             />
 
-            {/* Mostrar los resultados de búsqueda si hay un término de búsqueda */}
-            {searchTerm.length > 0 ? (
+            {/* Siempre mostrar las categorías */}
+            <View style={styles.imageContainer}>
+              <Image
+                source={images.image_benefits}
+                resizeMode="contain"
+                style={styles.imageBenefits}
+              />
+            </View>
+            <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
+
+            {categories.length > 0 ? (
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+              <View style={styles.containerCoupons}>
+                {categories.map((category) => (
+                  <Pressable
+                    key={category.id}
+                    onPress={() => handleCategoryPress(category)}
+                  >
+                  {({ pressed }) => (                
+                    <View style={[styles.couponsCont, { opacity: pressed ? 0.8 : 1 }]}>
+                      <View
+                        style={[
+                          styles.containerCouponsChildren,
+                          selectedCategory && selectedCategory.id === category.id
+                            ? styles.selectedCategoryStyle
+                            : null,
+                        ]}
+                      >
+                        <Image
+                          source={{ uri: category.image }}
+                          style={styles.imageCategory}
+                        />
+                      </View>
+                      <Text style={styles.textCouponsChildren}>{category.nombre}</Text>
+                    </View>
+                    )}
+                  </Pressable>
+                ))}
+              </View>
+              </ScrollView>
+            ) : (
+              <ActivityIndicator size="large" color={colors.purple} />
+            )}
+
+            {!user?.cuponizate && (
+              <Pressable onPress={routerUnregisteredUser}>
+                {({ pressed }) => (                
+                <View style={[styles.buttonGreen, { opacity: pressed ? 0.6 : 1 }]}>
+                  <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
+                </View>
+                )}
+              </Pressable>
+            )}
+
+            {/* Mostrar cupones filtrados o secciones predeterminadas */}
+            {searchTerm.length > 0 || selectedCategory ? (
+              <View> 
+                <Pressable onPress={handleClearCategoryPress}>
+                {({ pressed }) => (
+                <Text style={[styles.clearFiltersText, { opacity: pressed ? 0.6 : 1 }]}>Eliminar filtros</Text>
+                )}  
+                </Pressable>
               <View style={styles.cuponContainer}>
                 {error ? (
                   <View style={styles.containerError}>
                     <Text style={styles.sadFace}>😞</Text>
                     <Text style={styles.errorText}>{error}</Text>
-                    <Text style={styles.errorText2}>Prueba con otra busqueda</Text>
+                    <Text style={styles.errorText2}>Prueba con otra búsqueda</Text>
+
                   </View>
+                ) : isLoadingCategoryCupons ? (
+                  <ActivityIndicator size="large" color={colors.purple} />
                 ) : (
-                  filteredCupons.map(cupon => (
+                  (searchTerm.length > 0 ? filteredCupons : categoryCupons).map((cupon) => (
                     <CuponCard
                       key={cupon.id}
                       cupon={cupon}
@@ -139,7 +316,9 @@ const BenefitsScreen = () => {
                             nombre: cupon.nombre,
                             descuento: cupon.descuento,
                             uri: cupon.foto_principal.original,
-                            descripcion_micrositio: cupon.descripcion_micrositio,
+                            descripcion_micrositio: cupon.descripcion_micrositio
+                              .replace(/<\/?p>/g, '')
+                              .trim(),
                           },
                         })
                       }
@@ -147,9 +326,11 @@ const BenefitsScreen = () => {
                   ))
                 )}
               </View>
+              </View>
             ) : (
-              // Mostrar la vista general de cupones si no hay búsqueda en curso
+              // Renderizar las secciones predeterminadas si no hay búsqueda ni categoría seleccionada
               <>
+
                 <View style={styles.imageContainer}>
                   <Image
                     source={images.image_benefits}
@@ -182,112 +363,86 @@ const BenefitsScreen = () => {
                 </View>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.recomContainer}>
-                    {cupons?.map((cupon, key) => {
-                      return (
-                        <CuponCard
-                          key={key}
-                          cupon={cupon}
-                          onPress={() =>
-                            router.push({
-                              pathname: 'single_cupon',
-                              params: {
-                                id: cupon.id,
-                                nombre: cupon.nombre,
-                                descuento: cupon.descuento,
-                                uri: cupon.foto_principal.original,
-                                descripcion_micrositio: cupon.descripcion_micrositio
-                                  .replace(/<\/?p>/g, '')
-                                  .trim(),
-                              },
-                            })
-                          }
-                        />
-                      );
-                    })}
+                    {recommendedCupons.map((cupon) => (
+                      <CuponCard
+                        key={cupon.id}
+                        cupon={cupon}
+                        onPress={() =>
+                          router.push({
+                            pathname: 'single_cupon',
+                            params: {
+                              id: cupon.id,
+                              nombre: cupon.nombre,
+                              descuento: cupon.descuento,
+                              uri: cupon.foto_principal.original,
+                              descripcion_micrositio: cupon.descripcion_micrositio
+                                .replace(/<\/?p>/g, '')
+                                .trim(),
+                            },
+                          })
+                        }
+                      />
+                    ))}
                   </View>
                 </ScrollView>
+
+                {/* Beneficios en seguros */}
                 <View style={styles.containerView}>
                   <Text style={styles.textRecom}>Beneficios en seguros</Text>
                   <Text style={styles.textView}>Ver más</Text>
                 </View>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.recomContainer}>
-                    {cupons2?.map((cupon, key) => {
-                      const descripcion_breve = cupon.descripcion_breve
-                        .replace(/<\/?p>/g, '')
-                        .trim();
-                      const descripcion_micrositio = cupon.descripcion_micrositio
-                        .replace(/<\/?p>/g, '')
-                        .trim();
-
-                      return (
-                        <Pressable
-                          onPress={() =>
-                            router.push({
-                              pathname: 'single_cupon',
-                              params: {
-                                id: cupon.id,
-                                nombre: cupon.nombre,
-                                descuento: cupon.descuento,
-                                uri: cupon.foto_principal.original,
-                                descripcion_micrositio: descripcion_micrositio,
-                              },
-                            })
-                          }
-                          key={key}
-                          style={styles.containerRecom}>
-                          <Image
-                            source={{ uri: cupon.foto_principal.original }}
-                            style={styles.imageRecom}
-                          />
-                          <Text style={styles.recomText1}>{cupon.nombre}</Text>
-                          <Text style={styles.recomText2}>{cupon.descuento}</Text>
-                          <Text style={styles.recomText3}>{descripcion_breve}</Text>
-                        </Pressable>
-                      );
-                    })}
+                    {segurosCupons.map((cupon) => (
+                      <CuponCard
+                        key={cupon.id}
+                        cupon={cupon}
+                        onPress={() =>
+                          router.push({
+                            pathname: 'single_cupon',
+                            params: {
+                              id: cupon.id,
+                              nombre: cupon.nombre,
+                              descuento: cupon.descuento,
+                              uri: cupon.foto_principal.original,
+                              descripcion_micrositio: cupon.descripcion_micrositio
+                                .replace(/<\/?p>/g, '')
+                                .trim(),
+                            },
+                          })
+                        }
+                      />
+                    ))}
                   </View>
                 </ScrollView>
+
+                {/* Viajes y traslados */}
                 <View style={styles.containerView}>
-                  <Text style={styles.textRecom}>Viajes y translados</Text>
+                  <Text style={styles.textRecom}>Viajes y traslados</Text>
                   <Text style={styles.textView}>Ver más</Text>
                 </View>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.recomContainer}>
-                    {cupons3?.map((cupon, key) => {
-                      const descripcion_breve = cupon.descripcion_breve
-                        .replace(/<\/?p>/g, '')
-                        .trim();
-                      const descripcion_micrositio = cupon.descripcion_micrositio
-                        .replace(/<\/?p>/g, '')
-                        .trim();
-
-                      return (
-                        <Pressable
-                          onPress={() =>
-                            router.push({
-                              pathname: 'single_cupon',
-                              params: {
-                                id: cupon.id,
-                                nombre: cupon.nombre,
-                                descuento: cupon.descuento,
-                                uri: cupon.foto_principal.original,
-                                descripcion_micrositio: descripcion_micrositio,
-                              },
-                            })
-                          }
-                          key={key}
-                          style={styles.containerRecom}>
-                          <Image
-                            source={{ uri: cupon.foto_principal.original }}
-                            style={styles.imageRecom}
-                          />
-                          <Text style={styles.recomText1}>{cupon.nombre}</Text>
-                          <Text style={styles.recomText2}>{cupon.descuento}</Text>
-                          <Text style={styles.recomText3}>{descripcion_breve}</Text>
-                        </Pressable>
-                      );
-                    })}
+                    {viajesCupons.map((cupon) => (
+                      <CuponCard
+                        key={cupon.id}
+                        cupon={cupon}
+                        onPress={() =>
+                          router.push({
+                            pathname: 'single_cupon',
+                            params: {
+                              id: cupon.id,
+                              nombre: cupon.nombre,
+                              descuento: cupon.descuento,
+                              uri: cupon.foto_principal.original,
+                              descripcion_micrositio: cupon.descripcion_micrositio
+                                .replace(/<\/?p>/g, '')
+                                .trim(),
+                            },
+                          })
+                        }
+                      />
+                    ))}
                   </View>
                 </ScrollView>
               </>
@@ -303,11 +458,27 @@ const BenefitsScreen = () => {
   );
 };
 
+
+
+
 const styles = StyleSheet.create({
+  // Estilos existentes...
   container: {
     flex: 1,
     marginBottom: 20,
     backgroundColor: colors.purple,
+  },
+  selectedCategoryStyle: {
+    borderColor: colors.purple,
+    borderWidth: 2,
+  },
+  clearFiltersText: {
+    paddingLeft: 20,
+    paddingTop: 30,
+    color: colors.purple,
+    fontFamily: fonts.gotham.bold,
+    textDecorationLine: 'underline',
+    paddingBottom: 10,
   },
   imageContainer: {
     overflow: 'hidden',
@@ -324,7 +495,7 @@ const styles = StyleSheet.create({
   },
   containerMain: {
     backgroundColor: colors.gray,
-    paddingBottom: 60,
+    paddingBottom: 100,
   },
   scrollView: {
     width: '100%',
@@ -337,6 +508,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
     paddingHorizontal: 20,
+    paddingBottom: 300,
+    paddingTop: 20,
   },
   sadFace: {
     fontSize: 60,
@@ -402,6 +575,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.semiBold,
     fontSize: 10.039,
     paddingTop: 6,
+    textAlign: 'center',
+    maxWidth: 88,
   },
   buttonGreen: {
     backgroundColor: colors.purple,
@@ -448,49 +623,6 @@ const styles = StyleSheet.create({
     gap: 16,
     marginHorizontal: 20,
     marginBottom: 40,
-  },
-  containerRecom: {
-    backgroundColor: colors.white,
-    borderRadius: 10,
-    width: 156,
-    paddingBottom: 8,
-  },
-  imageRecom: {
-    width: 156,
-    height: 149,
-    marginBottom: 5,
-  },
-  recomText1: {
-    textAlign: 'center',
-    color: colors.texts,
-    fontSize: 10,
-    lineHeight: 19,
-    fontFamily: fonts.gotham.regular,
-  },
-  recomText2: {
-    fontSize: 30,
-    color: colors.texts,
-    textAlign: 'center',
-    fontFamily: fonts.gotham.semiBold,
-    lineHeight: 19,
-    paddingVertical: 10,
-  },
-  recomText3: {
-    fontSize: 10,
-    textAlign: 'center',
-    lineHeight: 10,
-    color: colors.texts,
-    fontFamily: fonts.gotham.regular,
-    paddingHorizontal: 8,
-    paddingTop: 2,
-  },
-  recomText2_two: {
-    fontSize: 23,
-    color: colors.texts,
-    textAlign: 'center',
-    fontFamily: fonts.gotham.semiBold,
-    lineHeight: 19,
-    paddingVertical: 10,
   },
 });
 
