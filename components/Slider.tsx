@@ -37,7 +37,7 @@ const Slider = ({ data }) => {
   };
 
   const renderDots = () => {
-    const totalPages = Math.ceil(data.length / pageSize);
+    const totalPages = Math.ceil(data?.length / pageSize);
     return (
       <View style={styles.dotContainer}>
         {Array.from({ length: totalPages }, (_, index) => (
@@ -62,7 +62,7 @@ const Slider = ({ data }) => {
       <View style={styles.container}>
         <FlatList
           ref={flatListRef}
-          data={Array.from({ length: Math.ceil(data.length / pageSize) }, (_, i) => i)}
+          data={Array.from({ length: Math.ceil(data?.length / pageSize) }, (_, i) => i)}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           horizontal

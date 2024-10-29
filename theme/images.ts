@@ -95,6 +95,8 @@ export const images: { [key: string]: ImageSourcePropType } = {
   magnifying_glass: require('@/assets/images/magnifying_glass.png'),
   mood_liquidation: require('@/assets/images/mood_liquidation.png'),
   hourglass: require('@/assets/images/hourglass.png'),
+  x_modal: require('@/assets/images/x_modal.png'),
+  location: require('@/assets/images/location.png'),
   // Mockups
   mockup_1: require('@/assets/mockups/01.png'),
   mockup_2: require('@/assets/mockups/02.png'),

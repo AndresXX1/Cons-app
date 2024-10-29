@@ -17,7 +17,7 @@ import { AppDispatch, RootState } from '@/store';
 import { getCuponsAsync } from '@/store/actions/auth';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { registerViewTime } from '@/store/service/timer';
-import  CuponCard  from '@/components/CuponCard';
+import CuponCard from '@/components/CuponCard';
 
 const BenefitsScreen = () => {
   const router = useRouter();
@@ -43,7 +43,7 @@ const BenefitsScreen = () => {
   const routerUnregisteredUser = () => {
     router.push('(dashboard)/unregistered_user');
   };
-  
+
   const info = [
     {
       text: 'Compras',
@@ -122,28 +122,28 @@ const BenefitsScreen = () => {
               <View style={styles.cuponContainer}>
                 {error ? (
                   <View style={styles.containerError}>
-                  <Text style={styles.sadFace}>😞</Text>
-                  <Text style={styles.errorText}>{error}</Text>
-                  <Text style={styles.errorText2}>Prueba con otra busqueda</Text>
+                    <Text style={styles.sadFace}>😞</Text>
+                    <Text style={styles.errorText}>{error}</Text>
+                    <Text style={styles.errorText2}>Prueba con otra busqueda</Text>
                   </View>
                 ) : (
                   filteredCupons.map(cupon => (
                     <CuponCard
-                    key={cupon.id}
-                    cupon={cupon}
-                    onPress={() =>
-                      router.push({
-                        pathname: 'single_cupon',
-                        params: {
-                          id: cupon.id,
-                          nombre: cupon.nombre,
-                          descuento: cupon.descuento,
-                          uri: cupon.foto_principal.original,
-                          descripcion_micrositio: cupon.descripcion_micrositio,
-                        },
-                      })
-                    }
-                  />
+                      key={cupon.id}
+                      cupon={cupon}
+                      onPress={() =>
+                        router.push({
+                          pathname: 'single_cupon',
+                          params: {
+                            id: cupon.id,
+                            nombre: cupon.nombre,
+                            descuento: cupon.descuento,
+                            uri: cupon.foto_principal.original,
+                            descripcion_micrositio: cupon.descripcion_micrositio,
+                          },
+                        })
+                      }
+                    />
                   ))
                 )}
               </View>
@@ -151,7 +151,11 @@ const BenefitsScreen = () => {
               // Mostrar la vista general de cupones si no hay búsqueda en curso
               <>
                 <View style={styles.imageContainer}>
-                <Image source={images.image_benefits} resizeMode="contain" style={styles.imageBenefits} />
+                  <Image
+                    source={images.image_benefits}
+                    resizeMode="contain"
+                    style={styles.imageBenefits}
+                  />
                 </View>
                 <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
                 <View style={styles.containerCoupons}>
@@ -354,6 +358,7 @@ const styles = StyleSheet.create({
   containerError: {
     paddingBottom: 500,
     paddingTop: 60,
+    maxWidth: 250,
   },
   imageBenefits: {
     width: '95%',
@@ -374,10 +379,10 @@ const styles = StyleSheet.create({
     gap: 21,
   },
   couponsCont: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 16,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
   },
   containerCouponsChildren: {
     width: 64.9,
