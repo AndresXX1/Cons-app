@@ -66,11 +66,11 @@ const ShopScreen = () => {
             <View style={styles.containerLogo}>
               {categories.map(category => (
                 <View key={category.id} style={styles.ContainerLogoDest}>
-                  <Pressable onPress={() => getProductsByCategory(category.id)}>
+                  <Pressable style={styles.categoryCircle}  onPress={() => getProductsByCategory(category.id)}>
                     <Image
-                      source={{
-                        uri: 'https://cdn.discordapp.com/attachments/888839207185948763/1300675873778962432/assets.png?ex=6721b44d&is=672062cd&hm=f84c526ad11576c0e2a20920293fc822cd31e7c2428c39368d716413309cc057&',
-                      }}
+                      source={
+                        images.award_star
+                      }
                       style={styles.logo}></Image>
                   </Pressable>
                   <Text style={styles.textLogo}>{category.name}</Text>
@@ -133,6 +133,12 @@ const styles = StyleSheet.create({
   scrollView: {
     width: '100%',
   },
+  categoryCircle: {
+    backgroundColor: colors.red2,
+    borderRadius: 50,
+    padding: 10,
+
+  },
   containerLogo: {
     display: 'flex',
     flexDirection: 'row',
@@ -145,8 +151,8 @@ const styles = StyleSheet.create({
     gap: 9,
   },
   logo: {
-    height: 97,
-    width: 97,
+    height: 65,
+    width: 65,
   },
   textLogo: {
     color: colors.texts,

@@ -4,6 +4,7 @@ import { ImageSourcePropType } from 'react-native';
 export const images: { [key: string]: ImageSourcePropType } = {
   logo: require('@/assets/images/logo.png'),
   logo_blue: require('@/assets/images/logo_blue.png'),
+  award_star: require('@/assets/images/award_star.png'),
   background: require('@/assets/images/background.png'),
   arrow_back: require('@/assets/images/arrow_back_ios.png'),
   arrow_blue: require('@/assets/images/arrow_blue_ios.png'),

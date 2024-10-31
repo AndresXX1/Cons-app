@@ -18,16 +18,77 @@ import { getCuponsAsync } from '@/store/actions/auth';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { registerViewTime } from '@/store/service/timer';
 import CuponCard from '@/components/CuponCard';
+import {
+  ShopIcon,
+  PizzaIcon,
+  ClothesIcon,
+  EdIcon,
+  ServiceIcon,
+  TourismIcon,
+  GymIcon,
+  HealthIcon,
+  EntretainmentIcon,
+  HelmetIcon,
+  TheaterIcon,
+  CarIcon,
+  CinemaIcon,
+  RealStateIcon,
+  FurnitureIcon,
+} from '@/components/Icons';
+
+import Banners from '@/components/Banners';
+
+
+const categoryOrder = [
+  'Motos',
+  'Autos',
+  'Teatros',
+  'Entretenimientos',
+  'Educación',
+  'Indumentaria, Calzado y Moda',
+  'Belleza y Salud',
+  'Servicios',
+  'Cines',
+  'Gimnasios y Deportes',
+  'Turismo',
+  'Gastronomía',
+  'Compras',
+  'Inmobiliarias',
+  'Inmuebles',
+];
+
+const categoryIcons = {
+  Motos: HelmetIcon,
+  Autos: CarIcon,
+  Teatros: TheaterIcon,
+  Entretenimientos: EntretainmentIcon,
+  Educación: EdIcon,
+  'Indumentaria, Calzado y Moda': ClothesIcon,
+  'Belleza y Salud': HealthIcon,
+  Servicios: ServiceIcon,
+  Cines: CinemaIcon,
+  'Gimnasios y Deportes': GymIcon,
+  Turismo: TourismIcon,
+  Gastronomía: PizzaIcon,
+  Compras: ShopIcon,
+  Inmobiliarias: RealStateIcon,
+  Inmuebles: FurnitureIcon,
+};
 
 const BenefitsScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const scrollViewRef = useRef<ScrollView>(null);
+  const { banners } = useSelector((state: RootState) => state.auth);
+
 
   // Obtener los cupones del estado
-  const { user, cupons = [], cupons2 = [], cupons3 = [] } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const {
+    user,
+    cupons = [],
+    cupons2 = [],
+    cupons3 = [],
+  } = useSelector((state: RootState) => state.auth);
 
   // Estado para categorías
   const [categories, setCategories] = useState([]);
@@ -55,28 +116,6 @@ const BenefitsScreen = () => {
     router.push('(dashboard)/unregistered_user');
   };
 
-
-
-  const info = [
-    {
-      text: 'Compras',
-      img: 'shopping',
-    },
-    {
-      text: 'Gastronomía',
-      img: 'local_pizza',
-    },
-    {
-      text: 'Indumentaria',
-      img: 'apparel',
-    },
-    {
-      text: 'Educación',
-      img: 'school',
-    },
-  ];
-
-
   // Función para limpiar la búsqueda
   const onClearSearch = useCallback(() => {
     setSearchTerm('');
@@ -84,7 +123,7 @@ const BenefitsScreen = () => {
   }, []);
 
   // Función para manejar la selección de una categoría
-  const handleCategoryPress = (category) => {
+  const handleCategoryPress = category => {
     setSelectedCategory(category);
     setSearchTerm('');
     fetchCategoryCupons(category.final_id);
@@ -97,7 +136,7 @@ const BenefitsScreen = () => {
   };
 
   // Función para obtener cupones de una categoría
-  const fetchCategoryCupons = async (final_id) => {
+  const fetchCategoryCupons = async final_id => {
     setIsLoadingCategoryCupons(true);
     try {
       const response = await fetch(`https://back5.maylandlabs.com/api/cupon/${final_id}`);
@@ -117,15 +156,15 @@ const BenefitsScreen = () => {
   };
 
   // Agregar categoría a cada cupón
-  const cuponsWithCategory = cupons?.map((cupon) => ({
+  const cuponsWithCategory = cupons?.map(cupon => ({
     ...cupon,
     category: 'Recomendados',
   }));
-  const cupons2WithCategory = cupons2?.map((cupon) => ({
+  const cupons2WithCategory = cupons2?.map(cupon => ({
     ...cupon,
     category: 'Beneficios en seguros',
   }));
-  const cupons3WithCategory = cupons3?.map((cupon) => ({
+  const cupons3WithCategory = cupons3?.map(cupon => ({
     ...cupon,
     category: 'Viajes y traslados',
   }));
@@ -137,17 +176,15 @@ const BenefitsScreen = () => {
       ...(cupons2WithCategory || []),
       ...(cupons3WithCategory || []),
     ];
-    const uniqueCupons = Array.from(
-      new Map(combined.map((item) => [item.id, item])).values()
-    );
+    const uniqueCupons = Array.from(new Map(combined.map(item => [item.id, item])).values());
     return uniqueCupons;
   }, [cuponsWithCategory, cupons2WithCategory, cupons3WithCategory]);
 
   // Filtrar cupones basado en el término de búsqueda
   const filteredCupons = useMemo(() => {
     if (searchTerm.length >= 1) {
-      return allCupons.filter((cupon) =>
-        cupon.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+      return allCupons.filter(cupon =>
+        cupon.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
     return allCupons;
@@ -170,15 +207,9 @@ const BenefitsScreen = () => {
   }, [searchTerm, filteredCupons, selectedCategory, categoryCupons]);
 
   // Filtrado basado en categoría (para vista general)
-  const recommendedCupons = allCupons.filter(
-    (cupon) => cupon.category === 'Recomendados'
-  );
-  const segurosCupons = allCupons.filter(
-    (cupon) => cupon.category === 'Beneficios en seguros'
-  );
-  const viajesCupons = allCupons.filter(
-    (cupon) => cupon.category === 'Viajes y traslados'
-  );
+  const recommendedCupons = allCupons.filter(cupon => cupon.category === 'Recomendados');
+  const segurosCupons = allCupons.filter(cupon => cupon.category === 'Beneficios en seguros');
+  const viajesCupons = allCupons.filter(cupon => cupon.category === 'Viajes y traslados');
 
   // Obtener categorías del backend
   useEffect(() => {
@@ -218,6 +249,15 @@ const BenefitsScreen = () => {
 
   useFocusEffect(trackViewTime);
 
+  // Ordenar las categorías
+  const orderedCategories = useMemo(() => {
+    return categories.slice().sort((a, b) => {
+      const indexA = categoryOrder.indexOf(a.nombre);
+      const indexB = categoryOrder.indexOf(b.nombre);
+      return indexA - indexB;
+    });
+  }, [categories]);
+
   return (
     <SafeAreaView style={styles.container}>
       <FocusAwareStatusBar backgroundColor={colors.purple} barStyle="light-content" />
@@ -232,44 +272,46 @@ const BenefitsScreen = () => {
             />
 
             {/* Siempre mostrar las categorías */}
-            <View style={styles.imageContainer}>
-              <Image
-                source={images.image_benefits}
-                resizeMode="contain"
-                style={styles.imageBenefits}
-              />
-            </View>
+            {<Banners banners={banners?.cuponizate} />}
+
             <Text style={styles.textCoupons}>Explora cupones por categoría</Text>
 
-            {categories.length > 0 ? (
-              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              <View style={styles.containerCoupons}>
-                {categories.map((category) => (
-                  <Pressable
-                    key={category.id}
-                    onPress={() => handleCategoryPress(category)}
-                  >
-                  {({ pressed }) => (                
-                    <View style={[styles.couponsCont, { opacity: pressed ? 0.8 : 1 }]}>
-                      <View
-                        style={[
-                          styles.containerCouponsChildren,
-                          selectedCategory && selectedCategory.id === category.id
-                            ? styles.selectedCategoryStyle
-                            : null,
-                        ]}
-                      >
-                        <Image
-                          source={{ uri: category.image }}
-                          style={styles.imageCategory}
-                        />
-                      </View>
-                      <Text style={styles.textCouponsChildren}>{category.nombre}</Text>
-                    </View>
-                    )}
-                  </Pressable>
-                ))}
-              </View>
+            {orderedCategories.length > 0 ? (
+              <ScrollView style={styles.containerCoupons} horizontal={true} showsHorizontalScrollIndicator={false} justifyContent="left">
+                {orderedCategories.map((category) => {
+                  const IconComponent = categoryIcons[category.nombre];
+                  const isSelected = selectedCategory && selectedCategory.id === category.id;
+
+                  return (
+                    <Pressable
+                      key={category.id}
+                      onPress={() => handleCategoryPress(category)}
+                    >
+                      {({ pressed }) => (
+                        <View style={[styles.couponsCont, { opacity: pressed ? 0.8 : 1 }]}>
+                          <View
+                            style={[
+                              styles.containerCouponsChildren,
+                              isSelected ? styles.selectedCategoryStyle : null,
+                            ]}
+                          >
+                            {IconComponent ? (
+                              <IconComponent />
+                            ) : category.image ? (
+                              <Image
+                                source={{ uri: category.image }}
+                                style={styles.imageCategory}
+                              />
+                            ) : (
+                              <Text>No Icon</Text>
+                            )}
+                          </View>
+                          <Text style={styles.textCouponsChildren}>{category.nombre}</Text>
+                        </View>
+                      )}
+                    </Pressable>
+                  );
+                })}
               </ScrollView>
             ) : (
               <ActivityIndicator size="large" color={colors.purple} />
@@ -277,55 +319,56 @@ const BenefitsScreen = () => {
 
             {!user?.cuponizate && (
               <Pressable onPress={routerUnregisteredUser}>
-                {({ pressed }) => (                
-                <View style={[styles.buttonGreen, { opacity: pressed ? 0.6 : 1 }]}>
-                  <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
-                </View>
+                {({ pressed }) => (
+                  <View style={[styles.buttonGreen, { opacity: pressed ? 0.6 : 1 }]}>
+                    <Text style={styles.buttonGreenText}>¡Quiero estos beneficios!</Text>
+                  </View>
                 )}
               </Pressable>
             )}
 
             {/* Mostrar cupones filtrados o secciones predeterminadas */}
             {searchTerm.length > 0 || selectedCategory ? (
-              <View> 
+              <View>
                 <Pressable onPress={handleClearCategoryPress}>
-                {({ pressed }) => (
-                <Text style={[styles.clearFiltersText, { opacity: pressed ? 0.6 : 1 }]}>Eliminar filtros</Text>
-                )}  
+                  {({ pressed }) => (
+                    <Text style={[styles.clearFiltersText, { opacity: pressed ? 0.6 : 1 }]}>
+                      Eliminar filtros
+                    </Text>
+                  )}
                 </Pressable>
-              <View style={styles.cuponContainer}>
-                {error ? (
-                  <View style={styles.containerError}>
-                    <Text style={styles.sadFace}>😞</Text>
-                    <Text style={styles.errorText}>{error}</Text>
-                    <Text style={styles.errorText2}>Prueba con otra búsqueda</Text>
-
-                  </View>
-                ) : isLoadingCategoryCupons ? (
-                  <ActivityIndicator size="large" color={colors.purple} />
-                ) : (
-                  (searchTerm.length > 0 ? filteredCupons : categoryCupons).map((cupon) => (
-                    <CuponCard
-                      key={cupon.id}
-                      cupon={cupon}
-                      onPress={() =>
-                        router.push({
-                          pathname: 'single_cupon',
-                          params: {
-                            id: cupon.id,
-                            nombre: cupon.nombre,
-                            descuento: cupon.descuento,
-                            uri: cupon.foto_principal.original,
-                            descripcion_micrositio: cupon.descripcion_micrositio
-                              .replace(/<\/?p>/g, '')
-                              .trim(),
-                          },
-                        })
-                      }
-                    />
-                  ))
-                )}
-              </View>
+                <View style={styles.cuponContainer}>
+                  {error ? (
+                    <View style={styles.containerError}>
+                      <Text style={styles.sadFace}>😞</Text>
+                      <Text style={styles.errorText}>{error}</Text>
+                      <Text style={styles.errorText2}>Prueba con otra búsqueda</Text>
+                    </View>
+                  ) : isLoadingCategoryCupons ? (
+                    <ActivityIndicator size="large" color={colors.purple} />
+                  ) : (
+                    (searchTerm.length > 0 ? filteredCupons : categoryCupons).map(cupon => (
+                      <CuponCard
+                        key={cupon.id}
+                        cupon={cupon}
+                        onPress={() =>
+                          router.push({
+                            pathname: 'single_cupon',
+                            params: {
+                              id: cupon.id,
+                              nombre: cupon.nombre,
+                              descuento: cupon.descuento,
+                              uri: cupon.foto_principal.original,
+                              descripcion_micrositio: cupon.descripcion_micrositio
+                                .replace(/<\/?p>/g, '')
+                                .trim(),
+                            },
+                          })
+                        }
+                      />
+                    ))
+                  )}
+                </View>
               </View>
             ) : (
               // Renderizar las secciones predeterminadas si no hay búsqueda ni categoría seleccionada
@@ -336,7 +379,7 @@ const BenefitsScreen = () => {
                 </View>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.recomContainer}>
-                    {recommendedCupons.map((cupon) => (
+                    {recommendedCupons.map(cupon => (
                       <CuponCard
                         key={cupon.id}
                         cupon={cupon}
@@ -366,7 +409,7 @@ const BenefitsScreen = () => {
                 </View>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.recomContainer}>
-                    {segurosCupons.map((cupon) => (
+                    {segurosCupons.map(cupon => (
                       <CuponCard
                         key={cupon.id}
                         cupon={cupon}
@@ -396,7 +439,7 @@ const BenefitsScreen = () => {
                 </View>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.recomContainer}>
-                    {viajesCupons.map((cupon) => (
+                    {viajesCupons.map(cupon => (
                       <CuponCard
                         key={cupon.id}
                         cupon={cupon}
@@ -431,15 +474,15 @@ const BenefitsScreen = () => {
   );
 };
 
-
-
-
 const styles = StyleSheet.create({
-  // Estilos existentes...
   container: {
     flex: 1,
     marginBottom: 20,
     backgroundColor: colors.purple,
+  },
+  iconCategory: {
+    width: 50,
+    height: 50,
   },
   selectedCategoryStyle: {
     borderColor: colors.purple,
@@ -516,12 +559,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: fonts.gotham.semiBold,
     marginBottom: 10,
+    marginTop: 40,
   },
   containerCoupons: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
+    paddingLeft: 16,
     gap: 21,
   },
   couponsCont: {
@@ -529,6 +571,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
+    width: 88, // Ajusta el ancho para que las categorías se alineen correctamente'
   },
   containerCouponsChildren: {
     width: 64.9,
