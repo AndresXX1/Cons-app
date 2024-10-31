@@ -63,6 +63,7 @@ const EmailVerify = () => {
           <Text style={styles.textOpacity}>name@name.com </Text>
         </Text>
         <OTPInputText
+          
           numberOfDigits={5}
           focusColor={colors.blue2}
           focusStickBlinkingDuration={500}

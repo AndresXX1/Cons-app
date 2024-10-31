@@ -11,6 +11,8 @@ import {
   Modal,
   Platform,
   Alert,
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 
 import { Redirect, useRouter } from 'expo-router';
@@ -24,18 +26,12 @@ import { updateSecondData } from '@/store/service/user';
 // Importar ImagePicker desde expo-image-picker
 import * as ImagePicker from 'expo-image-picker';
 
-const formatDateString = (date: string | Date) => {
-  if (typeof date === 'string') {
-    const [day, month, year] = date.split('/');
-    return `${day}/${month}/${year}`;
-  } else {
-    const formattedDate = new Intl.DateTimeFormat('es', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).format(date);
-    return formattedDate;
-  }
+const formatDateString = (date: Date) => {
+  return new Intl.DateTimeFormat('es', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(date);
 };
 
 const SignUp3 = () => {
@@ -49,7 +45,7 @@ const SignUp3 = () => {
   const [phoneIsFocused, setPhoneIsFocused] = useState(false);
 
   const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedDateText, setSelectedDateText] = useState<string>('');
 
   // Estado para almacenar la imagen de perfil
@@ -79,9 +75,11 @@ const SignUp3 = () => {
     if (event.type === 'set' && date) {
       setSelectedDate(date);
       setSelectedDateText(formatDateString(date));
+    } else if (event.type === 'dismissed') {
+      // Si el usuario cancela el selector, no hacemos nada
     }
     if (Platform.OS === 'android') {
-      setShowPicker(false); // Oculta el DatePicker en Android después de seleccionar
+      setShowPicker(false); // Oculta el DatePicker en Android después de seleccionar o cancelar
     }
   };
 
@@ -136,7 +134,7 @@ const SignUp3 = () => {
       aspect: [1, 1], // Relación de aspecto cuadrada
       quality: 0.7, // Calidad de la imagen
       cameraType: 'front', // Usar la cámara frontal
-      FlashMode: 'off', // Desactivar el modo de flash
+      flashMode: 'off', // Desactivar el modo de flash
     });
 
     if (!result.canceled) {
@@ -151,21 +149,63 @@ const SignUp3 = () => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <View style={styles.form}>
-        <View style={styles.logoContainer}>
-          <Image source={images.logo_blue} style={styles.logo} />
-        </View>
-        <Text style={styles.title}>Registro</Text>
-        <CustomProgressBar currentStep={3} totalSteps={4} />
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.form}>
+          <View style={styles.logoContainer}>
+            <Image source={images.logo_blue} style={styles.logo} />
+          </View>
+          <Text style={styles.title}>Registro</Text>
+          <CustomProgressBar currentStep={3} totalSteps={4} />
 
-        <TextInput
-          placeholder="Fecha de nacimiento"
-          style={styles.textInput}
-          value={selectedDateText}
-          editable={false}
-          placeholderTextColor={colors.gray2}
-          onPressIn={showDatePicker}
-        />
+          <TouchableOpacity onPress={showDatePicker} activeOpacity={1}>
+            <TextInput
+              placeholder="Fecha de nacimiento"
+              style={styles.textInput}
+              value={selectedDateText}
+              editable={false}
+              pointerEvents="none"
+            />
+          </TouchableOpacity>
+
+          {error !== '' && <Text style={styles.error}>{error}</Text>}
+
+          <TextInput
+            placeholder="Teléfono"
+            autoCapitalize="none"
+            placeholderTextColor={colors.gray2}
+            onFocus={handlePhoneFocus}
+            onBlur={handlePhoneBlur}
+            onChangeText={(text) => setInputPhoneValue(text)}
+            editable={!isSubmitting}
+            value={inputPhoneValue}
+            style={[
+              styles.textInput,
+              {
+                borderColor: phoneIsFocused ? colors.blue2 : colors.gray2,
+              },
+            ]}
+          />
+
+          {/* Mostrar la imagen de perfil o un marcador de posición */}
+          <View style={styles.profileImageContainer}>
+            {profileImage ? (
+              <Image source={{ uri: profileImage }} style={styles.profileImage} />
+            ) : (
+              <Image source={images.placeholderProfile} style={styles.profileImage} />
+            )}
+          </View>
+
+          <Pressable onPress={handleTakePhoto} style={styles.uploadButton}>
+            <Text style={styles.uploadButtonText}>Subir foto de perfil (opcional)</Text>
+          </Pressable>
+
+          <View style={styles.containerNext}>
+            <Pressable style={styles.buttonNext} onPress={handleNext}>
+              {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
+              {!isSubmitting && <Text style={styles.textNext}>Finalizar registro</Text>}
+            </Pressable>
+          </View>
+        </View>
 
         {showPicker && (
           <Modal visible={showPicker} transparent={true} animationType="slide">
@@ -189,46 +229,7 @@ const SignUp3 = () => {
             </View>
           </Modal>
         )}
-
-        <TextInput
-          placeholder="Teléfono"
-          autoCapitalize="none"
-          placeholderTextColor={colors.gray2}
-          onFocus={handlePhoneFocus}
-          onBlur={handlePhoneBlur}
-          onChangeText={(text) => setInputPhoneValue(text)}
-          editable={!isSubmitting}
-          value={inputPhoneValue}
-          style={[
-            styles.textInput,
-            {
-              borderColor: phoneIsFocused ? colors.blue2 : colors.gray2,
-            },
-          ]}
-        />
-
-        {/* Mostrar la imagen de perfil o un marcador de posición */}
-        <View style={styles.profileImageContainer}>
-          {profileImage ? (
-            <Image source={{ uri: profileImage }} style={styles.profileImage} />
-          ) : (
-            <Image source={images.placeholderProfile} style={styles.profileImage} />
-          )}
-        </View>
-
-        <Pressable onPress={handleTakePhoto} style={styles.uploadButton}>
-          <Text style={styles.uploadButtonText}>Subir foto de perfil (opcional)</Text>
-        </Pressable>
-
-        {error !== '' && <Text style={styles.error}>{error}</Text>}
-
-        <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNext} onPress={handleNext}>
-            {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
-            {!isSubmitting && <Text style={styles.textNext}>Finalizar registro</Text>}
-          </Pressable>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -236,11 +237,15 @@ const SignUp3 = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    paddingTop: 52,
     backgroundColor: colors.gray,
   },
-  form: {
+  scrollView: {
+    flexGrow: 1,
+    paddingTop: 52,
     paddingHorizontal: 16,
+  },
+  form: {
+    flex: 1,
   },
   logoContainer: {
     paddingVertical: 20,
@@ -269,12 +274,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     marginTop: 30,
+    justifyContent: 'center',
   },
   error: {
     fontFamily: fonts.gotham.regular,
     color: colors.red,
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   containerNext: {
     alignItems: 'center',
@@ -301,26 +307,25 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '100%',
-    padding: 20,
     backgroundColor: 'white',
-    borderTopLeftRadius: 10, // Para un mejor diseño
+    padding: 20,
+    borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    alignItems: 'center',
   },
   buttonClose: {
     marginTop: 20,
     backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 10,
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    marginBottom: 20,
+    alignSelf: 'center',
   },
   textClose: {
     color: 'white',
-    textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
+    textAlign: 'center',
     fontSize: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
   },
   // Estilos para la imagen de perfil y el botón de subir
   profileImageContainer: {
