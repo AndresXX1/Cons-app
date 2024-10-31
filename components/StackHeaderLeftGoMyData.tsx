@@ -19,7 +19,6 @@ export function StackHeaderLeftGoMyData({ color, title }: { color: string; title
         marginLeft: 20,
         gap: 9,
       }}
-      activeOpacity={1}
     >
       <Image
         source={color === colors.white ? images.arrow_back : images.arrow_blue}

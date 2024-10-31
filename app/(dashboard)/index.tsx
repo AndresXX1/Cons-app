@@ -21,6 +21,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { registerViewTime } from '@/store/service/timer';
 import Slider from '@/components/Slider';
+import { applyForLoan } from '@/store/service/user';
+import SelectBranchModal from '@/components/SelectBranchModal';
+
 
 const { width } = Dimensions.get('window');
 
@@ -54,6 +57,8 @@ const HomeScreen = () => {
     }, []),
   );
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       let seconds = 0;
@@ -86,6 +91,68 @@ const HomeScreen = () => {
     },
   ];
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      setModalVisible(false);
+    }, []),
+  );
+
+  const handlePush = async (branchId: string) => {
+    try {
+      setIsLoading(true); // Activar el loader
+      const response = await applyForLoan(branchId);
+      if (response) {
+        console.log('Préstamo aplicado exitosamente:', response);
+        if(response?.offer.maximoCapital === '0'){
+          return router.push('waiting_loan')
+        }
+        router.push({
+          pathname: '/borrow_money',
+          params: { loanData: response.offer.maximoCapital }, // Pasar la data como parámetro
+        });
+      } else {
+        console.log('Error al aplicar para el préstamo.');
+        // Puedes mostrar una alerta o notificación al usuario
+      }
+    } catch (error) {
+      console.log('Error en applyForLoan:', error);
+      // Maneja el error, por ejemplo, mostrando una alerta
+    } finally {
+      setIsLoading(false); // Desactivar el loader
+      closeModal();
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const branches = [
+    { id: 'VARELAAPP', name: 'Florencio Varela' },
+    { id: 'SOLANOAPP', name: 'San Francisco Solano' },
+    { id: 'SANFERNANDOAPP', name: 'San Fernando' },
+    { id: 'BERAZATEGUIAPP', name: 'Berazategui' },
+    { id: 'SANJUSTOAPP', name: 'San Justo' },
+    { id: 'LANUSAPP', name: 'Lanus' },
+    { id: 'LOMASAPP', name: 'Lomas' },
+    { id: 'SANMIGUEL2APP', name: 'San Miguel 2' },
+    { id: 'AVELLANEDAAPP', name: 'Avellaneda' },
+    { id: 'ONLINEAPP', name: 'Online' },
+    { id: 'QUILMESAPP', name: 'Quilmes' },
+    { id: 'SANJOSEAPP', name: 'San Jose' },
+    { id: 'LINIERSAPP', name: 'Liniers' },
+    { id: 'LAFERREREAPP', name: 'Laferrere' },
+    { id: 'MORENOAPP', name: 'Moreno' },
+    { id: 'DHOGARAPP', name: 'Dulce Hogar' },
+    { id: 'GRANDULCEAPP', name: 'La Gran Dulce' },
+  ];
+
   return (
     <SafeAreaView style={styles.root}>
       <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
@@ -101,7 +168,7 @@ const HomeScreen = () => {
             <Text style={styles.textBold}> $300.000!</Text>
           </View>
 
-          <Pressable style={styles.button} onPress={() => router.push('apply_for_loan')}>
+          <Pressable style={styles.button} onPress={() => openModal()}>
             {({ pressed }) => (
               <View style={[styles.buttonContainer, { opacity: pressed ? 0.5 : 1 }]}>
                 <Image source={images.money_white} style={styles.moneyIcon} />
@@ -109,7 +176,14 @@ const HomeScreen = () => {
               </View>
             )}
           </Pressable>
-        
+          <SelectBranchModal
+            visible={isModalVisible}
+            onClose={closeModal}
+            onSelectBranch={handlePush}
+            branches={branches}
+            isLoading={isLoading} // Pasar el estado de carga
+          />
+
           <View style={styles.line}></View>
 
           <Slider data={offices?.slice(0, 6)} />

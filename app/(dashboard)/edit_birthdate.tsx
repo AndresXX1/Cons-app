@@ -1,19 +1,9 @@
-import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, Text, Pressable, ScrollView, TextInput, TouchableOpacity, Modal, ActivityIndicator, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Pressable,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Modal,
-  ActivityIndicator,
-} from 'react-native';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { colors, fonts } from '@/theme';
-import { useRef, useState } from 'react';
 import { updateUserData } from '@/store/service/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
@@ -23,18 +13,17 @@ const EditBirthdate = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const dispatch = useDispatch<AppDispatch>();
   const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [error, setError] = useState('');
   const { user } = useSelector((state: RootState) => state.auth);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formatDateString = (date: string) => {
-    const spaceIndex = date.indexOf(' ');
-    const secondSpaceIndex = date.indexOf(' ', spaceIndex + 1);
-    const month =
-      date.slice(secondSpaceIndex + 1, secondSpaceIndex + 2).toUpperCase() +
-      date.slice(secondSpaceIndex + 2);
-    return date.slice(0, secondSpaceIndex + 1) + month;
+  const formatDateString = (date: Date) => {
+    return new Intl.DateTimeFormat('es', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(date);
   };
 
   const routerNext = () => {
@@ -51,21 +40,19 @@ const EditBirthdate = () => {
 
   const [selectedDateText, setSelectedDateText] = useState<string>('');
 
-  const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
-    if (selectedDate) {
-      const formattedDate = new Intl.DateTimeFormat('es', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      }).format(selectedDate);
-      setSelectedDate(selectedDate);
-      setSelectedDateText(formatDateString(formattedDate));
+  const handleDateChange = (event: DateTimePickerEvent, date?: Date) => {
+    if (event.type === 'set' && date) {
+      setSelectedDate(date);
+      setSelectedDateText(formatDateString(date));
+    }
+    if (Platform.OS === 'android') {
+      setShowPicker(false); // Oculta el DatePicker en Android después de seleccionar
     }
   };
 
   const handleSave = async () => {
     if (!selectedDate) {
-      setError('El nombre es requerido');
+      setError('La fecha de nacimiento es requerida');
       return;
     }
     if (isSubmitting) {
@@ -90,13 +77,14 @@ const EditBirthdate = () => {
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.gray} barStyle="dark-content" />
         <View style={styles.contentContainer}>
-          <TouchableOpacity style={{ opacity: 1 }} activeOpacity={1}>
+          <TouchableOpacity onPress={showDatePicker} activeOpacity={1}>
             <TextInput
-              onPress={showDatePicker}
               placeholder="Fecha de nacimiento"
               style={styles.textInput}
               value={selectedDateText}
               editable={false}
+              pointerEvents="none"
+              onPressIn={showDatePicker}
             />
           </TouchableOpacity>
         </View>
@@ -109,23 +97,28 @@ const EditBirthdate = () => {
           </Pressable>
         </View>
 
-        <Modal visible={showPicker} transparent={true} animationType="slide">
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <DatePicker
-                style={{ width: '100%' }}
-                value={selectedDate}
-                display="spinner"
-                mode="date"
-                textColor="#000"
-                onChange={handleDateChange}
-              />
-              <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
-                <Text style={styles.textClose}>Confirmar</Text>
-              </Pressable>
+        {showPicker && (
+          <Modal visible={showPicker} transparent={true} animationType="slide">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <DatePicker
+                  value={selectedDate || new Date()}
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                  mode="date"
+                  onChange={handleDateChange}
+                  maximumDate={new Date()}
+                  locale="es-ES"
+                  textColor="#000"
+                />
+                {Platform.OS === 'ios' && (
+                  <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
+                    <Text style={styles.textClose}>Confirmar</Text>
+                  </Pressable>
+                )}
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -155,34 +148,34 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     marginTop: 30,
+    justifyContent: 'center',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end', // Para mostrar el modal en la parte inferior
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
   },
   modalContent: {
-    width: 350,
-    padding: 20,
+    width: '100%',
     backgroundColor: 'white',
-    borderRadius: 10,
-    alignItems: 'center',
+    padding: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   buttonClose: {
     marginTop: 20,
     backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 10,
+    alignSelf: 'center',
   },
   textClose: {
     color: 'white',
-    width: 100,
-    display: 'flex',
-    textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
-    height: 18,
-    paddingTop: 3,
+    textAlign: 'center',
+    fontSize: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
   },
   containerNext: {
     alignItems: 'center',
@@ -198,9 +191,6 @@ const styles = StyleSheet.create({
     width: 164,
     height: 50,
     borderRadius: 50,
-    display: 'flex',
-    verticalAlign: 'middle',
-    textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 38,

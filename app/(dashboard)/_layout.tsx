@@ -1,5 +1,6 @@
 import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
 import { StackHeaderLeftGoBackBenefits } from '@/components/StackHeaderLeftGoBackBenefits';
+import { StackHeaderLeftGoBackNews } from '@/components/StackHeaderLeftGoBackNews';
 import { StackHeaderLeftGoBackProfile } from '@/components/StackHeaderLeftGoBackProfile';
 import { StackHeaderLeftGoLoan } from '@/components/StackHeaderLeftGoLoan';
 import { StackHeaderLeftGoMyData } from '@/components/StackHeaderLeftGoMyData';
@@ -47,6 +48,7 @@ const disableNavbarPages = [
   'edit_birthdate',
   'edit_phone',
   'payment_methods',
+  'waiting_loan',
 ];
 
 const DashboardLayout = () => {
@@ -78,6 +80,12 @@ const DashboardLayout = () => {
       />
       <Tabs.Screen
         name="loan"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="waiting_loan"
         options={{
           headerShown: false,
         }}
@@ -335,7 +343,7 @@ const DashboardLayout = () => {
           title: 'points_questions',
           headerTitle: () => null,
           headerTitleAlign: 'center',
-          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+          headerLeft: () => <StackHeaderLeftGoBackProfile title={'Volver atrás'} color={colors.blue} />,
         }}
       />
       <Tabs.Screen
@@ -357,7 +365,7 @@ const DashboardLayout = () => {
           title: 'news_detail',
           headerTitle: () => null,
           headerTitleAlign: 'center',
-          headerLeft: () => <StackHeaderLeftGoBack title={'Volver atrás'} color={colors.blue} />,
+          headerLeft: () => <StackHeaderLeftGoBackNews title={'Volver atrás'} color={colors.blue} />,
         }}
       />
     </Tabs>

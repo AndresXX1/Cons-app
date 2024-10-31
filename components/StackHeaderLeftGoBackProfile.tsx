@@ -19,7 +19,6 @@ export function StackHeaderLeftGoBackProfile({ color, title }: { color: string; 
         marginLeft: 20,
         gap: 9,
       }}
-      activeOpacity={1} // Evitar cambio de opacidad al presionar
     >
       <Image
         source={color === colors.white ? images.arrow_back : images.arrow_blue}

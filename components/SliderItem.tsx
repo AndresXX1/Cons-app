@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { images, fonts, colors } from '@/theme';
+import { router } from 'expo-router';
 
 const SliderItem = ({ item }) => {
   return (
-    <View style={styles.container}>
+    <Pressable onPress={() => router.push(`/branch_offices`)}>
+    {({ pressed }) => (
+    <View style={[styles.container, { opacity: pressed ? 0.5 : 1 }, { borderColor: pressed ? colors.gray5 : 'transparent'}]}>
       <Image source={{ uri : `https://back5.maylandlabs.com/branch/${item.image}`}} style={styles.image} />
       <View style={styles.containerText}>
         <Text style={styles.title}>{item.name}</Text>
@@ -13,6 +16,8 @@ const SliderItem = ({ item }) => {
         <Text style={styles.number}>{item.whatsapp}</Text>
       </View>
     </View>
+    )}
+   </Pressable>
   );
 };
 
@@ -22,10 +27,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     overflow: 'hidden',
+    borderWidth: 1,
   },
   containerText: {
     padding: 10,
-    minHeight: 160,
+    minHeight: 140,
   },
   image: {
     width: '100%',

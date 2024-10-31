@@ -1,24 +1,22 @@
 import React from 'react';
 import { colors, fonts, images } from '@/theme';
 import { TouchableOpacity, Image, Text } from 'react-native';
-import { AppDispatch } from '@/store';
-import { useDispatch } from 'react-redux';
-import { logOutAsync } from '@/store/actions/auth';
+import { useRouter } from 'expo-router';
 
-export function StackHeaderLogout({ color, title }: { color: string; title: string }) {
-  const dispatch = useDispatch<AppDispatch>();
+export function StackHeaderLeftGoBackNews({ color, title }: { color: string; title: string }) {
+  const router = useRouter();
 
   return (
     <TouchableOpacity
       onPress={() => {
-        dispatch(logOutAsync())
+        router.push('/news');
       }}
       style={{
         borderColor: 'transparent',
         backgroundColor: colors.transparent,
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: 10,
+        marginLeft: 20,
         gap: 9,
       }}
     >

@@ -37,7 +37,7 @@ const ApplyForLoanScreen = () => {
   );
 
   const handlePush = async (branchName: string) => {
-    await applyForLoan(branchName)
+    const response = await applyForLoan(branchName)    
     closeModal();
     router.push(`/borrow_money`);
   }
@@ -82,19 +82,6 @@ const ApplyForLoanScreen = () => {
             style={styles.scrollView}
             ref={scrollViewRef}
             contentContainerStyle={styles.scrollViewContent}>
-            <Text style={styles.title}>Quiero Mi Préstamo</Text>
-            <LinearGradient
-              start={{ x: 0.5, y: 0 }}
-              end={{ x: 0.5, y: 1 }}
-              colors={['#F3E670', '#FFBA08']}
-              style={styles.gradientBorder}>
-              <View style={styles.containerLoan}>
-                <Text style={styles.textLoan}>
-                  Préstamo disponible de{'\n'}
-                  <Text style={styles.textPriceLoan}>$300.000</Text>
-                </Text>
-              </View>
-            </LinearGradient>
             <View style={styles.buttonRed}>
               <Pressable onPress={openModal}>
                 <Text style={styles.textRed}>¡LO QUIERO AHORA!</Text>
