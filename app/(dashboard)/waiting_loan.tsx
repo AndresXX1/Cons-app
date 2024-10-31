@@ -7,11 +7,12 @@ import { useRouter } from 'expo-router';
 
 const WaitingLoan = () => {
   const router = useRouter();
-  const scrollViewRef = useRef<ScrollView>(null);
 
   return (
     <SafeAreaView style={styles.root}>
-      <ScrollView style={styles.scrollView} ref={scrollViewRef}>
+      <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
+
+      <View style={styles.scrollView}>
         <View>
           <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
           <View style={styles.circle}>
@@ -29,13 +30,13 @@ const WaitingLoan = () => {
           <Text style={styles.btnText}>Contactar a un asesor</Text>
         </Pressable>
 
-        <Pressable style={styles.btnRed} onPress={() => router.push('loan')}>
+        <Pressable style={styles.btnRed} onPress={() => router.push('shop')}>
           <Text style={styles.btnTextWhite}>Ver productos Argencompras</Text>
         </Pressable>
-        <Pressable style={styles.btnPurple} onPress={() => router.push('loan')}>
+        <Pressable style={styles.btnPurple} onPress={() => router.push('benefits')}>
           <Text style={styles.btnTextWhite}>Ver suscripción Cuponizate</Text>
         </Pressable>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -48,7 +49,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   scrollView: {
-    width: '100%',
+    flex: 1,
+    paddingVertical: 20,
   },
   title: {
     fontFamily: fonts.gotham.bold,

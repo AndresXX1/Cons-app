@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { colors, fonts, images } from '@/theme';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView, Linking, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
@@ -16,22 +16,25 @@ const SecurityScreen = () => {
           <Image source={images.key_vertical_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
             <Text style={styles.mainText}>Cambiar contraseña</Text>
-            <Text style={styles.offText}>***************</Text>
+            <Text style={styles.offText}>Cerrar sesion y dale a "Olvide mi contraseña"</Text>
           </View>
-          <Image source={images.edit_square_blue} style={styles.editIcon} />
         </View>
+        <Pressable onPress={() => Linking.openURL('https://www.argenpesos.com.ar/public/storage/pdf/ARGENCRED%20-%20Terminos%20y%20condiciones%20SITIO%20WEB.pdf')}>
         <View style={styles.containerItem}>
           <Image source={images.enhanced_encryption_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
             <Text style={styles.mainText}>Ver politicas de{'\n'}privacidad</Text>
           </View>
         </View>
+        </Pressable>
+        <Pressable onPress={() => Linking.openURL('https://www.argenpesos.com.ar/public/storage/pdf/ARGENCRED%20-%20Terminos%20y%20condiciones%20SITIO%20WEB.pdf')}>
         <View style={styles.containerItem}>
           <Image source={images.shield_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
             <Text style={styles.mainText}>Ver términos y{'\n'}condiciones</Text>
           </View>
         </View>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
   offText: {
     fontFamily: fonts.gotham.regular,
     color: colors.texts,
-    fontSize: 16,
+    fontSize: 14,
   },
   editIcon: {
     width: 24,

@@ -1,11 +1,13 @@
 import { colors, fonts, images } from '@/theme';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, StyleSheet, Text, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const BorrowMoneyScreen = () => {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const loanMoney = params.loanData;
 
   return (
     <SafeAreaView style={styles.root}>
@@ -14,6 +16,10 @@ const BorrowMoneyScreen = () => {
         <View style={styles.circle}>
           <Image source={images.check_blue} style={styles.checkIcon} />
         </View>
+          <Text style={styles.textLoan}>
+            Préstamo disponible de{'\n'}
+            <Text style={styles.textPriceLoan}>{loanMoney}</Text>
+          </Text>
         <Text style={styles.title}>¡En breve un asesor se contactara con vos!</Text>
         <Text style={styles.textDescription}>
           Horario de atención son de{'\n'}
@@ -23,10 +29,10 @@ const BorrowMoneyScreen = () => {
         </Text>
       </View>
       <View>
-        <Pressable style={styles.btnWhite}>
-          <Text style={styles.btnText}>Ver el estado de mi préstamo</Text>
+        <Pressable style={styles.btnWhite} onPress={() => router.push('loan')}>
+          <Text style={styles.btnText}>Ver mis préstamos</Text>
         </Pressable>
-        <Pressable onPress={() => router.push('apply_for_loan')}>
+        <Pressable onPress={() => router.push('')}>
           <Text style={styles.textBack}>Volver al menú</Text>
         </Pressable>
       </View>
@@ -41,12 +47,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.skyBlue,
     justifyContent: 'space-between',
   },
-  title: {
-    fontFamily: fonts.gotham.bold,
-    fontSize: 24,
+  textLoan: {
     color: colors.white,
+    fontFamily: fonts.gotham.regular,
+    fontSize: 20,
     textAlign: 'center',
-    marginTop: 30,
+    marginBottom: 12,
+    marginTop: 22,
+    lineHeight: 40,
+  },
+  textPriceLoan: {
+    fontSize: 48,
+    color: colors.white,
+    fontFamily: fonts.gotham.bold,
+    marginTop: 20,
+  },
+  title: {
+    textAlign: 'center',
+    fontFamily: fonts.gotham.semiBold,
+    fontSize: 20,
+    color: colors.white,
+    marginHorizontal: "auto",
+    maxWidth: 300,
+
   },
   circle: {
     width: 148,
@@ -56,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    marginTop: 64,
+    marginTop: 50,
   },
   checkIcon: {
     width: 116,
@@ -64,20 +87,20 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     fontFamily: fonts.gotham.regular,
-    fontSize: 20,
+    fontSize: 16,
     lineHeight: 24,
     color: colors.white,
     textAlign: 'center',
-    marginTop: 64,
+    marginTop: 84,
   },
   textDescriptionBold: {
-    fontFamily: fonts.gotham.semiBold,
+    fontFamily: fonts.gotham.bold,
+    fontSize: 16,
   },
   btnWhite: {
     backgroundColor: colors.white,
-    height: 50,
     marginHorizontal: 20,
-    padding: 15,
+    padding: 18,
     borderRadius: 50,
     marginBottom: 30,
   },

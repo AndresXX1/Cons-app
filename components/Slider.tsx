@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     width: width, // Full width of screen
     justifyContent: 'flex-start',
     gap: 16,
-    paddingLeft: 25,
   },
   containerOffices: {
     display: 'flex',

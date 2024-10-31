@@ -7,10 +7,10 @@ import {
   Pressable,
   Text,
   TextInput,
-  TouchableOpacity,
   ActivityIndicator,
   Modal,
   Platform,
+  Alert,
 } from 'react-native';
 
 import { Redirect, useRouter } from 'expo-router';
@@ -21,9 +21,21 @@ import { AppDispatch, RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSecondData } from '@/store/service/user';
 
-const formatDateString = (date: string) => {
-  const [day, month, year] = date.split('/');
-  return `${day}/${month}/${year}`;
+// Importar ImagePicker desde expo-image-picker
+import * as ImagePicker from 'expo-image-picker';
+
+const formatDateString = (date: string | Date) => {
+  if (typeof date === 'string') {
+    const [day, month, year] = date.split('/');
+    return `${day}/${month}/${year}`;
+  } else {
+    const formattedDate = new Intl.DateTimeFormat('es', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(date);
+    return formattedDate;
+  }
 };
 
 const SignUp3 = () => {
@@ -37,8 +49,11 @@ const SignUp3 = () => {
   const [phoneIsFocused, setPhoneIsFocused] = useState(false);
 
   const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedDateText, setSelectedDateText] = useState<string>('');
+
+  // Estado para almacenar la imagen de perfil
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const routerNext = () => {
     router.push('/(auth)/signup4');
@@ -61,27 +76,12 @@ const SignUp3 = () => {
   };
 
   const handleDateChange = (event: DateTimePickerEvent, date?: Date) => {
+    if (event.type === 'set' && date) {
+      setSelectedDate(date);
+      setSelectedDateText(formatDateString(date));
+    }
     if (Platform.OS === 'android') {
-      if (event.type === 'set' && date) {
-        const formattedDate = new Intl.DateTimeFormat('es', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-        }).format(date);
-        setSelectedDate(date);
-        setSelectedDateText(formatDateString(formattedDate));
-      }
       setShowPicker(false); // Oculta el DatePicker en Android después de seleccionar
-    } else {
-      if (date) {
-        const formattedDate = new Intl.DateTimeFormat('es', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-        }).format(date);
-        setSelectedDate(date);
-        setSelectedDateText(formatDateString(formattedDate));
-      }
     }
   };
 
@@ -101,6 +101,8 @@ const SignUp3 = () => {
     await updateSecondData({
       birthday: selectedDate,
       phone: inputPhoneValue,
+      // Puedes incluir profileImage si planeas enviarlo al backend
+      // profileImage,
       setError,
       setIsSubmitting,
       dispatch,
@@ -111,16 +113,37 @@ const SignUp3 = () => {
   useEffect(() => {
     if (user?.birthday) {
       const date = new Date(user.birthday.toString());
-      const formattedDate = new Intl.DateTimeFormat('es', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      }).format(date);
+      const formattedDate = formatDateString(date);
       setSelectedDate(date);
-      setSelectedDateText(formatDateString(formattedDate));
+      setSelectedDateText(formattedDate);
     }
     setInputPhoneValue(user?.phone || '');
   }, [user]);
+
+  // Función para manejar la toma de la foto
+  const handleTakePhoto = async () => {
+    // Solicitar permisos de cámara
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permiso denegado', 'Necesitamos permiso para usar la cámara');
+      return;
+    }
+
+    // Abrir la cámara para tomar una foto
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true, // Permite al usuario editar la foto
+      aspect: [1, 1], // Relación de aspecto cuadrada
+      quality: 0.7, // Calidad de la imagen
+      cameraType: 'front', // Usar la cámara frontal
+      FlashMode: 'off', // Desactivar el modo de flash
+    });
+
+    if (!result.canceled) {
+      const selectedImage = result.assets[0];
+      setProfileImage(selectedImage.uri);
+    }
+  };
 
   if (!isAuth) {
     return <Redirect href="/(auth)" />;
@@ -135,42 +158,36 @@ const SignUp3 = () => {
         <Text style={styles.title}>Registro</Text>
         <CustomProgressBar currentStep={3} totalSteps={4} />
 
-        <TouchableOpacity onPress={showDatePicker} activeOpacity={1}>
-          <TextInput
-            placeholder="Fecha de nacimiento"
-            style={styles.textInput}
-            value={selectedDateText}
-            editable={false}
-          />
-        </TouchableOpacity>
+        <TextInput
+          placeholder="Fecha de nacimiento"
+          style={styles.textInput}
+          value={selectedDateText}
+          editable={false}
+          placeholderTextColor={colors.gray2}
+          onPressIn={showDatePicker}
+        />
 
-        {Platform.OS === 'ios' && (
+        {showPicker && (
           <Modal visible={showPicker} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <DatePicker
-                  style={{ width: '100%' }}
-                  value={selectedDate}
-                  display="spinner"
+                  value={selectedDate || new Date()}
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                   mode="date"
-                  textColor="#000"
                   onChange={handleDateChange}
+                  maximumDate={new Date()}
+                  locale="es-ES"
+                  textColor="#000"
                 />
-                <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
-                  <Text style={styles.textClose}>Confirmar</Text>
-                </Pressable>
+                {Platform.OS === 'ios' && (
+                  <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
+                    <Text style={styles.textClose}>Confirmar</Text>
+                  </Pressable>
+                )}
               </View>
             </View>
           </Modal>
-        )}
-
-        {Platform.OS === 'android' && showPicker && (
-          <DatePicker
-            value={selectedDate}
-            display="default"
-            mode="date"
-            onChange={handleDateChange}
-          />
         )}
 
         <TextInput
@@ -189,6 +206,19 @@ const SignUp3 = () => {
             },
           ]}
         />
+
+        {/* Mostrar la imagen de perfil o un marcador de posición */}
+        <View style={styles.profileImageContainer}>
+          {profileImage ? (
+            <Image source={{ uri: profileImage }} style={styles.profileImage} />
+          ) : (
+            <Image source={images.placeholderProfile} style={styles.profileImage} />
+          )}
+        </View>
+
+        <Pressable onPress={handleTakePhoto} style={styles.uploadButton}>
+          <Text style={styles.uploadButtonText}>Subir foto de perfil (opcional)</Text>
+        </Pressable>
 
         {error !== '' && <Text style={styles.error}>{error}</Text>}
 
@@ -209,10 +239,8 @@ const styles = StyleSheet.create({
     paddingTop: 52,
     backgroundColor: colors.gray,
   },
-  containerNext: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 20,
+  form: {
+    paddingHorizontal: 16,
   },
   logoContainer: {
     paddingVertical: 20,
@@ -222,9 +250,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 154,
     height: 48,
-  },
-  form: {
-    paddingHorizontal: 16,
   },
   title: {
     fontFamily: fonts.gotham.semiBold,
@@ -251,6 +276,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
+  containerNext: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
   buttonNext: {
     backgroundColor: colors.blue,
     width: 164,
@@ -266,14 +296,14 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end', // Ajustado para que aparezca en la parte inferior
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end', // Para mostrar el modal en la parte inferior
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
   },
   modalContent: {
     width: '100%',
     padding: 20,
     backgroundColor: 'white',
-    borderTopLeftRadius: 10, // Ajustado para un mejor diseño
+    borderTopLeftRadius: 10, // Para un mejor diseño
     borderTopRightRadius: 10,
     alignItems: 'center',
   },
@@ -282,11 +312,36 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    marginBottom: 20,
   },
   textClose: {
     color: 'white',
     textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
+    fontSize: 16,
+  },
+  // Estilos para la imagen de perfil y el botón de subir
+  profileImageContainer: {
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+  },
+  uploadButton: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  uploadButtonText: {
+    color: colors.blue,
+    fontFamily: fonts.gotham.regular,
+    textDecorationLine: 'underline',
+    fontSize: 16,
+    marginTop: 10,
   },
 });
 

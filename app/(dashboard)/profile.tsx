@@ -19,7 +19,7 @@ const ProfileScreen = () => {
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
   const dispatch = useDispatch<AppDispatch>();
-  const { user, isAuth } = useSelector((state: RootState) => state.auth);
+  const { user, isAuth, smarter } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     if (!isAuth) return router.push('(auth)');
@@ -44,22 +44,41 @@ const ProfileScreen = () => {
         clearInterval(intervalId);
         registerViewTime({ time: seconds, view: 'profile' });
       };
-    }, [])
+    }, []),
   );
 
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
-        <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
         <NavBar />
+        <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
         <Text style={styles.fullName}>
           {user?.first_name && firstWord(user.first_name)}
           {user?.last_name && ' '}
           {user?.last_name && firstWord(user.last_name)}
         </Text>
         <View style={styles.containerItem}>
-          <Image source={images.icon_gold} style={styles.imageIcon} />
-          <Text style={styles.level}>Nivel Oro</Text>
+          {smarter &&
+          smarter.credits &&
+          smarter.credits.length > 0 &&
+          smarter.credits[0].categoria ? (
+            <Image
+              source={images[smarter.credits[0].categoria]}
+              style={styles.imageIcon}
+              resizeMode="cover"
+            />
+          ) : (
+            <Image source={images.Bronce} style={styles.imageIcon} resizeMode="cover" />
+          )}
+          <Text style={{ color: colors.texts, fontSize: 16, fontFamily: fonts.gotham.regular }}>
+            Nivel
+          </Text>
+          <Text style={{ color: colors.texts, fontSize: 16, fontFamily: fonts.gotham.bold }}>
+            {''}
+            {smarter && smarter.credits && smarter.credits.length > 0
+              ? smarter.credits[0].categoria
+              : 'Bronce'}
+          </Text>
         </View>
         <LinearGradient
           start={{ x: 0.5, y: 0 }}
@@ -75,7 +94,11 @@ const ProfileScreen = () => {
           </Pressable>
         </LinearGradient>
         <Pressable onPress={() => router.push('points_questions')}>
-          <Text style={styles.link}>¿Cómo puedo sumar más puntos?</Text>
+          {({ pressed }) => (
+            <Text style={[styles.link, { opacity: pressed ? 0.5 : 1 }]}>
+              ¿Cómo puedo sumar más puntos?
+            </Text>
+          )}
         </Pressable>
         <Pressable style={styles.buttonBlue} onPress={() => router.push('my_data')}>
           <View style={styles.iconCointainer}>
@@ -105,7 +128,7 @@ const ProfileScreen = () => {
           </View>
           <Image source={images.arrow_back_blue} style={styles.arrow} />
         </Pressable>
-        <Text style={styles.version}>Versión 1.13.11</Text>
+        <Text style={styles.version}>Versión 1.5.6</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -114,11 +137,12 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.blue2,
     alignItems: 'center',
   },
   scrollView: {
     width: '100%',
+    backgroundColor: colors.gray,
   },
   fullName: {
     fontFamily: fonts.gotham.semiBold,
@@ -169,7 +193,7 @@ const styles = StyleSheet.create({
   buttonPoints: {
     backgroundColor: colors.red,
     width: 143,
-    height: 39,
+    paddingVertical: 10,
     borderRadius: 50,
     display: 'flex',
     justifyContent: 'center',
@@ -188,7 +212,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue,
     width: width - 32,
     marginLeft: 16,
-    height: 54,
+    paddingVertical: 16,
+    minHeight: 54,
     borderRadius: 50,
     display: 'flex',
     flexDirection: 'row',
@@ -202,7 +227,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue,
     width: width - 32,
     marginLeft: 16,
-    height: 54,
+    paddingVertical: 16,
+    minHeight: 54,
     borderRadius: 50,
     display: 'flex',
     flexDirection: 'row',
@@ -217,6 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    justifyContent: 'center',
   },
   icon: {
     width: 24,
@@ -225,7 +252,6 @@ const styles = StyleSheet.create({
   textButtonBlue: {
     fontFamily: fonts.gotham.semiBold,
     color: colors.white,
-    marginTop: -4,
     fontSize: 19,
   },
   arrow: {
@@ -252,7 +278,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.gotham.semiBold,
     color: colors.blue,
     fontSize: 19,
-    marginTop: -4,
   },
   version: {
     fontFamily: fonts.gotham.regular,
