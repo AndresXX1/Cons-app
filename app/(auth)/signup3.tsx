@@ -88,10 +88,10 @@ const SignUp3 = () => {
   };
 
   const handleNext = async () => {
-    // if (!selectedDateText) {
-    //   setError('Fecha de nacimiento requerida');
-    //   return;
-    // }
+    if (!selectedDateText) {
+      setError('Fecha de nacimiento requerida');
+      return;
+    }
     if (!inputPhoneValue) {
       setError('El teléfono es requerido');
       return;
