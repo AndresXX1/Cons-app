@@ -193,12 +193,14 @@ export const updateSecondData = async ({
   birthday,
   phone,
   setError,
+  newImage,
   setIsSubmitting,
   dispatch,
   routerNext,
 }: {
-  birthday: Date;
+  birthday?: Date;
   phone: string;
+  newImage?: FormData;
   setError: (error: string) => void;
   setIsSubmitting: (boolean: boolean) => void;
   dispatch: ReturnType<typeof useAppDispatch>;
@@ -212,7 +214,11 @@ export const updateSecondData = async ({
     });
     if (response.data.ok) {
       setIsSubmitting(false);
-      dispatch(getUserAsync());
+      if (newImage) {
+        await uploadImgAvatar(newImage, dispatch)
+      } else {
+        dispatch(getUserAsync())
+      }
       routerNext();
     } else {
       setIsSubmitting(false);
@@ -225,6 +231,26 @@ export const updateSecondData = async ({
   } finally {
     setIsSubmitting(false);
     setIsSubmitting(false);
+  }
+};
+
+export const uploadImgAvatar = async (file: FormData, dispatch: ReturnType<typeof useAppDispatch>) => {
+  try {
+    const response = await axiosInstance.put(apiUrls.uploadImgAvatar(), file, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    if (response.data.ok) {
+      dispatch(getUserAsync())
+      return response.data.avatar;
+    } else {
+      console.log("Error al subir imagen");
+      return "";
+    }
+  } catch (error) {
+    console.log("Error al subir imagen");
+    return "";
   }
 };
 

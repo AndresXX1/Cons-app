@@ -10,6 +10,7 @@ export const apiUrls = {
   verifyCode: () => `${baseUrl}/api/auth/verify-email`,
   googleSignIn: () => `${baseUrl}/api/auth/log-in-with-google`,
   resendVerifyCode: () => `${baseUrl}/api/auth/resend-code`,
+  uploadImgAvatar: () => `${baseUrl}/api/user/avatar`,
   refreshToken: () => `${baseUrl}/api/auth/refresh-token`,
   logOut: () => `${baseUrl}/api/auth/log-out`,
   forgetPassword: () => `${baseUrl}/api/auth/forget-password`,

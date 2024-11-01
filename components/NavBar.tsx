@@ -1,4 +1,14 @@
-import { Text, View, StyleSheet, Image, Pressable, ActivityIndicator, Modal } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  ActivityIndicator,
+  Modal,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { colors, fonts, images } from '@/theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
@@ -6,13 +16,42 @@ import { apiUrls } from '../store/api';
 import { usePathname, useRouter } from 'expo-router';
 import BannersArgenCompras from '@/components/BannersArgenCompras';
 import { TextInput } from 'react-native-gesture-handler';
-
+import { launchImageLibrary } from 'react-native-image-picker';
+import { uploadImgAvatar } from '@/store/service/user';
 
 const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
   const router = useRouter();
   const pathName = usePathname();
   const dispatch = useDispatch<AppDispatch>();
   const { user, banners, smarter } = useSelector((state: RootState) => state.auth);
+
+  const handleChangeImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+      },
+      async response => {
+        if (response.didCancel) {
+          console.log('El usuario canceló la seleccion de foto');
+        } else if (response.errorCode) {
+          Alert.alert('Error', response.errorMessage);
+        } else if (response.assets) {
+          const asset = response.assets[0];
+          const uri = asset.uri;
+          const fileName = asset.fileName || 'image.jpg';
+
+          if (uri) {
+            const blob = await fetch(uri).then(res => res.blob());
+            const formData = new FormData();
+            formData.append('file', blob, fileName);
+            await uploadImgAvatar(formData, dispatch)
+          } else {
+            Alert.alert('Error al subir la imagen')
+          }
+        }
+      },
+    );
+  };
 
   if (pathName === '/') {
     return (
@@ -46,20 +85,29 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
           </Text>
         </View>
         <View style={styles.menuInfo}>
-        <Pressable style={styles.level}>
-  {smarter && smarter.credits && smarter.credits.length > 0 && smarter.credits[0].categoria ? 
-    <Image source={images[smarter.credits[0].categoria]} style={styles.platinumIcon} resizeMode="cover" />
-    :
-    <Image source={images.Bronce} style={styles.platinumIcon} resizeMode="cover" />
-  }
-  <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.regular }}>
-    Estas en el nivel
-  </Text>
-  <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
-    {''}
-    {smarter && smarter.credits && smarter.credits.length > 0 ? smarter.credits[0].categoria : "Bronce"}
-  </Text>
-</Pressable>
+          <Pressable style={styles.level}>
+            {smarter &&
+            smarter.credits &&
+            smarter.credits.length > 0 &&
+            smarter.credits[0].categoria ? (
+              <Image
+                source={images[smarter.credits[0].categoria]}
+                style={styles.platinumIcon}
+                resizeMode="cover"
+              />
+            ) : (
+              <Image source={images.Bronce} style={styles.platinumIcon} resizeMode="cover" />
+            )}
+            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.regular }}>
+              Estas en el nivel
+            </Text>
+            <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
+              {''}
+              {smarter && smarter.credits && smarter.credits.length > 0
+                ? smarter.credits[0].categoria
+                : 'Bronce'}
+            </Text>
+          </Pressable>
           <Pressable style={styles.points}>
             <Text style={{ color: '#ffffff', fontSize: 16, fontFamily: fonts.gotham.bold }}>
               Tenés {user?.points} puntos
@@ -73,16 +121,18 @@ const NavBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
     return (
       <View style={styles.containerProfile}>
         <Image source={images.logo} style={styles.logo} resizeMode="cover" />
-        <Image
-          source={{
-            uri:
-              user && user.avatar !== '' && user.avatar !== null
-                ? apiUrls.avatar(user.avatar)
-                : apiUrls.avatar('default.png'),
-          }}
-          style={styles.imgProfile}
-          resizeMode="cover"
-        />
+        <TouchableOpacity onPress={handleChangeImage}>
+          <Image
+            source={{
+              uri:
+                user && user.avatar !== '' && user.avatar !== null
+                  ? apiUrls.avatar(user.avatar)
+                  : apiUrls.avatar('default.png'),
+            }}
+            style={styles.imgProfile}
+            resizeMode="cover"
+          />
+        </TouchableOpacity>
       </View>
     );
   } else if (pathName === '/shop') {
