@@ -23,8 +23,12 @@ import { AppDispatch, RootState } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSecondData } from '@/store/service/user';
 
-// Importar ImagePicker desde expo-image-picker
 import * as ImagePicker from 'expo-image-picker';
+
+interface ImageProps {
+  uri: string,
+  filename: string,
+}
 
 const formatDateString = (date: Date) => {
   return new Intl.DateTimeFormat('es', {
@@ -49,7 +53,7 @@ const SignUp3 = () => {
   const [selectedDateText, setSelectedDateText] = useState<string>('');
 
   // Estado para almacenar la imagen de perfil
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<ImageProps | null>(null);
 
   const routerNext = () => {
     router.push('/(auth)/signup4');
@@ -95,12 +99,16 @@ const SignUp3 = () => {
     if (isSubmitting) {
       return;
     }
+    const newImage = new FormData()
+    if (profileImage) {
+      const blob = await fetch(profileImage.uri).then(res => res.blob());
+      newImage.append('file', blob, profileImage.filename)
+    }
     setIsSubmitting(true);
     await updateSecondData({
       birthday: selectedDate,
       phone: inputPhoneValue,
-      // Puedes incluir profileImage si planeas enviarlo al backend
-      // profileImage,
+      newImage,
       setError,
       setIsSubmitting,
       dispatch,
@@ -133,13 +141,14 @@ const SignUp3 = () => {
       allowsEditing: true, // Permite al usuario editar la foto
       aspect: [1, 1], // Relación de aspecto cuadrada
       quality: 0.7, // Calidad de la imagen
-      cameraType: 'front', // Usar la cámara frontal
-      flashMode: 'off', // Desactivar el modo de flash
+      cameraType: ImagePicker.CameraType.front, // Usar la cámara frontal
     });
 
     if (!result.canceled) {
       const selectedImage = result.assets[0];
-      setProfileImage(selectedImage.uri);
+      if (selectedImage.fileName) {
+        setProfileImage({uri: selectedImage.uri, filename: selectedImage.fileName});
+      }
     }
   };
 
@@ -189,7 +198,7 @@ const SignUp3 = () => {
           {/* Mostrar la imagen de perfil o un marcador de posición */}
           <View style={styles.profileImageContainer}>
             {profileImage ? (
-              <Image source={{ uri: profileImage }} style={styles.profileImage} />
+              <Image source={{ uri: profileImage.uri }} style={styles.profileImage} />
             ) : (
               <Image source={images.placeholderProfile} style={styles.profileImage} />
             )}
