@@ -26,13 +26,7 @@ import { updateSecondData } from '@/store/service/user';
 // Importar ImagePicker desde expo-image-picker
 import * as ImagePicker from 'expo-image-picker';
 
-const formatDateString = (date: Date) => {
-  return new Intl.DateTimeFormat('es', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(date);
-};
+
 
 const SignUp3 = () => {
   const router = useRouter();
@@ -50,6 +44,14 @@ const SignUp3 = () => {
 
   // Estado para almacenar la imagen de perfil
   const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  const formatDateString = (date: Date) => {
+    return new Intl.DateTimeFormat('es', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(date);
+  };
 
   const routerNext = () => {
     router.push('/(auth)/signup4');
@@ -70,6 +72,12 @@ const SignUp3 = () => {
   const hideDatePicker = () => {
     setShowPicker(false);
   };
+
+  const cancelDatePicker = () => {
+    setShowPicker(false);
+    setSelectedDateText('');
+  };
+
 
   const handleDateChange = (event: DateTimePickerEvent, date?: Date) => {
     if (event.type === 'set' && date) {
@@ -99,8 +107,6 @@ const SignUp3 = () => {
     await updateSecondData({
       birthday: selectedDate,
       phone: inputPhoneValue,
-      // Puedes incluir profileImage si planeas enviarlo al backend
-      // profileImage,
       setError,
       setIsSubmitting,
       dispatch,
@@ -135,6 +141,8 @@ const SignUp3 = () => {
       quality: 0.7, // Calidad de la imagen
       cameraType: 'front', // Usar la cámara frontal
       flashMode: 'off', // Desactivar el modo de flash
+      facing: 'front', 
+      flash: 'off',
     });
 
     if (!result.canceled) {
@@ -164,6 +172,7 @@ const SignUp3 = () => {
               value={selectedDateText}
               editable={false}
               pointerEvents="none"
+              onPressIn={showDatePicker}
             />
           </TouchableOpacity>
 
@@ -186,7 +195,6 @@ const SignUp3 = () => {
             ]}
           />
 
-          {/* Mostrar la imagen de perfil o un marcador de posición */}
           <View style={styles.profileImageContainer}>
             {profileImage ? (
               <Image source={{ uri: profileImage }} style={styles.profileImage} />
@@ -207,27 +215,48 @@ const SignUp3 = () => {
           </View>
         </View>
 
-        {showPicker && (
+        {showPicker && Platform.OS === 'ios' && (
           <Modal visible={showPicker} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <DatePicker
                   value={selectedDate || new Date()}
-                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                   mode="date"
+                  display="spinner"
                   onChange={handleDateChange}
                   maximumDate={new Date()}
-                  locale="es-ES"
-                  textColor="#000"
+                  textColor={colors.black}
+                  locale="es-AR"
+
                 />
-                {Platform.OS === 'ios' && (
-                  <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
-                    <Text style={styles.textClose}>Confirmar</Text>
-                  </Pressable>
-                )}
+                <Pressable onPress={hideDatePicker}>
+                  {({ pressed }) => (
+                    <View style={[styles.buttonSave, { opacity: pressed ? 0.5 : 1 }]}>
+                      <Text style={styles.textSave}>Confirmar</Text>
+                    </View>
+                  )}
+                </Pressable>
+                <Pressable onPress={cancelDatePicker}>
+                  {({ pressed }) => (
+                    <View style={[styles.buttonClose, { opacity: pressed ? 0.5 : 1 }]}>
+                      <Text style={styles.textClose}>Cancelar</Text>
+                    </View>
+                  )}
+                </Pressable>
               </View>
             </View>
           </Modal>
+        )}
+
+        {showPicker && Platform.OS === 'android' && (
+          <DatePicker
+            value={selectedDate || new Date()}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+            maximumDate={new Date()}
+            locale="es-AR"
+          />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -308,19 +337,37 @@ const styles = StyleSheet.create({
   modalContent: {
     width: '100%',
     backgroundColor: 'white',
-    padding: 20,
+    padding: 15,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  buttonClose: {
-    marginTop: 20,
+  buttonSave: {
+    marginTop: 10,
     backgroundColor: colors.blue,
-    padding: 10,
+    padding: 15,
     borderRadius: 10,
-    alignSelf: 'center',
+    marginBottom: 10,
+    borderBlockColor: colors.blue,
+  },
+  buttonClose: {
+    marginTop: 10,
+    backgroundColor: colors.white,
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    borderColor: colors.blue,
+    borderWidth: 1,
   },
   textClose: {
-    color: 'white',
+    color: colors.blue,
+    fontFamily: fonts.gotham.semiBold,
+    textAlign: 'center',
+    fontSize: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  textSave: {
+    color: colors.white,
     fontFamily: fonts.gotham.semiBold,
     textAlign: 'center',
     fontSize: 16,

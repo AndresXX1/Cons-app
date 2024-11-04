@@ -1,5 +1,16 @@
 import React, { useRef, useState } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, TextInput, TouchableOpacity, Modal, ActivityIndicator, Platform } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+  Platform,
+  Modal,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
@@ -17,6 +28,7 @@ const EditBirthdate = () => {
   const [error, setError] = useState('');
   const { user } = useSelector((state: RootState) => state.auth);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedDateText, setSelectedDateText] = useState<string>('');
 
   const formatDateString = (date: Date) => {
     return new Intl.DateTimeFormat('es', {
@@ -30,7 +42,7 @@ const EditBirthdate = () => {
     router.push('/my_data');
   };
 
-  const showDatePicker = () => {
+  const showDatePickerHandler = () => {
     setShowPicker(true);
   };
 
@@ -38,7 +50,10 @@ const EditBirthdate = () => {
     setShowPicker(false);
   };
 
-  const [selectedDateText, setSelectedDateText] = useState<string>('');
+  const cancelDatePicker = () => {
+    setShowPicker(false);
+    setSelectedDateText('');
+  };
 
   const handleDateChange = (event: DateTimePickerEvent, date?: Date) => {
     if (event.type === 'set' && date) {
@@ -46,7 +61,7 @@ const EditBirthdate = () => {
       setSelectedDateText(formatDateString(date));
     }
     if (Platform.OS === 'android') {
-      setShowPicker(false); // Oculta el DatePicker en Android después de seleccionar
+      setShowPicker(false); // Hide the DatePicker on Android after selection
     }
   };
 
@@ -62,62 +77,99 @@ const EditBirthdate = () => {
     const userId = user?.id || '';
     setIsSubmitting(true);
 
-    await updateUserData({
-      id: userId,
-      birthday: selectedDate,
-      setError,
-      setIsSubmitting,
-      dispatch,
-      routerNext,
-    });
+    try {
+      await updateUserData({
+        id: userId,
+        birthday: selectedDate,
+        setError,
+        setIsSubmitting,
+        dispatch,
+        routerNext,
+      });
+    } catch (err) {
+      setError('Error al guardar la fecha de nacimiento');
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <SafeAreaView style={styles.root}>
-      <ScrollView style={styles.scrollView} ref={scrollViewRef}>
+      <ScrollView
+        style={styles.scrollView}
+        ref={scrollViewRef}
+        contentContainerStyle={styles.contentContainer}>
         <FocusAwareStatusBar backgroundColor={colors.gray} barStyle="dark-content" />
-        <View style={styles.contentContainer}>
-          <TouchableOpacity onPress={showDatePicker} activeOpacity={1}>
-            <TextInput
-              placeholder="Fecha de nacimiento"
-              style={styles.textInput}
-              value={selectedDateText}
-              editable={false}
-              pointerEvents="none"
-              onPressIn={showDatePicker}
-            />
-          </TouchableOpacity>
-        </View>
+
+        <TouchableOpacity onPress={showDatePickerHandler} activeOpacity={0.7}>
+          <TextInput
+            placeholder="Fecha de nacimiento"
+            placeholderTextColor={colors.gray2}
+            style={styles.textInput}
+            value={selectedDateText}
+            editable={false}
+            pointerEvents="none"
+            onPressIn={showDatePickerHandler}
+            accessibilityLabel="Seleccionar fecha de nacimiento"
+          />
+        </TouchableOpacity>
 
         {error !== '' && <Text style={styles.error}>{error}</Text>}
+
         <View style={styles.containerNext}>
-          <Pressable style={styles.buttonNext} onPress={handleSave}>
-            {isSubmitting && <ActivityIndicator size={22} color={colors.white} />}
-            {!isSubmitting && <Text style={styles.textNext}>Guardar</Text>}
+          <Pressable onPress={handleSave} disabled={isSubmitting}>
+            {({ pressed }) => (
+              <View style={[styles.buttonNext, { opacity: pressed ? 0.5 : 1 }]}>
+                {isSubmitting ? (
+                  <ActivityIndicator size={22} color={colors.white} />
+                ) : (
+                  <Text style={styles.textNext}>Guardar</Text>
+                )}
+              </View>
+            )}
           </Pressable>
         </View>
-
-        {showPicker && (
+        {showPicker && Platform.OS === 'ios' && (
           <Modal visible={showPicker} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <DatePicker
                   value={selectedDate || new Date()}
-                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                   mode="date"
+                  display="spinner"
                   onChange={handleDateChange}
                   maximumDate={new Date()}
-                  locale="es-ES"
-                  textColor="#000"
+                  textColor={colors.black}
+                  locale="es-AR"
+
                 />
-                {Platform.OS === 'ios' && (
-                  <Pressable style={styles.buttonClose} onPress={hideDatePicker}>
-                    <Text style={styles.textClose}>Confirmar</Text>
-                  </Pressable>
-                )}
+                <Pressable onPress={hideDatePicker}>
+                  {({ pressed }) => (
+                    <View style={[styles.buttonSave, { opacity: pressed ? 0.5 : 1 }]}>
+                      <Text style={styles.textSave}>Confirmar</Text>
+                    </View>
+                  )}
+                </Pressable>
+                <Pressable onPress={cancelDatePicker}>
+                  {({ pressed }) => (
+                    <View style={[styles.buttonClose, { opacity: pressed ? 0.5 : 1 }]}>
+                      <Text style={styles.textClose}>Cancelar</Text>
+                    </View>
+                  )}
+                </Pressable>
               </View>
             </View>
           </Modal>
+        )}
+
+        {showPicker && Platform.OS === 'android' && (
+          <DatePicker
+            value={selectedDate || new Date()}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+            maximumDate={new Date()}
+            locale="es-AR"
+          />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -128,14 +180,61 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.white,
+    justifyContent: 'space-between',
   },
   contentContainer: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 15,
+    paddingTop: 70,
+    paddingBottom: 20, // Ensure content is not hidden behind the button
   },
   scrollView: {
     flexGrow: 1,
-    paddingTop: 70,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end', // Para mostrar el modal en la parte inferior
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
+  },
+  modalContent: {
+    width: '100%',
+    backgroundColor: 'white',
+    padding: 15,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  buttonSave: {
+    marginTop: 10,
+    backgroundColor: colors.blue,
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    borderBlockColor: colors.blue,
+  },
+  buttonClose: {
+    marginTop: 10,
+    backgroundColor: colors.white,
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    borderColor: colors.blue,
+    borderWidth: 1,
+  },
+  textClose: {
+    color: colors.blue,
+    fontFamily: fonts.gotham.semiBold,
+    textAlign: 'center',
+    fontSize: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  textSave: {
+    color: colors.white,
+    fontFamily: fonts.gotham.semiBold,
+    textAlign: 'center',
+    fontSize: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
   },
   textInput: {
     color: colors.black,
@@ -150,47 +249,21 @@ const styles = StyleSheet.create({
     marginTop: 30,
     justifyContent: 'center',
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end', // Para mostrar el modal en la parte inferior
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
-  },
-  modalContent: {
-    width: '100%',
-    backgroundColor: 'white',
-    padding: 20,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  buttonClose: {
-    marginTop: 20,
-    backgroundColor: colors.blue,
-    padding: 10,
-    borderRadius: 10,
-    alignSelf: 'center',
-  },
-  textClose: {
-    color: 'white',
-    fontFamily: fonts.gotham.semiBold,
-    textAlign: 'center',
-    fontSize: 16,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-  },
   containerNext: {
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     paddingVertical: 20,
   },
   textNext: {
     fontFamily: fonts.gotham.semiBold,
     color: colors.white,
+    fontSize: 16,
   },
   buttonNext: {
     backgroundColor: colors.blue,
     width: 164,
     height: 50,
-    borderRadius: 50,
+    borderRadius: 25, // Changed to 25 for perfect rounding
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 38,

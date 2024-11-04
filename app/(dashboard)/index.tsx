@@ -23,14 +23,18 @@ import { registerViewTime } from '@/store/service/timer';
 import Slider from '@/components/Slider';
 import { applyForLoan } from '@/store/service/user';
 import SelectBranchModal from '@/components/SelectBranchModal';
+import PaymentMethodModal from '@/components/PaymentMethodModal';
+
 
 
 const { width } = Dimensions.get('window');
 
 const HomeScreen = () => {
   const [offices, setOffices] = useState([]);
+  const [selectedMethodIndex, setSelectedMethodIndex] = useState<number | null>(null);
+  const [isMethodModalVisible, setMethodModalVisible] = useState(false);
 
-  const { banners, smarter } = useSelector((state: RootState) => state.auth);
+  const { banners } = useSelector((state: RootState) => state.auth);
 
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView>(null);
@@ -152,6 +156,22 @@ const HomeScreen = () => {
     { id: 'DHOGARAPP', name: 'Dulce Hogar' },
     { id: 'GRANDULCEAPP', name: 'La Gran Dulce' },
   ];
+  const paymentMethods = [
+  { image: images.pay_1, text1: 'Pago', text2: 'en línea' },
+  { image: images.pay_2, text1: 'Pago', text2: 'fácil' },
+  { image: images.pay_3, text1: 'Mercado', text2: 'Pago' },
+  { image: images.pay_4, text1: 'Transferencia/Deposito' },
+  ];
+
+  const openModalMethods = (index: number) => {
+    setSelectedMethodIndex(index);
+    setMethodModalVisible(true);    
+  };
+
+  const closeModalMethods = () => {
+    setMethodModalVisible(false);
+    setSelectedMethodIndex(null);
+  };
 
   return (
     <SafeAreaView style={styles.root}>
@@ -195,29 +215,20 @@ const HomeScreen = () => {
           <View style={styles.containerPay}>
             <Text style={styles.payTitle}>Medios de pago</Text>
             <Text style={styles.payTitleTwo}>para tu cuota</Text>
-            <View style={styles.payContainer}>
-              <View style={styles.payContainerTwo}>
-                <Image source={images.pay_1} style={styles.image_pay}></Image>
-                <Text style={styles.textPay}>Pago</Text>
-                <Text style={styles.textPay}>en línea</Text>
-              </View>
-              <View style={styles.payContainerTwo}>
-                <Image source={images.pay_2} style={styles.image_pay}></Image>
-                <Text style={styles.textPay}>Pago</Text>
-                <Text style={styles.textPay}>fácil</Text>
-              </View>
-            </View>
-            <View style={styles.payContainer}>
-              <View style={styles.payContainerTwo}>
-                <Image source={images.pay_3} style={styles.image_pay}></Image>
-                <Text style={styles.textPay}>Mercado</Text>
-                <Text style={styles.textPay}>Pago</Text>
-              </View>
-              <View style={styles.payContainerTwo}>
-                <Image source={images.pay_4} style={styles.image_pay}></Image>
-                <Text style={styles.textPay}>Transferencia/Deposito</Text>
-              </View>
-            </View>
+            <View style={styles.payContainerFather}>
+            {paymentMethods.map((method, index) => (
+              <Pressable
+                key={index}
+                style={styles.payContainerTwo}
+                onPress={() => openModalMethods(index)}>
+                <View key={index} style={styles.payContainerTwo}>
+                  <Image source={method.image} style={styles.image_pay} />
+                  <Text style={styles.textPay}>{method.text1}</Text>
+                  {method.text2 && <Text style={styles.textPay}>{method.text2}</Text>}
+                </View>
+              </Pressable>
+            ))}
+          </View>
             <Pressable onPress={() => router.push('payment_methods')}>
               {({ pressed }) => (
                 <Text style={[styles.textPayFinally, { opacity: pressed ? 0.5 : 1 }]}>
@@ -253,6 +264,11 @@ const HomeScreen = () => {
           ))}
           <View style={{ marginBottom: 80 }}></View>
         </View>
+        <PaymentMethodModal
+        isVisible={isMethodModalVisible}
+        methodIndex={selectedMethodIndex}
+        onClose={closeModalMethods}
+      />
       </ScrollView>
     </SafeAreaView>
   );
@@ -411,6 +427,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
     marginBottom: 25,
+  },
+  payContainerFather: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 'auto',
+    gap: 30,
+    paddingHorizontal: 20,
   },
   image_pay: {
     width: 106,
