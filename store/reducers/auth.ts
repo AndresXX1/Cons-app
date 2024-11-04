@@ -67,10 +67,6 @@ export const authSlice = createSlice({
       })
       .addCase(googleSignIn.fulfilled, state => {
         state.isAuth = true;
-        state.user = {
-        ...action.payload.user,
-        email_verified: true, // Aseguramos que email_verified sea true
-    };
       })
       .addCase(googleSignIn.rejected, state => {
         state.isAuth = false;
