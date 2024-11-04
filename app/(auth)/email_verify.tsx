@@ -10,7 +10,7 @@ import { OTPInputText } from '@/components/OTPInputText';
 
 const EmailVerify = () => {
   const router = useRouter();
-  const { isAuth } = useSelector((state: RootState) => state.auth);
+  const { isAuth, user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -60,12 +60,13 @@ const EmailVerify = () => {
         <Text style={styles.textPin}>Pin de seguridad</Text>
         <Text style={styles.textPinTwo}>
           Introduce el pin que enviamos al correo{' '}
-          <Text style={styles.textOpacity}>name@name.com </Text>
+          <Text style={styles.textOpacity}>{user?.email} </Text>
         </Text>
         <OTPInputText
           
           numberOfDigits={5}
           focusColor={colors.blue2}
+          
           focusStickBlinkingDuration={500}
           onTextChange={text => {
             setError('');

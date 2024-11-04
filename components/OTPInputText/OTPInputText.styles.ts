@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.gotham.semiBold,
     fontSize: 54,
     lineHeight: 60.48,
-    color: colors.black,
+    color: colors.texts,
   },
   hiddenInput: {
     width: 1,

@@ -16,7 +16,8 @@ const SecurityScreen = () => {
           <Image source={images.key_vertical_blue} style={styles.mainIcon} />
           <View style={styles.containerText}>
             <Text style={styles.mainText}>Cambiar contraseña</Text>
-            <Text style={styles.offText}>Cerrar sesion y dale a "Olvide mi contraseña"</Text>
+            <Text style={styles.offText}>Si desea realizar el cambio debe Cerrar sesión y haga click en Olvide mi contraseña.
+            </Text>
           </View>
         </View>
         <Pressable onPress={() => Linking.openURL('https://www.argenpesos.com.ar/public/storage/pdf/ARGENCRED%20-%20Terminos%20y%20condiciones%20SITIO%20WEB.pdf')}>

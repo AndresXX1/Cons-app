@@ -1,8 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { colors, fonts, images } from '@/theme';
-import { View, StyleSheet, Text, Pressable, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Pressable, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { axiosInstance } from '@/store/actions/auth';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import NoNotificationsPlaceholder from '@/components/NoNotificationsPlaceholder';
+
 
 interface NotificationProps {
   create: string;
@@ -18,6 +21,7 @@ interface NotificationProps {
 const NotificationsScreen = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [notifications, setNotifications] = useState<NotificationProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchNotifications = async () => {
     try {
@@ -25,6 +29,7 @@ const NotificationsScreen = () => {
       if (response.data.ok) {
         setNotifications(response.data.notifications);
         console.log(response.data.notifications);
+        setIsLoading(false);
       } else {
         console.error('Error al obtener las notificaciones:', response.data.message);
       }
@@ -39,21 +44,25 @@ const NotificationsScreen = () => {
 
   return (
     <SafeAreaView style={styles.root}>
+      <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="dark-content" />
+
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <Text style={styles.title}>Notificaciones</Text>
+        {isLoading ? <ActivityIndicator color={colors.blue}></ActivityIndicator> : notifications.length === 0 ? <NoNotificationsPlaceholder/> :
         <View style={styles.conteinerNotifications}>
           {notifications?.map(item => {
             return (
               <View key={item.id} style={styles.notification}>
                 <View>
                   <Text style={styles.notificationTitle}>{item.title}</Text>
-                  <Text style={styles.notificationDate}>{item.scheduledAt}</Text>
+                  <Text style={styles.notificationDate}>{item.scheduledAt.slice(0, 10)}</Text>
                 </View>
                 <Image source={images.arrow_back_icon} style={styles.arrowBlack} />
               </View>
             );
           })}
         </View>
+        }
       </ScrollView>
     </SafeAreaView>
   );
@@ -66,7 +75,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
   },
   scrollView: {
-    width: '100%',
     paddingBottom: 40,
   },
   back: {
@@ -111,7 +119,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    padding: 25,
     backgroundColor: colors.white,
     borderRadius: 20,
     marginBottom: 16,

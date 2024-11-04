@@ -54,17 +54,16 @@ const Banners: React.FC<BannersProps> = ({ banners }) => {
 
 const styles = StyleSheet.create({
   image: {
-    width: width - 32,
     height: 212,
-    resizeMode: 'cover',
-    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
   banner: {
-    width: width - 32,
+    width: 335,
     height: 212,
-    marginLeft: 16,
+    marginHorizontal: 'auto',
+    overflow: 'hidden',
+    borderRadius: 10,
   },
   text: {
     fontSize: 18,

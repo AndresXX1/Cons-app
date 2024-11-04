@@ -50,7 +50,7 @@ const HelpScreen = () => {
       setQuestions([...questions]);
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 100);
+      }, 50);
     }
   };
 
@@ -63,20 +63,23 @@ const HelpScreen = () => {
         <View style={styles.containerQuestions}>
           {questions.map(question => {
             return (
-              <View style={styles.containerQuestion} key={question.id}>
+              <Pressable key={question.id} onPress={() => handleChangeStatus(question.id)}>
+              <View style={styles.containerQuestion} >
                 <View style={styles.containerHeaderQuestion}>
                   <Text style={styles.titleQuestion}>{question.question}</Text>
-                  <Pressable onPress={() => handleChangeStatus(question.id)}>
+                  
                     <Image
                       source={question.active ? images.arrow_top_blue : images.arrow_bottom_blue}
                       style={styles.arrowIcon}
                     />
-                  </Pressable>
                 </View>
+
                 {question.active && (
                   <Text style={styles.descriptionQuestion}>{question.description}</Text>
                 )}
               </View>
+              </Pressable>
+
             );
           })}
         </View>
@@ -143,8 +146,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     borderColor: colors.blue,
-    paddingVertical: 7,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
     gap: 10,
   },
   containerHeaderQuestion: {

@@ -33,7 +33,20 @@ const NewsScreen = () => {
       <ScrollView style={styles.scrollView} ref={scrollViewRef}>
         <FocusAwareStatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <Text style={styles.title}>Nuestras Noticias</Text>
-        <View style={styles.containerNews}>
+        {notices.length === 0 ? (
+          <View>
+          <Text style={styles.empty}>No hay nuevas noticias</Text>
+          <Pressable onPress={() => router.push('/')}>
+          {({ pressed }) => (
+            <View style={[styles.button, { opacity: pressed ? 0.5 : 1 }]}>
+            <Text style={styles.buttonText}>Volver al inicio</Text>
+            </View>
+          )}
+
+        </Pressable>
+        </View>
+        ) : (
+          <View style={styles.containerNews}>
           {notices.map(notice => {
             return (
               <View style={styles.newsCard} key={notice.id}>
@@ -52,6 +65,10 @@ const NewsScreen = () => {
             );
           })}
         </View>
+        
+        )}
+        
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -86,6 +103,21 @@ const styles = StyleSheet.create({
     gap: 9,
     marginVertical: 24,
   },
+  button: {
+    backgroundColor: colors.blue2,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 500,
+    marginTop: 30,
+    maxWidth: 300,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: colors.white,
+    fontFamily: fonts.gotham.semiBold,
+    fontSize: 18,
+    textAlign: 'center',
+  },
   arrow: {
     width: 14,
     height: 24,
@@ -109,6 +141,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.gotham.semiBold,
     marginTop: 42,
+  },
+  empty: {
+    color: colors.texts,
+    fontSize: 20,
+    textAlign: 'center',
+    fontFamily: fonts.gotham.regular,
+    marginTop: 120,
   },
   containerNews: {
     marginHorizontal: 20,

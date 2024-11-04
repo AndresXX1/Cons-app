@@ -111,7 +111,7 @@ const SignUp = () => {
 
   const handleGoogleSignIn = async () => {
     if (active || active2) {
-      return;
+      return ;
     }
     setActive2(true);
     promptAsync();
@@ -167,16 +167,13 @@ const SignUp = () => {
       }),
     );
   };
-
-  if (
-    isAuth &&
-    user !== null &&
-    user?.first_name &&
-    user?.last_name &&
-    user?.birthday &&
-    user?.email_verified === true
-  )
-    return <Redirect href="/(dashboard)" />;
+  if (isAuth && user) {
+    if (
+      user.first_name &&
+      user.last_name &&
+      user.birthday &&
+      user.email_verified === true
+    ) return <Redirect href="/(dashboard)" />;
 
   if (isAuth && user !== null && user?.email_verified === false) {
     return <Redirect href="/(auth)/email_verify" />;
@@ -190,7 +187,9 @@ const SignUp = () => {
   ) {
     return <Redirect href="/(auth)/signup2" />;
   }
+  }
 
+  
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.form}>
