@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { googleSignIn, registerInAsync } from '@/store/actions/auth';
 import * as Notifications from 'expo-notifications';
+import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 
 const registerForPushNotificationsAsync = async () => {
   try {
@@ -192,7 +193,9 @@ const SignUp = () => {
   
   return (
     <SafeAreaView style={styles.root}>
+
       <View style={styles.form}>
+    <FocusAwareStatusBar barStyle='dark-content' />
         <View style={styles.logoContainer}>
           <Image source={images.logo_blue} style={styles.logo} />
         </View>

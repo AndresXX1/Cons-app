@@ -23,7 +23,7 @@ const SliderItem = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 160, // Para que los dos ítems ocupen el espacio completo
+    minWidth: "43%", // Para que los dos ítems ocupen el espacio completo
     backgroundColor: '#fff',
     borderRadius: 10,
     overflow: 'hidden',

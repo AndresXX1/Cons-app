@@ -79,11 +79,6 @@ const ShopScreen = () => {
             </View>
           </ScrollView>
 
-          {/* <View style={styles.containerFilter}>
-            <Image source={images.filter} style={styles.imageFilter}></Image>
-            <Text style={styles.textFilter}>Filtrar</Text>
-          </View> */}
-
           <Text style={styles.textProduct}>PRODUCTOS DESTACADOS</Text>
 
           <View style={styles.containerFeaturedFather}>
