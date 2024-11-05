@@ -1,93 +1,149 @@
 import { IBanner } from '@/store/reducers/auth';
 import { colors } from '@/theme';
-import React, { useState, useEffect } from 'react';
-import { Image, Text, StyleSheet, Dimensions, ImageBackground, View } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Animated,
+  FlatList,
+  ImageBackground,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 
-const { width } = Dimensions.get('window');
+const BANNER_WIDTH = 335; // Ajusta este valor al ancho real de tus banners
+
 
 interface BannersProps {
   banners: IBanner[];
 }
 
 const Banners: React.FC<BannersProps> = ({ banners }) => {
-  const [index, setIndex] = useState(0);
-  const animation = useSharedValue(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const flatListRef = useRef<FlatList<IBanner>>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(prevIndex => (prevIndex + 1) % banners.length);
-      animation.value = 0;
+      let nextIndex = currentIndex + 1;
+      if (nextIndex >= banners.length) {
+        nextIndex = 0;
+      }
+      if (flatListRef.current) {
+        flatListRef.current.scrollToOffset({
+          offset: nextIndex * BANNER_WIDTH,
+          animated: true,
+        });
+        setCurrentIndex(nextIndex);
+      }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [banners.length]);  // Dependency on banners.length to reset if banners change
+  }, [currentIndex, banners.length]);
 
-  useEffect(() => {
-    animation.value = withTiming(1, { duration: 600 });
-  }, [index]);
+  const onMomentumScrollEnd = (event: any) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(offsetX / BANNER_WIDTH);
+    if (newIndex !== currentIndex) {
+      setCurrentIndex(newIndex);
+    }
+  };
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: animation.value,
-    };
-  });
+  const renderItem = ({ item, index }: { item: IBanner; index: number }) => {
+    const inputRange = [
+      (index - 1) * BANNER_WIDTH,
+      index * BANNER_WIDTH,
+      (index + 1) * BANNER_WIDTH,
+    ];
+
+
+    const opacity = scrollX.interpolate({
+      inputRange,
+      outputRange: [0.05, 1, 0.05],
+      extrapolate: 'clamp',
+    });
+
+    return (
+      <Animated.View style={{ width: BANNER_WIDTH, opacity }}>
+        <TouchableOpacity activeOpacity={0.75}>
+          <ImageBackground
+            source={{ uri: `https://back5.maylandlabs.com/banner/${item.url}` }}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  };
 
   return (
-    <Animated.View style={[styles.banner, animatedStyle]}>
-      {banners.length > 0 && banners[index]?.url && (  // Check if banners and url are defined
-        <ImageBackground
-          source={{ uri: `https://back5.maylandlabs.com/banner/${banners[index].url}` }}
-          style={styles.image}
-          imageStyle={{ borderRadius: 10 }}
-          resizeMode="cover">
-          <View style={styles.containerLine}>
-            <View style={index === 0 ? styles.lineActive : styles.lineInactive} />
-            <View style={index === 1 ? styles.lineActive : styles.lineInactive} />
-            <View style={index === 2 ? styles.lineActive : styles.lineInactive} />
-          </View>
-        </ImageBackground>
-      )}
-    </Animated.View>
+    <View style={styles.bannerContainer}>
+      <Animated.FlatList
+        data={banners}
+        ref={flatListRef}
+        keyExtractor={(item) => item.id.toString()}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderItem}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: true }
+        )}
+        onMomentumScrollEnd={onMomentumScrollEnd}
+        scrollEventThrottle={16}
+        snapToInterval={BANNER_WIDTH}
+        decelerationRate="fast"
+        contentContainerStyle={{ alignItems: 'center' }}
+      />
+      {/* Indicador de paginación */}
+      <View style={styles.paginationContainer}>
+        {banners.map((_, i) => (
+          <View
+            key={i}
+            style={i === currentIndex ? styles.lineActive : styles.lineInactive}
+          />
+        ))}
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  image: {
+  bannerContainer: {
+    width: BANNER_WIDTH,
     height: 212,
     alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  banner: {
-    width: 335,
-    height: 212,
-    marginHorizontal: 'auto',
+    justifyContent: 'center',
+    marginHorizontal: "auto",
     overflow: 'hidden',
     borderRadius: 10,
   },
-  text: {
-    fontSize: 18,
-    color: '#333',
+  image: {
+    width: BANNER_WIDTH,
+    height: 212,
   },
-  containerLine: {
-    gap: 10,
+  paginationContainer: {
+    position: 'absolute',
+    bottom: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
   },
   lineActive: {
     width: 59,
     height: 7,
     borderRadius: 10,
-    backgroundColor: colors.blue2,
+    backgroundColor: colors.blue2, // Asegúrate de reemplazar con tu color
+    marginHorizontal: 5,
   },
   lineInactive: {
     width: 10,
     height: 7,
-    opacity: 0.7,
     borderRadius: 10,
-    backgroundColor: colors.blue2,
+    backgroundColor: colors.blue2, // Asegúrate de reemplazar con tu color
+    opacity: 0.7,
+    marginHorizontal: 5,
   },
 });
 

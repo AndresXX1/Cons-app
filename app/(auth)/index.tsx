@@ -19,7 +19,7 @@ const MenuAuth = () => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <FocusAwareStatusBar backgroundColor={colors.transparent} barStyle="light-content" />
+      <FocusAwareStatusBar backgroundColor={colors.blue2} barStyle="light-content" />
       <ImageBackground source={images.background} style={styles.backgroundImage} resizeMode="cover">
         <Image source={images.logo} style={styles.logo} resizeMode="cover" />
         <Pressable
@@ -44,9 +44,10 @@ const MenuAuth = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.blue2,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 40,
   },
   backgroundImage: {
     flex: 1,
