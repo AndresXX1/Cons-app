@@ -358,7 +358,7 @@ const deleteAccess = async () => {
     }
   } finally {
     await removeItem(tokenAccess.tokenName);
-    await removeItem(tokenAccess.refreshTokenName);
+    await removeItem(tokenAccess.refreshTokenName);    
   }
 };
 

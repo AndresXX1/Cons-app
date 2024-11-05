@@ -4,14 +4,20 @@ import { TouchableOpacity, Image, Text } from 'react-native';
 import { AppDispatch } from '@/store';
 import { useDispatch } from 'react-redux';
 import { logOutAsync } from '@/store/actions/auth';
+import { useRouter } from 'expo-router';	
+
 
 export function StackHeaderLogout({ color, title }: { color: string; title: string }) {
+
+  const router = useRouter();
+
   const dispatch = useDispatch<AppDispatch>();
 
   return (
     <TouchableOpacity
       onPress={() => {
         dispatch(logOutAsync())
+        router.push('/(auth)/signup');
       }}
       style={{
         borderColor: 'transparent',

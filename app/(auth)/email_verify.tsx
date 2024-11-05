@@ -50,6 +50,9 @@ const EmailVerify = () => {
     });
   };
 
+  console.log(user);
+  
+
   // if (!isAuth) {
   //   return <Redirect href="/(auth)" />;
   // }
@@ -59,8 +62,7 @@ const EmailVerify = () => {
       <View style={styles.form}>
         <Text style={styles.textPin}>Pin de seguridad</Text>
         <Text style={styles.textPinTwo}>
-          Introduce el pin que enviamos al correo{' '}
-          <Text style={styles.textOpacity}>{user?.email} </Text>
+          Introduce el pin que enviamos a tu correo(revisa tu casillero de spam si no lo encontrás)
         </Text>
         <OTPInputText
           
@@ -177,8 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: fonts.gotham.semiBold,
     textAlign: 'center',
-    marginTop: 42,
-    marginBottom: 20,
+    marginTop: 38,
   },
   textPinTwo: {
     color: colors.gray2,
@@ -186,7 +187,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     marginBottom: 40,
-    lineHeight: 20,
   },
   textOpacity: {
     fontFamily: fonts.gotham.semiBold,
