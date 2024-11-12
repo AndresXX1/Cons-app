@@ -20,6 +20,7 @@ import { AppDispatch, RootState } from '@/store';
 import { googleSignIn, registerInAsync } from '@/store/actions/auth';
 import * as Notifications from 'expo-notifications';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
+import { makeRedirectUri } from 'expo-auth-session';
 
 const registerForPushNotificationsAsync = async () => {
   try {
@@ -53,11 +54,13 @@ const registerForPushNotificationsAsync = async () => {
 };
 
 const SignUp = () => {
+  const redirectUri = makeRedirectUri();
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
     iosClientId: '',
-    redirectUri: '(auth)/signup',
+    redirectUri,
   });
 
   const router = useRouter();
