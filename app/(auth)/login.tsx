@@ -21,7 +21,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import FocusAwareStatusBar from '@/components/FocusAwareStatusBar';
 import { StackHeaderLeftGoBack } from '@/components/StackHeaderLeftGoBack';
-import { makeRedirectUri } from 'expo-auth-session';
 
 const { width, height } = Dimensions.get('window');
 
@@ -57,15 +56,11 @@ const registerForPushNotificationsAsync = async () => {
 };
 
 const LogIn = () => {
-  const redirectUri = makeRedirectUri({
-    scheme: 'argenpesos',
-    path: 'auth'
-  });
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
     iosClientId: '',
-    redirectUri: redirectUri
+    redirectUri: '(auth)/login',
   });
 
   const navigation = useNavigation();
