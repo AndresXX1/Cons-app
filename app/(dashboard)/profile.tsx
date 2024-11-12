@@ -128,7 +128,7 @@ const ProfileScreen = () => {
           </View>
           <Image source={images.arrow_back_blue} style={styles.arrow} />
         </Pressable>
-        <Text style={styles.version}>Versión 1.6.2</Text>
+        <Text style={styles.version}>Versión 1.6.3</Text>
       </ScrollView>
     </SafeAreaView>
   );

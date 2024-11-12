@@ -63,7 +63,10 @@ const LogIn = () => {
     androidClientId: '675685533507-demdikbnbebra80kdud2vtql23jur3cv.apps.googleusercontent.com',
     webClientId: '675685533507-umbe36aorflnd0fn7kekmbm28q80b3ri.apps.googleusercontent.com',
     iosClientId: '',
-    redirectUri,
+    redirectUri: makeRedirectUri({
+      scheme: 'com.binarysorcerers.argenpesos',
+      path: '/login',
+    }),
   });
 
   const navigation = useNavigation();
